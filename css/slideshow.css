@@ -57,19 +57,19 @@
 }
 .cb-slideshow li:nth-child(2) span {
 	 background-image: url(http://placehold.it/1600x900&text=image2);
-	 -webkit-animation-delay: 15s;
-	 -moz-animation-delay: 15s;
-	 -o-animation-delay: 15s;
-	 -ms-animation-delay: 15s;
-	 animation-delay: 15s;
+	 -webkit-animation-delay: 10s;
+	 -moz-animation-delay: 1s;
+	 -o-animation-delay: 10s;
+	 -ms-animation-delay: 10s;
+	 animation-delay: 10s;
 }
 .cb-slideshow li:nth-child(3) span {
 	 background-image: url(http://placehold.it/1600x900&text=image3);
-	 -webkit-animation-delay: 30s;
-	 -moz-animation-delay: 30s;
-	 -o-animation-delay: 30s;
-	 -ms-animation-delay: 30s;
-	 animation-delay: 30s;
+	 -webkit-animation-delay: 20s;
+	 -moz-animation-delay: 20s;
+	 -o-animation-delay: 20s;
+	 -ms-animation-delay: 20s;
+	 animation-delay: 20s;
 }
 
 

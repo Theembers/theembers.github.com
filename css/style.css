@@ -27,7 +27,6 @@
 }
 body {
 	color:#fff;
-	font-family: 'Open Sans', sans-serif;
 	font-weight: 300;
 	position:relative;
 	background:#000;
@@ -43,7 +42,16 @@ a {
 }
 
 .copyrights{text-indent:-9999px;height:0;line-height:0;font-size:0;overflow:hidden;}
-
+/*
+	¹Ø¼ü×Ö±êÊ¶
+*/
+span.keywords{
+	color: #ff675f;
+}
+span.sub{
+	padding-left:8px;
+	font-size: 15px;
+}
 /*----------------------------------------------------
  2.	Document Setup
 ------------------------------------------------------*/
@@ -66,53 +74,52 @@ a {
 }
 
 p{
-	font-family: 'Open Sans', sans-serif;
 	font-size:14px;
 	line-height:21px;
 	font-weight:400;
 	padding-bottom:22px;
 	margin:0px;
 }
-h1{
-	font-family: 'Open Sans', sans-serif;
+h1{	
 	font-size:80px;
 	line-height:90px;
-	font-weight:700;
+	font-weight:300;
 	margin:0px;
 	padding-bottom:8px;
+	font-family: "Microsoft YaHei" !important;
 }
 h2{
-	font-family: 'Open Sans', sans-serif;
 	font-size:36px;
 	line-height:38px;
-	padding-bottom:0px;
+	padding-bottom:10px;
 	font-weight:300;
 	text-transform:uppercase;
 	margin:0px;
+	font-family: "Microsoft YaHei" !important;
 }
 h3{
-	font-family: 'Open Sans', sans-serif;
 	font-size:24px;
 	line-height:30px;
 	padding-bottom:6px;
 	font-weight:400;
 	margin:0px;
+	font-family: "Microsoft YaHei" !important;
 }
 h4{
-	font-family: 'Open Sans', sans-serif;
 	font-size:19px;
 	line-height:24px;
 	padding-bottom:6px;
 	font-weight:600;
 	margin:0px;
+	font-family: "Microsoft YaHei" !important;
 }
 h5{
-	font-family: 'Open Sans', sans-serif;
 	font-size:16px;
 	line-height:24px;
 	padding-bottom:6px;
 	font-weight:400;
 	margin:0px;
+	font-family: "Microsoft YaHei" !important;
 }
 
 h4.subHeading{
@@ -161,10 +168,14 @@ header{
 	text-transform:uppercase;
 }
 .bannerText h2{
-	font-size:34px;
+	font-size:30px;
 	text-transform:none;
+	padding-bottom:12px;
 }
-
+.bannerText h3{
+	font-size:20px;
+	text-transform:none;	
+}
 
 
 
@@ -366,7 +377,6 @@ header{
   background:#262b37;
   color:#c3c8d6;
   border:none;
-  font-family: 'Open Sans', sans-serif;
   font-size:14px;
   text-transform:uppercase;
 }
@@ -434,7 +444,9 @@ header{
 	padding-bottom:93px ;
 }
 
-
+.aboutme p{
+	font-size: 20px;
+}
 .aboutTop{
 	background:#00bdbd;
 	height:60px;
@@ -445,7 +457,6 @@ header{
 
 .bntDownload{
 	font-size:16px;
-	font-family: 'Open Sans', sans-serif;
 	font-weight:700;
 	background:#474d5d;
 	padding:16px 22px;
@@ -457,7 +468,9 @@ header{
 	text-decoration:none;
 }
 
-
+p strong{
+	font-size:26px;
+}
 
 /*----------------------------------------------------
  7.	Technical Skills Style
@@ -559,7 +572,7 @@ header{
  8.	Work Experience Style
 ------------------------------------------------------*/
 .exprience{
-	background:#fff;
+	background:#474d5d;
 }
 .exprience .container{
 	padding-top:85px ;
@@ -611,15 +624,15 @@ header{
 }
 .exCon{
 	width:auto;
-	background:#f3f3f3;
-	border-bottom:solid 4px #eeeeee;
+	background:#00bdbd;
+	border-bottom:solid 6px #ff675f;
 	padding:22px 47px 6px 47px;
 	margin-left:15px;
 	text-align:left;
 }
 
 .exCon p{
-	color:#84868d;
+	color:#FFFFFF;
 	line-height:21px;
 }
 .exCon h4{
@@ -635,19 +648,22 @@ header{
 /*----------------------------------------------------
  9.	Education Style
 ------------------------------------------------------*/
+
 .education{
-	background:#eeeeee;
+	background:#EEEEEE;
 }
 .education .container{
 	padding-top:85px ;
 	padding-bottom:90px ;
 }
-
+.education .workYear{
+	background: url(../images/portfolio/thumb/school_logo_sbs.jpg)  no-repeat;
+}
 .education h2{
-	color:#ff675f;
+	color:#FF675F;
 }
 .education p{
-	color:#84868d;
+	color:#474d5d;
 	/*font-size:13px;*/
 	line-height:18px;
 }
@@ -664,12 +680,12 @@ header{
 	background:url(../images/arrow-left-light.png) no-repeat 0 23px;
 }
 .education .exCon{
-	background:#fafafa;
-	border-bottom:solid 4px #e8e7e7;
+	background:#E1E1E3;
+	border-bottom:solid 6px #FF675F;
 }
 
 .education .workDetails .rightArea{
-	border-left-color:#e5e4e4;
+	border-left-color:#FF675F;
 }
 
 
@@ -701,6 +717,10 @@ header{
 	text-align: center;
 }
 
+.portfolioFilter p{
+	text-decoration:none;
+}
+
 .portfolioFilter ul{
 	margin:0 auto;
 	text-align:center;
@@ -716,7 +736,6 @@ header{
 	font-size:13px;
 	line-height:15px;
 	color:#ffffff;
-	text-transform:uppercase;
 	display:block;
 	text-decoration:none;
 	border:solid 1px #95d9ee;
@@ -929,7 +948,7 @@ ul.portfolioContainer li:hover span.hoverBox .linKed{
 ------------------------------------------------------*/
 
 .contact{
-	background:#fff;
+	background:#EEE;
 }
 .contact .container{
 	padding-top:85px ;
@@ -945,11 +964,27 @@ ul.portfolioContainer li:hover span.hoverBox .linKed{
 	line-height:18px;
 }
 .contact .heading p{
+	color:#474d5d;
 	padding-bottom:41px;
 }
 
 .contact h4{
+	color:#2bb3dd;
+	padding-bottom:16px;
 	font-weight:700;
+}
+.contact h4 i{
+	padding-right: 10px;
+}
+
+.contact h4 span{
+	padding-bottom:16px;
+}
+
+
+.contact h4 span a{
+	color:#2BB3DD;
+	text-decoration:none;
 }
 
 .topCon{
@@ -1030,7 +1065,6 @@ ul.portfolioContainer li:hover span.hoverBox .linKed{
 
 .conForm .submitBnt{
 	background:#ff675f;
-	font-family: 'Open Sans', sans-serif;
 	color:#fff;
 	font-size:16px;
 	font-weight:600;
@@ -1062,14 +1096,11 @@ ul.portfolioContainer li:hover span.hoverBox .linKed{
 }
 
 
-
-
-
 /*----------------------------------------------------
  12. Footer Style
 ------------------------------------------------------*/
 .footer{
-	background:#00bdbd;
+	background:#474D5D;
 }
 .footer .container{
 	padding:40px 0;
