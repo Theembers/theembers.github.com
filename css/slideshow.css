@@ -58,7 +58,7 @@
 .cb-slideshow li:nth-child(2) span {
 	 background-image: url(../images/p1.jpg);
 	 -webkit-animation-delay: 10s;
-	 -moz-animation-delay: 1s;
+	 -moz-animation-delay: 10s;
 	 -o-animation-delay: 10s;
 	 -ms-animation-delay: 10s;
 	 animation-delay: 10s;
