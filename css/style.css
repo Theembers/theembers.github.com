@@ -173,6 +173,10 @@ header{
 	margin-top: 20px;
 }
 
+.bannerText .updatetime{
+	padding-top: 20px;
+}
+
 .bannerText h1{
 	text-transform:uppercase;
 	letter-spacing: 10px;
