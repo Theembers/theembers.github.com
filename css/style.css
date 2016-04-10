@@ -34,6 +34,7 @@ body {
 	height:100%;
 	overflow: scroll;
 	overflow-x: hidden;
+	
 }
 a {
 	text-decoration:none;
@@ -74,8 +75,8 @@ span.sub{
 }
 
 p{
-	font-size:14px;
-	line-height:21px;
+	font-size:15px;
+	line-height:25px;
 	font-weight:400;
 	padding-bottom:22px;
 	margin:0px;
@@ -454,16 +455,23 @@ header{
 }
 
 .bntDownload{
-	font-size:16px;
-	font-weight:700;
-	background:#474d5d;
-	padding:16px 22px;
-	display:inline-block;
+	text-align: center;
+	padding:16px 18px;
+	line-height:15px;
+	color:#ffffff;
+	display:block;
+	text-decoration:none;
+	border:solid 1px #95d9ee;
+	
+	transition-duration: 0.2s;
+	-webkit-transition-duration: 0.2s;
 }
 .bntDownload:hover{
-	background:#373d4c;
-	color:#CCCCCC;
-	text-decoration:none;
+	border:solid 1px #15596e;
+	color:#15596e;
+	
+	transition-duration: 0.2s;
+	-webkit-transition-duration: 0.2s;
 }
 
 p strong{
@@ -502,7 +510,7 @@ p strong{
 }
 .technical .skills{
 	margin:0 auto;
-	margin-bottom:23px;
+	margin-bottom:20px;
 	text-align:center;
 	padding:0px;
 	float:none;
@@ -1101,7 +1109,7 @@ ul.portfolioContainer li:hover span.hoverBox .linKed{
  12. Footer Style
 ------------------------------------------------------*/
 .footer{
-	background:#474D5D;
+	background:#00BDBD;
 }
 .footer .container{
 	padding:40px 0;
