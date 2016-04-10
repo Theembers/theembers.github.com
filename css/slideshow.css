@@ -19,27 +19,13 @@
 	opacity: 0;
 	z-index: 0;
 	-webkit-backface-visibility: hidden;
-	-webkit-animation: imageAnimation 36s linear infinite 0s;
-	-moz-animation: imageAnimation 36s linear infinite 0s;
-	-o-animation: imageAnimation 36s linear infinite 0s;
-	-ms-animation: imageAnimation 36s linear infinite 0s;
-	animation: imageAnimation 36s linear infinite 0s;
+	-webkit-animation: imageAnimation 9s linear infinite 0s;
+	-moz-animation: imageAnimation 9s linear infinite 0s;
+	-o-animation: imageAnimation 9s linear infinite 0s;
+	-ms-animation: imageAnimation 9s linear infinite 0s;
+	animation: imageAnimation 9s linear infinite 0s;
 }
-.cb-slideshow li div {
-	z-index: 1000;
-	position: absolute;
-	bottom: 30px;
-	left: 0px;
-	width: 100%;
-	text-align: center;
-	opacity: 0;
-	color: #fff;
-	-webkit-animation: titleAnimation 36s linear infinite 0s;
-	-moz-animation: titleAnimation 36s linear infinite 0s;
-	-o-animation: titleAnimation 36s linear infinite 0s;
-	-ms-animation: titleAnimation 36s linear infinite 0s;
-	animation: titleAnimation 36s linear infinite 0s;
-}
+
 .cb-slideshow li div h3 {
 	font-family: 'BebasNeueRegular', 'Arial Narrow', Arial, sans-serif;
 	font-size: 240px;
@@ -52,24 +38,24 @@
 	Slid Show image part
 -----------------------------------------*/ 
 .cb-slideshow li:nth-child(1) span {
-	 background-image: url(../images/p1.jpg);
+	
 	 
 }
 .cb-slideshow li:nth-child(2) span {
-	 background-image: url(../images/p1.jpg);
-	 -webkit-animation-delay: 10s;
-	 -moz-animation-delay: 10s;
-	 -o-animation-delay: 10s;
-	 -ms-animation-delay: 10s;
-	 animation-delay: 10s;
+	
+	 -webkit-animation-delay: 3s;
+	 -moz-animation-delay: 3s;
+	 -o-animation-delay: 3s;
+	 -ms-animation-delay: 3s;
+	 animation-delay: 3s;
 }
 .cb-slideshow li:nth-child(3) span {
-	 background-image: url(../images/p1.jpg);
-	 -webkit-animation-delay: 20s;
-	 -moz-animation-delay: 20s;
-	 -o-animation-delay: 20s;
-	 -ms-animation-delay: 20s;
-	 animation-delay: 20s;
+	
+	 -webkit-animation-delay: 6s;
+	 -moz-animation-delay: 6s;
+	 -o-animation-delay: 6s;
+	 -ms-animation-delay: 6s;
+	 animation-delay: 6s;
 }
 
 
