@@ -26,14 +26,6 @@
 	animation: imageAnimation 9s linear infinite 0s;
 }
 
-.cb-slideshow li div h3 {
-	font-family: 'BebasNeueRegular', 'Arial Narrow', Arial, sans-serif;
-	font-size: 240px;
-	padding: 0;
-	line-height: 200px;
-}
-
-
 /*-----------------------------------------
 	Slid Show image part
 -----------------------------------------*/ 
@@ -117,22 +109,5 @@ opacity: 0
 }
  100% {
 opacity: 0
-}
-}
-
-
-
-/* Show at least something when animations not supported */
-.no-cssanimations .cb-slideshow li span {
-	opacity: 1;
-}
- @media screen and (max-width: 1140px) {
- .cb-slideshow li div h3 {
-font-size: 140px
-}
-}
-@media screen and (max-width: 600px) {
- .cb-slideshow li div h3 {
-font-size: 80px
 }
 }
