@@ -654,9 +654,7 @@ p strong{
 	padding-top:85px ;
 	padding-bottom:90px ;
 }
-.education .workYear{
-	background: url(../images/portfolio/thumb/school_logo_sbs.jpg)  no-repeat;
-}
+
 .education h2{
 	color:#FF675F;
 }
@@ -673,6 +671,11 @@ p strong{
 	font-weight:700;
 }
 
+.workDetails .logo{
+	text-align:center;
+	-webkit-border-radius: 50%;
+    border-radius: 50%;
+}
 
 .education .arrowpart{
 	background:url(../images/arrow-left-light.png) no-repeat 0 23px;
@@ -1152,9 +1155,7 @@ ul.portfolioContainer li:hover span.hoverBox .linKed{
 		padding-top:50px;
 	}
 	
-	.education .workYear{
-		padding-top:58px;
-	}
+
 }
 
 
