@@ -98,6 +98,7 @@ h2{
 	margin:0px;
 	font-family: "Microsoft YaHei" !important;
 }
+	
 h3{
 	font-size:24px;
 	line-height:30px;
@@ -160,13 +161,14 @@ header{
 	text-align:center;
 	padding:30px 0 30px ;
 	max-width:960px;
-	border:1px solid #fff;
+	border:1px solid #000;
 	background: rgba(0, 0, 0, 0.2);
 	 filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#b2000000, endColorstr=#b2000000);
 	zoom: 1;
 }
 .bannerText h1{
 	text-transform:uppercase;
+	letter-spacing: 10px;
 }
 .bannerText h2{
 	font-size:30px;
@@ -586,7 +588,7 @@ p strong{
 }
 
 .exprience h2{
-	color:#ff675f;
+	color:#EEEEEE;
 }
 .exprience p{
 	color:#84868d;
@@ -1109,47 +1111,11 @@ ul.portfolioContainer li:hover span.hoverBox .linKed{
  12. Footer Style
 ------------------------------------------------------*/
 .footer{
-	background:#00BDBD;
+	background:#262B37;
 }
 .footer .container{
-	padding:40px 0;
+	padding:20px 0;
 }
-
-.footer ul{
-	margin:0 auto;
-	text-align:center;
-	list-style-type:none;
-}
-.footer ul li{
-	display:inline-block;
-	text-align:center;
-	background:#ffffff;
-	color:#00bdbd;
-	line-height:42px;
-	margin:0 6px;
-	width:42px !important;
-	height:42px !important;
-	
-	-webkit-border-radius: 50%;
-    border-radius: 50%;
-}
-.footer ul li:hover{
-	background:#0a9f9f ;
-}
-.footer ul li:hover	a{
-	color:#fff;
-}
-
-.footer ul li a{
-	color:#00bdbd;
-	width:42px !important;
-	height:42px !important;
-}
-.footer ul li a i{
-	line-height:42px !important;
-}
-
-
 
 	
 /*---------------------------------------------------------------------------------
