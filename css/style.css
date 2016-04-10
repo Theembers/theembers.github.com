@@ -1124,6 +1124,10 @@ ul.portfolioContainer li:hover span.hoverBox .linKed{
 	padding:20px 0;
 }
 
+.footer span{
+	padding-top:10px;
+	float:right;
+}
 	
 /*---------------------------------------------------------------------------------
  13. Responsive style
