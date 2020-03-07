@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><meta name="generator" content="Hexo 3.9.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="java-note[1]-JAVA源码-线程、线程池、AQS、JUC">
+
+
+
+
+  <meta name="keywords" content="开发, dev, blog, 博客, java, hexo, even, theembers, theembers, theEmbers.devFun, 小轴, 郭小轴">
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="TheEmbers.devFun">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1.4">
+
+
+
+<link rel="canonical" href="https://theembers.github.io/2020/01/21/java-note-1/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1.4">
+
+
+
+  
+  <script id="baidu_analytics">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?6053c2edabf3ee9b02ecc553130da68a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+  <script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.10.0/dist/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "AbQBWhsXzFouhrbyvkHeWaQb-gzGzoHsz",
+      appKey: "JMW5LdbzGvOecjancFT4b9zm"
+    });
+  </script>
+
+
+
+
+<script>
+  window.config = {"title":"TheEmbers.devFun","subtitle":"childlike forever. 😃","description":"","author":"TheEmbers Guo","language":"zh-cn","timezone":"","url":"https://theembers.github.io","root":"/","permalink":":year/:month/:day/:title/","permalink_defaults":{},"source_dir":"source","public_dir":"public","tag_dir":"tags","archive_dir":"archives","category_dir":"categories","code_dir":"downloads/code","i18n_dir":":lang","skip_render":[],"new_post_name":":title.md","default_layout":"post","titlecase":false,"external_link":true,"filename_case":0,"render_drafts":false,"post_asset_folder":true,"relative_link":false,"future":true,"highlight":{"enable":true,"auto_detect":false,"line_number":true,"tab_replace":"","first_line_number":"always1"},"default_category":"uncategorized","category_map":{},"tag_map":{},"date_format":"YYYY-MM-DD","time_format":"HH:mm:ss","per_page":10,"pagination_dir":"page","theme":"even","deploy":[{"type":"git","repository":"git@github.com:Theembers/theembers.github.com.git","branch":"master"},{"type":"git","repository":"git@gitee.com:theembers/theembers.git","branch":"master"}],"ignore":[],"logo":"/image/logo.png","title_art":"<font class=\"theme-color\">7</font>heEmbers<font class=\"theme-color\">.</font>devFun","keywords":"开发, dev, blog, 博客, java, hexo, even, theembers, theembers, theEmbers.devFun, 小轴, 郭小轴","author_image":"https://image-1257148187.cos.ap-chengdu.myqcloud.com/picgo_img/person-head.jpeg","address":"成都 · 中国","default_bgimg":["https://image-1257148187.cos.ap-chengdu.myqcloud.com/picgo_img/WechatIMG15.jpg","https://image-1257148187.cos.ap-chengdu.myqcloud.com/picgo_img/timg.jpeg","https://image-1257148187.cos.ap-chengdu.myqcloud.com/picgo_img/tes11af.jpg","https://image-1257148187.cos.ap-chengdu.myqcloud.com/picgo_img/simptab-wallpaper-20190526195946.png","https://image-1257148187.cos.ap-chengdu.myqcloud.com/picgo_img/a44d4bddb4e7d119baf614e0e6698ba4.jpg","https://image-1257148187.cos.ap-chengdu.myqcloud.com/picgo_img/simptab-wallpaper-20190107131809.png"],"markdown_it_plus":{"highlight":true,"html":true,"xhtmlOut":true,"breaks":true,"langPrefix":null,"linkify":true,"typographer":null,"quotes":"“”‘’","pre_class":"highlight","plugins":[{"plugin":{"name":"markdown-it-mark","enable":true}},{"plugin":{"name":"markdown-it-toc-and-anchor","enable":true,"options":{"toc":true,"tocClassName":"markdownIt-TOC","tocFirstLevel":2,"tocLastLevel":6,"tocCallback":null,"anchorLink":true,"anchorLinkSymbol":"","anchorFirstLevel":2,"anchorLastLevel":6,"anchorLinkSpace":true,"anchorLinkSymbolClassName":null,"anchorLinkBefore":true,"anchorClassName":"headerlink","resetIds":true}}}]},"index_generator":{"per_page":10,"order_by":"-date","path":""},"archive_generator":{"per_page":20,"yearly":true,"monthly":true,"daily":false,"order_by":"-date"},"tag_generator":{"per_page":20},"category_generator":{"per_page":20},"neat_enable":false,"neat_html":{"enable":true,"exclude":null},"neat_css":{"enable":true,"exclude":["*.min.css"]},"neat_js":{"enable":true,"mangle":true,"output":null,"compress":null,"exclude":["*.min.js"]},"image_caption":{"enable":true,"class_name":null},"live2d":{"enable":true,"scriptFrom":"local","pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"use":"live2d-widget-model-hijiki"},"display":{"position":"left","width":150,"height":300,"hOffset":20,"vOffset":-20},"mobile":{"show":false,"scale":0.5,"motion":true},"react":{"opacity":1}},"encrypt":{"enable":true,"abstract":"有东西被加密了, 需要密码才能看.","message":"需要密码才可以看哦.","wrong_pass_message":"抱歉, 这个密码看着不太对, 请再试试.","wrong_hash_message":"抱歉, 这个文章不能被校验, 不过还是能看看解密后的内容."},"feed":{"type":"atom","limit":20,"hub":"","content":true,"content_limit":140,"content_limit_delim":"","path":"atom.xml"},"server":{"port":4000,"log":false,"ip":"0.0.0.0","compress":false,"header":true},"since":2015,"favicon":"/favicon.ico","rss":"/atom.xml","menu":{"Home":"/","Tags":"/tags","Categories":"/categories","Archives":"/archives","GitHub":"https://github.com/Theembers"},"color":"Default","toc":true,"total":false,"newPost":604800000,"fancybox":true,"pjax":true,"copyright":{"enable":false,"license":"<a rel=\"license\" href=\"http://creativecommons.org/licenses/by-nc/4.0/\"><img alt=\"知识共享许可协议\" style=\"border-width:0\" src=\"https://i.creativecommons.org/l/by-nc/4.0/80x15.png\" /></a>本作品采用<a rel=\"license\" href=\"http://creativecommons.org/licenses/by-nc/4.0/\">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可。"},"reward":{"enable":false,"qrCode":{"wechat":"/image/reward/wechat.jpg","alipay":"/image/reward/alipay.jpg"}},"social":{"email":"unusual7@163.com","stack-overflow":null,"twitter":null,"facebook":null,"linkedin":null,"google":null,"github":"https://github.com/Theembers","weibo":null,"zhihu":"https://www.zhihu.com/people/theembers","wechat":null,"cloudmusic":"https://music.163.com/#/user/home?id=32131879","douban":null,"pocket":null,"tumblr":null,"instagram":null},"local_search":{"enable":true},"leancloud":{"app_id":"AbQBWhsXzFouhrbyvkHeWaQb-gzGzoHsz","app_key":"JMW5LdbzGvOecjancFT4b9zm"},"baidu_analytics":"6053c2edabf3ee9b02ecc553130da68a","baidu_verification":null,"google_analytics":null,"google_verification":null,"disqus_shortname":null,"changyan":{"appid":null,"appkey":null},"livere_datauid":null,"valine":{"appid":"AbQBWhsXzFouhrbyvkHeWaQb-gzGzoHsz","appkey":"JMW5LdbzGvOecjancFT4b9zm","notify":false,"verify":false,"avatar":"retro","placeholder":"你要说什么啊😊","meta":"['nick']"},"version":"1.1.4"};
+</script>
+
+    <title> java-note[1]-JAVA源码-线程、线程池、AQS、JUC - TheEmbers.devFun </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <i class="image iconfont icon-cat"></i>
+    <span class="title">TheEmbers.devFun</span>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+  
+    <div class="mobile-post-toc-blank">
+    </div>
+   <!-- <div class="mobile-post-toc-icon">
+      <i class="iconfont icon-catalog"></i>
+    </div> -->
+  
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  
+  <div class="author-box">
+  
+    <div class="image-box">
+      <img class="image" src="https://image-1257148187.cos.ap-chengdu.myqcloud.com/picgo_img/person-head.jpeg">
+    </div>
+  
+    <div class="name">TheEmbers Guo</div>
+  
+    <div class="address"><i class="theme-color iconfont icon-address"></i>成都 · 中国</div>
+  
+  </div>
+
+
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          <i class="theme-color iconfont icon-home"></i>
+          
+          
+            首页
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          <i class="theme-color iconfont icon-tags"></i>
+          
+          
+            标签
+          
+        </li>
+      </a>
+    
+      <a href="/categories">
+        <li class="mobile-menu-item">
+          <i class="theme-color iconfont icon-categories"></i>
+          
+          
+            分类
+          
+        </li>
+      </a>
+    
+      <a href="/archives">
+        <li class="mobile-menu-item">
+          <i class="theme-color iconfont icon-archives"></i>
+          
+          
+            归档
+          
+        </li>
+      </a>
+    
+      <a href="https://github.com/Theembers">
+        <li class="mobile-menu-item">
+          <i class="theme-color iconfont icon-github"></i>
+          
+          
+            GitHub
+          
+        </li>
+      </a>
+    
+  </ul>
+
+  <div class="mobile-menu-social">
+    
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:unusual7@163.com" class="theme-color iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+           <a href="https://github.com/Theembers" class="theme-color iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+        
+           <a href="https://www.zhihu.com/people/theembers" class="theme-color iconfont icon-zhihu" title="zhihu"></a>
+        
+      
+    
+      
+    
+      
+        
+           <a href="https://music.163.com/#/user/home?id=32131879" class="theme-color iconfont icon-cloudmusic" title="cloudmusic"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+    
+    
+      <a href="/atom.xml" class="theme-color iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+  </div>
+  
+</nav>
+
+<nav id="mobile-toc" class="mobile-toc slideout-menu">
+ <!-- 
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+    
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#线程与线程池"><span class="toc-number">1.</span> <span class="toc-text"> 线程与线程池</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#thread"><span class="toc-number">1.1.</span> <span class="toc-text"> thread</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#threadlocal"><span class="toc-number">1.2.</span> <span class="toc-text"> ThreadLocal</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#executorservice-线程池"><span class="toc-number">1.3.</span> <span class="toc-text"> ExecutorService 线程池</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#aqs"><span class="toc-number">2.</span> <span class="toc-text"> AQS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#juc"><span class="toc-number">3.</span> <span class="toc-text"> JUC</span></a></li></ol>
+    
+    </div>
+  </div>
+
+ -->
+</nav>
+    <div class="container" id="mobile-panel">
+
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/.">
+    <span class="icon iconfont icon-cat"></span>
+    <span class="title"><font class="theme-color">7</font>heEmbers<font class="theme-color">.</font>devFun</span>
+    <span class="subtitle">childlike forever. 😃</span>
+  </a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            <i class="theme-color iconfont icon-home"></i>
+            
+            
+              首页
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            <i class="theme-color iconfont icon-tags"></i>
+            
+            
+              标签
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            <i class="theme-color iconfont icon-categories"></i>
+            
+            
+              分类
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives">
+            <i class="theme-color iconfont icon-archives"></i>
+            
+            
+              归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="https://github.com/Theembers">
+            <i class="theme-color iconfont icon-github"></i>
+            
+            
+              GitHub
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+<div id="topbar" class="topbar hidden">
+  <div class="logo">
+    <a href="/.">
+      <span class="icon iconfont icon-cat"></span>
+      <span class="title"><font class="theme-color">7</font>heEmbers<font class="theme-color">.</font>devFun</span>
+    </a>
+  </div>
+  <div class="menu">
+    
+      
+        <span class="menu-item">
+          <a class="menu-item-link" href="/">
+            <i class="theme-color iconfont icon-home"></i>
+            
+            
+              首页
+            
+          </a>
+        </span>
+      
+        <span class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            <i class="theme-color iconfont icon-tags"></i>
+            
+            
+              标签
+            
+          </a>
+        </span>
+      
+        <span class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            <i class="theme-color iconfont icon-categories"></i>
+            
+            
+              分类
+            
+          </a>
+        </span>
+      
+        <span class="menu-item">
+          <a class="menu-item-link" href="/archives">
+            <i class="theme-color iconfont icon-archives"></i>
+            
+            
+              归档
+            
+          </a>
+        </span>
+      
+        <span class="menu-item">
+          <a class="menu-item-link" href="https://github.com/Theembers">
+            <i class="theme-color iconfont icon-github"></i>
+            
+            
+              GitHub
+            
+          </a>
+        </span>
+      
+  
+  </div>
+</div>
+      </header>
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  
+    <article class="post">
+  
+    <header class="post-header">
+      
+      <!--文章标题 -->
+      <h1 class="post-title">
+        <span class="post-flag">
+          
+          
+          
+        </span>
+        
+          java-note[1]-JAVA源码-线程、线程池、AQS、JUC
+          
+        
+      </h1>
+      <!-- 文章信息 -->
+      <div class="post-meta">
+        <span class="post-time">
+          <i class="theme-color iconfont icon-date"></i>
+          2020-01-21
+        </span>
+        <span class="post-count">
+          <i class="theme-color iconfont icon-count"></i>
+          
+          1.9k
+          
+        </span>
+        <span class="post-read">
+          <i class="theme-color iconfont icon-time"></i>
+          
+          15
+          
+        </span>
+        
+          <span class="post-visits">
+              <i class="theme-color iconfont icon-visitor"></i>
+              <span class="visits" data-url="/2020/01/21/java-note-1/" data-title="java-note[1]-JAVA源码-线程、线程池、AQS、JUC">0</span>
+          </span>
+        
+      </div>
+      
+      
+        <div class="float-right post-meta">
+      
+          <div class="post-category">
+            <i class="theme-color iconfont icon-categories"></i>
+            
+              <a href="/categories/dev/">dev</a>
+            
+              <a href="/categories/dev/java/">java</a>
+            
+              <a href="/categories/dev/java/jdk/">jdk</a>
+            
+          </div>
+        </div>
+      
+      
+     
+    </header>
+    
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+    
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#线程与线程池"><span class="toc-number">1.</span> <span class="toc-text"> 线程与线程池</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#thread"><span class="toc-number">1.1.</span> <span class="toc-text"> thread</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#threadlocal"><span class="toc-number">1.2.</span> <span class="toc-text"> ThreadLocal</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#executorservice-线程池"><span class="toc-number">1.3.</span> <span class="toc-text"> ExecutorService 线程池</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#aqs"><span class="toc-number">2.</span> <span class="toc-text"> AQS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#juc"><span class="toc-number">3.</span> <span class="toc-text"> JUC</span></a></li></ol>
+    
+    </div>
+  </div>
+
+
+    
+    <div class="post-content ">
+      
+        <div class="detial-post-content">
+          <h2 id="线程与线程池"><a class="headerlink" href="#线程与线程池"></a> 线程与线程池</h2>
+<h3 id="thread"><a class="headerlink" href="#thread"></a> thread</h3>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Thread类实现了Runnable接口，所以说线程可以通过继承Thread来实现。</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Thread</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 守护线程</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">boolean</span> daemon = <span class="keyword">false</span>;</span><br><span class="line">    <span class="comment">// 要被执行的方法</span></span><br><span class="line">    <span class="keyword">private</span> Runnable target;</span><br><span class="line">    <span class="comment">// 与本线程有关的ThreadLocal值，该映射由ThreadLocal类维护，注意这一点！这里是关于ThreadLocal为什么会内存泄漏的原因之一</span></span><br><span class="line">    ThreadLocal.ThreadLocalMap threadLocals = <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="threadlocal"><a class="headerlink" href="#threadlocal"></a> ThreadLocal</h3>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ThreadLocal</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> T <span class="title">get</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Thread t = Thread.currentThread();</span><br><span class="line">        ThreadLocalMap map = getMap(t);</span><br><span class="line">        <span class="keyword">if</span> (map != <span class="keyword">null</span>) &#123;</span><br><span class="line">            ThreadLocalMap.Entry e = map.getEntry(<span class="keyword">this</span>);</span><br><span class="line">            <span class="keyword">if</span> (e != <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="meta">@SuppressWarnings</span>(<span class="string">"unchecked"</span>)</span><br><span class="line">                T result = (T)e.value;</span><br><span class="line">                <span class="keyword">return</span> result;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> setInitialValue();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">set</span><span class="params">(T value)</span> </span>&#123;</span><br><span class="line">        Thread t = Thread.currentThread();</span><br><span class="line">        ThreadLocalMap map = getMap(t);</span><br><span class="line">        <span class="keyword">if</span> (map != <span class="keyword">null</span>)</span><br><span class="line">            map.set(<span class="keyword">this</span>, value);</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            createMap(t, value);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function">ThreadLocalMap <span class="title">getMap</span><span class="params">(Thread t)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> t.threadLocals;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">createMap</span><span class="params">(Thread t, T firstValue)</span> </span>&#123;</span><br><span class="line">        t.threadLocals = <span class="keyword">new</span> ThreadLocalMap(<span class="keyword">this</span>, firstValue);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">/** </span></span><br><span class="line"><span class="comment">     * ThreadLocal 维护在它自己内部类ThreadLocalMap中，这是一个类似HashMap的数据结构。</span></span><br><span class="line"><span class="comment">     * 其内部 Entry 对象继承了弱引用类型 WeakReference 也就是说这个对象会在下一次GC时被回收。注意这里是ThreadLocal为什么会内存泄漏之二。</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">ThreadLocalMap</span> </span>&#123;</span><br><span class="line">        ThreadLocalMap(ThreadLocal&lt;?&gt; firstKey, Object firstValue) &#123;</span><br><span class="line">            table = <span class="keyword">new</span> Entry[INITIAL_CAPACITY];</span><br><span class="line">            <span class="keyword">int</span> i = firstKey.threadLocalHashCode &amp; (INITIAL_CAPACITY - <span class="number">1</span>);</span><br><span class="line">            table[i] = <span class="keyword">new</span> Entry(firstKey, firstValue);</span><br><span class="line">            size = <span class="number">1</span>;</span><br><span class="line">            setThreshold(INITIAL_CAPACITY);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Entry</span> <span class="keyword">extends</span> <span class="title">WeakReference</span>&lt;<span class="title">ThreadLocal</span>&lt;?&gt;&gt; </span>&#123;</span><br><span class="line">            <span class="comment">/** The value associated with this ThreadLocal. */</span></span><br><span class="line">            Object value;</span><br><span class="line"></span><br><span class="line">            Entry(ThreadLocal&lt;?&gt; k, Object v) &#123;</span><br><span class="line">                <span class="keyword">super</span>(k);</span><br><span class="line">                value = v;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>正如代码注释山标记了两个“注意”，ThreadLocalMap在Thread中存在一个强引用链，而在ThreadLocal中则是一个弱引用链。如果此时如下图所示，发生了GC会导致弱引用中的Key值被回收，而此时当前线程并没有停止，所以强引用链依旧存在，但是并不能通过get方法获取到value（因为key被回收变成了null）。所以value会一直存在于内存中（如果当前线程一直存活），最后导致内存泄漏。</p>
+<p><img src="https://image-1257148187.cos.ap-chengdu.myqcloud.com/picgo_img/20200122140356.png" alt></p>
+<h3 id="executorservice-线程池"><a class="headerlink" href="#executorservice-线程池"></a> ExecutorService 线程池</h3>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 工作队列</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> BlockingQueue&lt;Runnable&gt; workQueue;</span><br><span class="line"><span class="comment">// 可重入锁</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> ReentrantLock mainLock = <span class="keyword">new</span> ReentrantLock();</span><br><span class="line"><span class="comment">// 工作线程对象</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> HashSet&lt;Worker&gt; workers = <span class="keyword">new</span> HashSet&lt;Worker&gt;();</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 线程对象</span></span><br><span class="line"><span class="comment"> * 继承了AQS,说明它自生是带有锁机制的，他所代表的线程状态（即work自己的状态）都是AQS机制的</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Worker</span> <span class="keyword">extends</span> <span class="title">AbstractQueuedSynchronizer</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</span><br><span class="line">    <span class="keyword">final</span> Thread thread;</span><br><span class="line">    <span class="comment">/** Initial task to run.  Possibly null. */</span></span><br><span class="line">    Runnable firstTask;</span><br><span class="line">    <span class="comment">/** Per-thread task counter */</span></span><br><span class="line">    <span class="keyword">volatile</span> <span class="keyword">long</span> completedTasks;</span><br><span class="line"></span><br><span class="line">    Worker(Runnable firstTask) &#123;</span><br><span class="line">            setState(-<span class="number">1</span>); <span class="comment">// inhibit interrupts until runWorker AQS 初始状态</span></span><br><span class="line">            <span class="keyword">this</span>.firstTask = firstTask;</span><br><span class="line">            <span class="keyword">this</span>.thread = getThreadFactory().newThread(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        runWorker(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 当前有效的线程数 &amp; 当前线程池的状态</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> AtomicInteger ctl = <span class="keyword">new</span> AtomicInteger(ctlOf(RUNNING, <span class="number">0</span>));</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">(Runnable command)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (command == <span class="keyword">null</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">         * Proceed in 3 steps:</span></span><br><span class="line"><span class="comment">         *</span></span><br><span class="line"><span class="comment">         * 1. If fewer than corePoolSize threads are running, try to</span></span><br><span class="line"><span class="comment">         * start a new thread with the given command as its first</span></span><br><span class="line"><span class="comment">         * task.  The call to addWorker atomically checks runState and</span></span><br><span class="line"><span class="comment">         * workerCount, and so prevents false alarms that would add</span></span><br><span class="line"><span class="comment">         * threads when it shouldn't, by returning false.</span></span><br><span class="line"><span class="comment">         *</span></span><br><span class="line"><span class="comment">         * 2. If a task can be successfully queued, then we still need</span></span><br><span class="line"><span class="comment">         * to double-check whether we should have added a thread</span></span><br><span class="line"><span class="comment">         * (because existing ones died since last checking) or that</span></span><br><span class="line"><span class="comment">         * the pool shut down since entry into this method. So we</span></span><br><span class="line"><span class="comment">         * recheck state and if necessary roll back the enqueuing if</span></span><br><span class="line"><span class="comment">         * stopped, or start a new thread if there are none.</span></span><br><span class="line"><span class="comment">         *</span></span><br><span class="line"><span class="comment">         * 3. If we cannot queue task, then we try to add a new</span></span><br><span class="line"><span class="comment">         * thread.  If it fails, we know we are shut down or saturated</span></span><br><span class="line"><span class="comment">         * and so reject the task.</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="keyword">int</span> c = ctl.get();</span><br><span class="line">        <span class="comment">// workerCountOf() 获取当前线程数,如果线程数小于核心线程数，则创建新线程（Worker）</span></span><br><span class="line">        <span class="keyword">if</span> (workerCountOf(c) &lt; corePoolSize) &#123;</span><br><span class="line">            <span class="keyword">if</span> (addWorker(command, <span class="keyword">true</span>))</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            c = ctl.get(); <span class="comment">// 执行到这里说明addWorker()操作失败，比如被其他command抢先拉满了核心线程数。</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// isRunning() 获取当前线程池状态是否为执行中，并且加入工作队列成功</span></span><br><span class="line">        <span class="keyword">if</span> (isRunning(c) &amp;&amp; workQueue.offer(command)) &#123;</span><br><span class="line">            <span class="keyword">int</span> recheck = ctl.get();</span><br><span class="line">            <span class="keyword">if</span> (! isRunning(recheck) &amp;&amp; remove(command))</span><br><span class="line">                <span class="comment">// 如果当前线程池不在执行状态，但是任务从工作队列移除成功了，则调用拒绝策略</span></span><br><span class="line">                reject(command);</span><br><span class="line">            <span class="comment">// 如果工作线程总数为0，就创建新工作线程（至少启动一个线程。）   </span></span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (workerCountOf(recheck) == <span class="number">0</span>)</span><br><span class="line">                addWorker(<span class="keyword">null</span>, <span class="keyword">false</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (!addWorker(command, <span class="keyword">false</span>)) <span class="comment">// 到这说明队列满了，那么就创建扩展线程执行，注意addWorker()第二个参数。</span></span><br><span class="line">            <span class="comment">// 到这说明用拓展线程也失败了，则调用拒绝策略</span></span><br><span class="line">            reject(command);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 创建执行线程</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">addWorker</span><span class="params">(Runnable firstTask, <span class="keyword">boolean</span> core)</span> </span>&#123;</span><br><span class="line">        retry: <span class="comment">// 重试点</span></span><br><span class="line">        <span class="comment">// CAS 操作</span></span><br><span class="line">        <span class="keyword">for</span> (;;) &#123;</span><br><span class="line">            <span class="keyword">int</span> c = ctl.get();</span><br><span class="line">            <span class="keyword">int</span> rs = runStateOf(c);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Check if queue empty only if necessary.</span></span><br><span class="line">            <span class="comment">// 果然 线程池 停止 并且 没有新任务 队列空 则返回 （说白了就是现场停止并且完全没事干了）</span></span><br><span class="line">            <span class="keyword">if</span> (rs &gt;= SHUTDOWN &amp;&amp; !(rs == SHUTDOWN &amp;&amp; firstTask == <span class="keyword">null</span> &amp;&amp; !workQueue.isEmpty()))</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span> (;;) &#123;</span><br><span class="line">                <span class="comment">// 获取工作线程数</span></span><br><span class="line">                <span class="keyword">int</span> wc = workerCountOf(c);</span><br><span class="line">                <span class="comment">// 当前工作线程数大于容量（CAPACITY 表示线程池理论容量）或者大于核心/最大设置线程数时 返回</span></span><br><span class="line">                <span class="keyword">if</span> (wc &gt;= CAPACITY ||  wc &gt;= (core ? corePoolSize : maximumPoolSize))</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">                <span class="comment">// cas 添加线程数。成功 则跳出循环（跳出到最外层循环）</span></span><br><span class="line">                <span class="keyword">if</span> (compareAndIncrementWorkerCount(c))</span><br><span class="line">                    <span class="keyword">break</span> retry;</span><br><span class="line">                c = ctl.get();  <span class="comment">// Re-read ctl</span></span><br><span class="line">                <span class="keyword">if</span> (runStateOf(c) != rs) <span class="comment">// cas 判断当前线程状态是否与上次的状态一致，不一致则到最外层重试。</span></span><br><span class="line">                    <span class="keyword">continue</span> retry;</span><br><span class="line">                <span class="comment">// else CAS failed due to workerCount change; retry inner loop</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">boolean</span> workerStarted = <span class="keyword">false</span>;</span><br><span class="line">        <span class="keyword">boolean</span> workerAdded = <span class="keyword">false</span>;</span><br><span class="line">        Worker w = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// 初始化一个工作对象</span></span><br><span class="line">            w = <span class="keyword">new</span> Worker(firstTask);</span><br><span class="line">            <span class="keyword">final</span> Thread t = w.thread;</span><br><span class="line">            <span class="keyword">if</span> (t != <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="comment">// 上锁</span></span><br><span class="line">                <span class="keyword">final</span> ReentrantLock mainLock = <span class="keyword">this</span>.mainLock;</span><br><span class="line">                mainLock.lock();</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="comment">// Recheck while holding lock.</span></span><br><span class="line">                    <span class="comment">// Back out on ThreadFactory failure or if</span></span><br><span class="line">                    <span class="comment">// shut down before lock acquired.</span></span><br><span class="line">                    <span class="keyword">int</span> rs = runStateOf(ctl.get());</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">if</span> (rs &lt; SHUTDOWN || (rs == SHUTDOWN &amp;&amp; firstTask == <span class="keyword">null</span>)) &#123;</span><br><span class="line">                        <span class="keyword">if</span> (t.isAlive()) <span class="comment">// precheck that t is startable</span></span><br><span class="line">                            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalThreadStateException();</span><br><span class="line">                        <span class="comment">// 把worker对象加到workers链中</span></span><br><span class="line">                        workers.add(w);</span><br><span class="line">                        <span class="keyword">int</span> s = workers.size();</span><br><span class="line">                        <span class="keyword">if</span> (s &gt; largestPoolSize)</span><br><span class="line">                            largestPoolSize = s;</span><br><span class="line">                        workerAdded = <span class="keyword">true</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">                    mainLock.unlock();</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">/**</span></span><br><span class="line"><span class="comment">                 * 如果添加成功 那就开始调用 worker的start()方法，后续这个线程会从工作队列中获取任务自己执行。</span></span><br><span class="line"><span class="comment">                 * 可以看Worker的run方法，调用的runWorker(Worker this)，以及 getTask()从队列中获取任务。</span></span><br><span class="line"><span class="comment">                 */</span></span><br><span class="line">                <span class="keyword">if</span> (workerAdded) &#123;</span><br><span class="line">                    t.start();</span><br><span class="line">                    workerStarted = <span class="keyword">true</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (! workerStarted)</span><br><span class="line">                addWorkerFailed(w);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> workerStarted;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 拒绝策略</span></span><br><span class="line">    <span class="function"><span class="keyword">final</span> <span class="keyword">void</span> <span class="title">reject</span><span class="params">(Runnable command)</span> </span>&#123;</span><br><span class="line">        handler.rejectedExecution(command, <span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>由此可见：</p>
+<ol>
+<li>线程池初始化线程其实超麻烦的，所以在一些核心场景下可以考虑优先初始化热身（把线程拉满）</li>
+<li>keepAliveTime是表示 当前线程池有任务要执行，但是现在开启的线程池太多了，导致一些现场始终抢不到任务，所以超过这个时间没抢到任务的线程就会被回收</li>
+<li>任务被执行完后（工作队列没任务了），则会主动调取processWorkerExit()方法来回出发回收线程操作。并且会保证只存活核心线程数或者只有一个线程（ONLY_ONE）</li>
+</ol>
+<p>附上线程池工作流程图：</p>
+<center>
+<p><img src="https://i.loli.net/2018/09/06/5b90b431ce0bf.png" alt="线程池工作流程.png"><span class="image-caption">线程池工作流程.png</span></p>
+</center>
+<h2 id="aqs"><a class="headerlink" href="#aqs"></a> AQS</h2>
+<p>AQS -&gt; AbstractQueuedSynchronizer 是一种实现锁和以来等待队列的同步器框架。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">AbstractQueuedSynchronizer</span> <span class="keyword">extends</span> <span class="title">AbstractOwnableSynchronizer</span> <span class="keyword">implements</span> <span class="title">java</span>.<span class="title">io</span>.<span class="title">Serializable</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span> </span>&#123;</span><br><span class="line">        <span class="comment">/** Marker to indicate a node is waiting in shared mode */</span></span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> Node SHARED = <span class="keyword">new</span> Node();</span><br><span class="line">        <span class="comment">/** Marker to indicate a node is waiting in exclusive mode */</span></span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> Node EXCLUSIVE = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/** waitStatus value to indicate thread has cancelled */</span></span><br><span class="line">        <span class="comment">// 用于标记线程被终止的状态值</span></span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> CANCELLED =  <span class="number">1</span>;</span><br><span class="line">        <span class="comment">/** waitStatus value to indicate successor's thread needs unparking */</span></span><br><span class="line">        <span class="comment">// 用于标记线下需要被唤醒的状态值</span></span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> SIGNAL    = -<span class="number">1</span>;</span><br><span class="line">        <span class="comment">/** waitStatus value to indicate thread is waiting on condition */</span></span><br><span class="line">        <span class="comment">// 用于标记线程为等待状态</span></span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> CONDITION = -<span class="number">2</span>;</span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * waitStatus value to indicate the next acquireShared should</span></span><br><span class="line"><span class="comment">         * unconditionally propagate</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="comment">// 表示可以传播下一个共享状态</span></span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> PROPAGATE = -<span class="number">3</span>;</span><br><span class="line">        <span class="comment">// 共享状态 使用 volatile 修饰 保证了状态在多线程场景下的可见性</span></span><br><span class="line">        <span class="keyword">volatile</span> <span class="keyword">int</span> waitStatus;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Node 节点的两端引用</span></span><br><span class="line">        <span class="keyword">volatile</span> Node prev;</span><br><span class="line">        <span class="keyword">volatile</span> Node next;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 当前node排队时的线程实例 </span></span><br><span class="line">        <span class="keyword">volatile</span> Thread thread;</span><br><span class="line"></span><br><span class="line">        Node nextWaiter;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="https://image-1257148187.cos.ap-chengdu.myqcloud.com/UTOOLS1583335209100.png" alt="AQS数据模型"><span class="image-caption">AQS数据模型</span></p>
+<h2 id="juc"><a class="headerlink" href="#juc"></a> JUC</h2>
+
+        </div>
+      
+    </div>
+
+    
+      
+      
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <i class="theme-color iconfont icon-tag"></i>
+              <a href="/tags/jdk/">jdk</a>
+            
+              <i class="theme-color iconfont icon-tag"></i>
+              <a href="/tags/源码解析/">源码解析</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2020/01/21/my-house/">
+        <i class="theme-color iconfont icon-left"></i>
+        <span class="prev-text nav-default">my-house</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    
+    
+      <a class="next" href="/2020/01/19/java-note-0/">
+        <span class="next-text nav-default">java-note[0]-JAVA源码-基本类型</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="theme-color iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+      </footer>
+    
+    
+  <div class="bdsharebuttonbox bd-share-box" id="share">
+    <a href="#" class="theme-color iconfont icon-copy" data-cmd="copy" title="分享到复制地址">
+    </a>
+    <a href="#" class="theme-color iconfont icon-yinxiang" data-cmd="evernotecn" title="分享到印象笔记"></a>
+    <!-- <a href="#" class="bds_youdao" data-cmd="youdao" title="分享到有道云笔记"></a> -->
+    <a href="#" class="theme-color iconfont icon-weibo" data-cmd="tsina" title="分享到新浪微博">
+    </a>
+    <a href="#" class="theme-color iconfont icon-wechat" data-cmd="weixin" title="分享到微信">
+    </a>
+  </div>
+  <script>
+    window._bd_share_config = {
+      "common": {
+        "bdSnsKey": {},
+        "bdText": "",
+        "bdMini": "1",
+        "bdMiniList": false,
+        "bdPic": "",
+        "bdStyle": "2",
+        "bdSize": "24"
+      },
+      "share": {}
+    };
+    // with (document) 0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = 'http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion=' + ~(-new Date() / 36e5)];
+  </script>
+  <script type="text/javascript" src="/lib/share/static/api/js/share.js"></script>
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="vcomments"></div> 
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:unusual7@163.com" class="theme-color iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+           <a href="https://github.com/Theembers" class="theme-color iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+        
+           <a href="https://www.zhihu.com/people/theembers" class="theme-color iconfont icon-zhihu" title="zhihu"></a>
+        
+      
+    
+      
+    
+      
+        
+           <a href="https://music.163.com/#/user/home?id=32131879" class="theme-color iconfont icon-cloudmusic" title="cloudmusic"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+    
+    
+      <a href="/atom.xml" class="theme-color iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+<div class="copyright">
+ <!-- <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span> -->
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2015 - 
+    
+    2020
+
+    <span class="heart">
+      <i class="iconfont icon-heart" style="color:red;"></i>
+    </span>
+    <span class="author">TheEmbers Guo</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="author-wrapper"><div class="author">
+  <div class="info">
+    
+  <div class="author-box">
+  
+    <div class="image-box">
+      <img class="image" src="https://image-1257148187.cos.ap-chengdu.myqcloud.com/picgo_img/person-head.jpeg">
+    </div>
+  
+    <div class="name">TheEmbers Guo</div>
+  
+    <div class="address"><i class="theme-color iconfont icon-address"></i>成都 · 中国</div>
+  
+  </div>
+
+  </div>
+
+  
+
+  <div class="author-categories">
+    <div class="title">
+      <i class="theme-color iconfont icon-categories"></i>
+      <span>分类</span>
+    </div>
+    <a class="category-link" href="/categories/Mac/">Mac<span class="category-count">1</span></a> <a class="category-link" href="/categories/blog/">blog<span class="category-count">12</span></a> <a class="category-link" href="/categories/blog/学习/">学习<span class="category-count">1</span></a> <a class="category-link" href="/categories/blog/年终总结/">年终总结<span class="category-count">4</span></a> <a class="category-link" href="/categories/blog/碎碎念/">碎碎念<span class="category-count">6</span></a> <a class="category-link" href="/categories/dev/">dev<span class="category-count">51</span></a> <a class="category-link" href="/categories/dev/DDD/">DDD<span class="category-count">1</span></a> <a class="category-link" href="/categories/dev/ElasticSearch/">ElasticSearch<span class="category-count">8</span></a> <a class="category-link" href="/categories/dev/database/">database<span class="category-count">6</span></a> <a class="category-link" href="/categories/dev/git/">git<span class="category-count">2</span></a> <a class="category-link" href="/categories/dev/go/">go<span class="category-count">1</span></a> <a class="category-link" href="/categories/dev/java/">java<span class="category-count">20</span></a> <a class="category-link" href="/categories/dev/java/jdk/">jdk<span class="category-count">2</span></a> <a class="category-link" href="/categories/dev/java/jvm/">jvm<span class="category-count">6</span></a> <a class="category-link" href="/categories/dev/java/netty/">netty<span class="category-count">3</span></a> <a class="category-link" href="/categories/dev/java/spring/">spring<span class="category-count">2</span></a> <a class="category-link" href="/categories/dev/java/并发/">并发<span class="category-count">5</span></a> <a class="category-link" href="/categories/dev/linux/">linux<span class="category-count">1</span></a> <a class="category-link" href="/categories/dev/node/">node<span class="category-count">1</span></a> <a class="category-link" href="/categories/dev/redis/">redis<span class="category-count">1</span></a> <a class="category-link" href="/categories/dev/spring-cloud/">spring cloud<span class="category-count">4</span></a> <a class="category-link" href="/categories/dev/tool/">tool<span class="category-count">1</span></a> <a class="category-link" href="/categories/dev/web/">web<span class="category-count">2</span></a> <a class="category-link" href="/categories/dev/消息队列/">消息队列<span class="category-count">1</span></a> <a class="category-link" href="/categories/dev/网络/">网络<span class="category-count">1</span></a> <a class="category-link" href="/categories/iot/">iot<span class="category-count">3</span></a> <a class="category-link" href="/categories/碎碎念/">碎碎念<span class="category-count">1</span></a> <a class="category-link" href="/categories/碎碎念/家装/">家装<span class="category-count">1</span></a>
+  </div>
+  <!--<div class="author-tags">
+    <div class="title">
+      <i class="iconfont icon-tags"></i>
+      <span> 标签</span>
+    </div>
+    <a class="tag-link" href="/tags/BlockingQueue/">BlockingQueue<span class="tag-count">1</span></a><a class="tag-link" href="/tags/ByteBuf/">ByteBuf<span class="tag-count">1</span></a><a class="tag-link" href="/tags/Cerebro/">Cerebro<span class="tag-count">1</span></a><a class="tag-link" href="/tags/ElasticSearch/">ElasticSearch<span class="tag-count">8</span></a><a class="tag-link" href="/tags/HTTP/">HTTP<span class="tag-count">1</span></a><a class="tag-link" href="/tags/Kibana/">Kibana<span class="tag-count">1</span></a><a class="tag-link" href="/tags/Mac/">Mac<span class="tag-count">1</span></a><a class="tag-link" href="/tags/RabbitMQ/">RabbitMQ<span class="tag-count">1</span></a><a class="tag-link" href="/tags/Spring-Cloud-Health/">Spring Cloud Health<span class="tag-count">2</span></a><a class="tag-link" href="/tags/TCP-IP/">TCP/IP<span class="tag-count">1</span></a><a class="tag-link" href="/tags/ThreadLocal/">ThreadLocal<span class="tag-count">1</span></a><a class="tag-link" href="/tags/aop/">aop<span class="tag-count">1</span></a><a class="tag-link" href="/tags/back-end/">back-end<span class="tag-count">2</span></a><a class="tag-link" href="/tags/cat/">cat<span class="tag-count">3</span></a><a class="tag-link" href="/tags/dc/">dc<span class="tag-count">1</span></a><a class="tag-link" href="/tags/dev/">dev<span class="tag-count">1</span></a><a class="tag-link" href="/tags/emoji/">emoji<span class="tag-count">1</span></a><a class="tag-link" href="/tags/fore-end/">fore-end<span class="tag-count">1</span></a><a class="tag-link" href="/tags/framework/">framework<span class="tag-count">2</span></a><a class="tag-link" href="/tags/git/">git<span class="tag-count">2</span></a><a class="tag-link" href="/tags/go/">go<span class="tag-count">1</span></a><a class="tag-link" href="/tags/iot/">iot<span class="tag-count">5</span></a><a class="tag-link" href="/tags/java/">java<span class="tag-count">14</span></a><a class="tag-link" href="/tags/jdk/">jdk<span class="tag-count">2</span></a><a class="tag-link" href="/tags/jvm/">jvm<span class="tag-count">6</span></a><a class="tag-link" href="/tags/linux/">linux<span class="tag-count">1</span></a><a class="tag-link" href="/tags/markdown/">markdown<span class="tag-count">2</span></a><a class="tag-link" href="/tags/mqtt/">mqtt<span class="tag-count">1</span></a><a class="tag-link" href="/tags/mysql/">mysql<span class="tag-count">6</span></a><a class="tag-link" href="/tags/netty/">netty<span class="tag-count">3</span></a><a class="tag-link" href="/tags/nio/">nio<span class="tag-count">2</span></a><a class="tag-link" href="/tags/nodeJs/">nodeJs<span class="tag-count">1</span></a><a class="tag-link" href="/tags/nodejs/">nodejs<span class="tag-count">1</span></a><a class="tag-link" href="/tags/proxy/">proxy<span class="tag-count">1</span></a><a class="tag-link" href="/tags/redis/">redis<span class="tag-count">1</span></a><a class="tag-link" href="/tags/soft/">soft<span class="tag-count">1</span></a><a class="tag-link" href="/tags/spring/">spring<span class="tag-count">2</span></a><a class="tag-link" href="/tags/spring-transaction/">spring transaction<span class="tag-count">1</span></a><a class="tag-link" href="/tags/spring-cloud-bus/">spring-cloud-bus<span class="tag-count">1</span></a><a class="tag-link" href="/tags/spring-cloud-config/">spring-cloud-config<span class="tag-count">1</span></a><a class="tag-link" href="/tags/spring事务管理/">spring事务管理<span class="tag-count">1</span></a><a class="tag-link" href="/tags/test/">test<span class="tag-count">1</span></a><a class="tag-link" href="/tags/volatile/">volatile<span class="tag-count">1</span></a><a class="tag-link" href="/tags/vscode/">vscode<span class="tag-count">1</span></a><a class="tag-link" href="/tags/vue/">vue<span class="tag-count">2</span></a><a class="tag-link" href="/tags/二档起步/">二档起步<span class="tag-count">1</span></a><a class="tag-link" href="/tags/代理模式/">代理模式<span class="tag-count">1</span></a><a class="tag-link" href="/tags/优化/">优化<span class="tag-count">1</span></a><a class="tag-link" href="/tags/句法/">句法<span class="tag-count">1</span></a><a class="tag-link" href="/tags/多线程/">多线程<span class="tag-count">5</span></a><a class="tag-link" href="/tags/学生时代/">学生时代<span class="tag-count">1</span></a><a class="tag-link" href="/tags/家装/">家装<span class="tag-count">1</span></a><a class="tag-link" href="/tags/年终总结/">年终总结<span class="tag-count">5</span></a><a class="tag-link" href="/tags/并发/">并发<span class="tag-count">5</span></a><a class="tag-link" href="/tags/序/">序<span class="tag-count">1</span></a><a class="tag-link" href="/tags/消息队列/">消息队列<span class="tag-count">1</span></a><a class="tag-link" href="/tags/源码解析/">源码解析<span class="tag-count">2</span></a><a class="tag-link" href="/tags/线程池/">线程池<span class="tag-count">1</span></a><a class="tag-link" href="/tags/表情/">表情<span class="tag-count">1</span></a><a class="tag-link" href="/tags/雪糕/">雪糕<span class="tag-count">3</span></a>
+  </div> -->
+  <div class="author-social">
+    
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:unusual7@163.com" class="theme-color iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+           <a href="https://github.com/Theembers" class="theme-color iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+        
+           <a href="https://www.zhihu.com/people/theembers" class="theme-color iconfont icon-zhihu" title="zhihu"></a>
+        
+      
+    
+      
+    
+      
+        
+           <a href="https://music.163.com/#/user/home?id=32131879" class="theme-color iconfont icon-cloudmusic" title="cloudmusic"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+    
+    
+      <a href="/atom.xml" class="theme-color iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+  </div>
+</div>
+
+      </div>
+      
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+
+      <div class="light-dark" id="light-dark">
+        <input type="checkbox" id="md_2">
+        <label for="md_2" class="iconfont write"></label>
+      </div>
+
+    
+  
+  
+
+  
+  
+<!-- valine Comments -->
+<script src="//cdn.jsdelivr.net/npm/valine/dist/Valine.min.js"></script>
+<script type="text/javascript">
+    setTimeout(function(){
+    new Valine({
+            el: '#vcomments',
+            notify: false,
+            verify: false,
+            app_id: "AbQBWhsXzFouhrbyvkHeWaQb-gzGzoHsz",
+            app_key: "JMW5LdbzGvOecjancFT4b9zm",
+            placeholder: "你要说什么啊😊",
+            avatar: 'retro',
+            meta: ['nick']
+        });
+    },300)
+   
+</script>
+
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.cookie.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/countup/countUp.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/growl/jquery.growl.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=1.1.4"></script>
+
+
+    <div class="back-img-box">
+      
+    </div>
+  </div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/assets/hijiki.model.json"},"display":{"position":"left","width":150,"height":300,"hOffset":20,"vOffset":-20},"mobile":{"show":false,"scale":0.5,"motion":true},"react":{"opacity":1},"log":false});</script></body>
+</html>

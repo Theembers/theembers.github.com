@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><meta name="generator" content="Hexo 3.9.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="并发[4]-各种BlockingQueue">
+
+
+
+
+  <meta name="keywords" content="开发, dev, blog, 博客, java, hexo, even, theembers, theembers, theEmbers.devFun, 小轴, 郭小轴">
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="TheEmbers.devFun">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1.4">
+
+
+
+<link rel="canonical" href="https://theembers.github.io/2018/09/11/thread-4/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1.4">
+
+
+
+  
+  <script id="baidu_analytics">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?6053c2edabf3ee9b02ecc553130da68a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+  <script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.10.0/dist/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "AbQBWhsXzFouhrbyvkHeWaQb-gzGzoHsz",
+      appKey: "JMW5LdbzGvOecjancFT4b9zm"
+    });
+  </script>
+
+
+
+
+<script>
+  window.config = {"title":"TheEmbers.devFun","subtitle":"childlike forever. 😃","description":"","author":"TheEmbers Guo","language":"zh-cn","timezone":"","url":"https://theembers.github.io","root":"/","permalink":":year/:month/:day/:title/","permalink_defaults":{},"source_dir":"source","public_dir":"public","tag_dir":"tags","archive_dir":"archives","category_dir":"categories","code_dir":"downloads/code","i18n_dir":":lang","skip_render":[],"new_post_name":":title.md","default_layout":"post","titlecase":false,"external_link":true,"filename_case":0,"render_drafts":false,"post_asset_folder":true,"relative_link":false,"future":true,"highlight":{"enable":true,"auto_detect":false,"line_number":true,"tab_replace":"","first_line_number":"always1"},"default_category":"uncategorized","category_map":{},"tag_map":{},"date_format":"YYYY-MM-DD","time_format":"HH:mm:ss","per_page":10,"pagination_dir":"page","theme":"even","deploy":[{"type":"git","repository":"git@github.com:Theembers/theembers.github.com.git","branch":"master"},{"type":"git","repository":"git@gitee.com:theembers/theembers.git","branch":"master"}],"ignore":[],"logo":"/image/logo.png","title_art":"<font class=\"theme-color\">7</font>heEmbers<font class=\"theme-color\">.</font>devFun","keywords":"开发, dev, blog, 博客, java, hexo, even, theembers, theembers, theEmbers.devFun, 小轴, 郭小轴","author_image":"https://image-1257148187.cos.ap-chengdu.myqcloud.com/picgo_img/person-head.jpeg","address":"成都 · 中国","default_bgimg":["https://image-1257148187.cos.ap-chengdu.myqcloud.com/picgo_img/WechatIMG15.jpg","https://image-1257148187.cos.ap-chengdu.myqcloud.com/picgo_img/timg.jpeg","https://image-1257148187.cos.ap-chengdu.myqcloud.com/picgo_img/tes11af.jpg","https://image-1257148187.cos.ap-chengdu.myqcloud.com/picgo_img/simptab-wallpaper-20190526195946.png","https://image-1257148187.cos.ap-chengdu.myqcloud.com/picgo_img/a44d4bddb4e7d119baf614e0e6698ba4.jpg","https://image-1257148187.cos.ap-chengdu.myqcloud.com/picgo_img/simptab-wallpaper-20190107131809.png"],"markdown_it_plus":{"highlight":true,"html":true,"xhtmlOut":true,"breaks":true,"langPrefix":null,"linkify":true,"typographer":null,"quotes":"“”‘’","pre_class":"highlight","plugins":[{"plugin":{"name":"markdown-it-mark","enable":true}},{"plugin":{"name":"markdown-it-toc-and-anchor","enable":true,"options":{"toc":true,"tocClassName":"markdownIt-TOC","tocFirstLevel":2,"tocLastLevel":6,"tocCallback":null,"anchorLink":true,"anchorLinkSymbol":"","anchorFirstLevel":2,"anchorLastLevel":6,"anchorLinkSpace":true,"anchorLinkSymbolClassName":null,"anchorLinkBefore":true,"anchorClassName":"headerlink","resetIds":true}}}]},"index_generator":{"per_page":10,"order_by":"-date","path":""},"archive_generator":{"per_page":20,"yearly":true,"monthly":true,"daily":false,"order_by":"-date"},"tag_generator":{"per_page":20},"category_generator":{"per_page":20},"neat_enable":false,"neat_html":{"enable":true,"exclude":null},"neat_css":{"enable":true,"exclude":["*.min.css"]},"neat_js":{"enable":true,"mangle":true,"output":null,"compress":null,"exclude":["*.min.js"]},"image_caption":{"enable":true,"class_name":null},"live2d":{"enable":true,"scriptFrom":"local","pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"use":"live2d-widget-model-hijiki"},"display":{"position":"left","width":150,"height":300,"hOffset":20,"vOffset":-20},"mobile":{"show":false,"scale":0.5,"motion":true},"react":{"opacity":1}},"encrypt":{"enable":true,"abstract":"有东西被加密了, 需要密码才能看.","message":"需要密码才可以看哦.","wrong_pass_message":"抱歉, 这个密码看着不太对, 请再试试.","wrong_hash_message":"抱歉, 这个文章不能被校验, 不过还是能看看解密后的内容."},"feed":{"type":"atom","limit":20,"hub":"","content":true,"content_limit":140,"content_limit_delim":"","path":"atom.xml"},"server":{"port":4000,"log":false,"ip":"0.0.0.0","compress":false,"header":true},"since":2015,"favicon":"/favicon.ico","rss":"/atom.xml","menu":{"Home":"/","Tags":"/tags","Categories":"/categories","Archives":"/archives","GitHub":"https://github.com/Theembers"},"color":"Default","toc":true,"total":false,"newPost":604800000,"fancybox":true,"pjax":true,"copyright":{"enable":false,"license":"<a rel=\"license\" href=\"http://creativecommons.org/licenses/by-nc/4.0/\"><img alt=\"知识共享许可协议\" style=\"border-width:0\" src=\"https://i.creativecommons.org/l/by-nc/4.0/80x15.png\" /></a>本作品采用<a rel=\"license\" href=\"http://creativecommons.org/licenses/by-nc/4.0/\">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可。"},"reward":{"enable":false,"qrCode":{"wechat":"/image/reward/wechat.jpg","alipay":"/image/reward/alipay.jpg"}},"social":{"email":"unusual7@163.com","stack-overflow":null,"twitter":null,"facebook":null,"linkedin":null,"google":null,"github":"https://github.com/Theembers","weibo":null,"zhihu":"https://www.zhihu.com/people/theembers","wechat":null,"cloudmusic":"https://music.163.com/#/user/home?id=32131879","douban":null,"pocket":null,"tumblr":null,"instagram":null},"local_search":{"enable":true},"leancloud":{"app_id":"AbQBWhsXzFouhrbyvkHeWaQb-gzGzoHsz","app_key":"JMW5LdbzGvOecjancFT4b9zm"},"baidu_analytics":"6053c2edabf3ee9b02ecc553130da68a","baidu_verification":null,"google_analytics":null,"google_verification":null,"disqus_shortname":null,"changyan":{"appid":null,"appkey":null},"livere_datauid":null,"valine":{"appid":"AbQBWhsXzFouhrbyvkHeWaQb-gzGzoHsz","appkey":"JMW5LdbzGvOecjancFT4b9zm","notify":false,"verify":false,"avatar":"retro","placeholder":"你要说什么啊😊","meta":"['nick']"},"version":"1.1.4"};
+</script>
+
+    <title> 并发[4]-各种BlockingQueue - TheEmbers.devFun </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <i class="image iconfont icon-cat"></i>
+    <span class="title">TheEmbers.devFun</span>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+  
+    <div class="mobile-post-toc-blank">
+    </div>
+   <!-- <div class="mobile-post-toc-icon">
+      <i class="iconfont icon-catalog"></i>
+    </div> -->
+  
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  
+  <div class="author-box">
+  
+    <div class="image-box">
+      <img class="image" src="https://image-1257148187.cos.ap-chengdu.myqcloud.com/picgo_img/person-head.jpeg">
+    </div>
+  
+    <div class="name">TheEmbers Guo</div>
+  
+    <div class="address"><i class="theme-color iconfont icon-address"></i>成都 · 中国</div>
+  
+  </div>
+
+
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          <i class="theme-color iconfont icon-home"></i>
+          
+          
+            首页
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          <i class="theme-color iconfont icon-tags"></i>
+          
+          
+            标签
+          
+        </li>
+      </a>
+    
+      <a href="/categories">
+        <li class="mobile-menu-item">
+          <i class="theme-color iconfont icon-categories"></i>
+          
+          
+            分类
+          
+        </li>
+      </a>
+    
+      <a href="/archives">
+        <li class="mobile-menu-item">
+          <i class="theme-color iconfont icon-archives"></i>
+          
+          
+            归档
+          
+        </li>
+      </a>
+    
+      <a href="https://github.com/Theembers">
+        <li class="mobile-menu-item">
+          <i class="theme-color iconfont icon-github"></i>
+          
+          
+            GitHub
+          
+        </li>
+      </a>
+    
+  </ul>
+
+  <div class="mobile-menu-social">
+    
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:unusual7@163.com" class="theme-color iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+           <a href="https://github.com/Theembers" class="theme-color iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+        
+           <a href="https://www.zhihu.com/people/theembers" class="theme-color iconfont icon-zhihu" title="zhihu"></a>
+        
+      
+    
+      
+    
+      
+        
+           <a href="https://music.163.com/#/user/home?id=32131879" class="theme-color iconfont icon-cloudmusic" title="cloudmusic"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+    
+    
+      <a href="/atom.xml" class="theme-color iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+  </div>
+  
+</nav>
+
+<nav id="mobile-toc" class="mobile-toc slideout-menu">
+ <!-- 
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+    
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#生产者-消费者场景"><span class="toc-number">1.</span> <span class="toc-text"> &quot;生产者-消费者&quot;场景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#blockingqueue-基本操作"><span class="toc-number">2.</span> <span class="toc-text"> BlockingQueue 基本操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#插入队列元素"><span class="toc-number">2.1.</span> <span class="toc-text"> 插入队列元素</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#删除元素"><span class="toc-number">2.2.</span> <span class="toc-text"> 删除元素</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查看元素"><span class="toc-number">2.3.</span> <span class="toc-text"> 查看元素</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#特点"><span class="toc-number">2.4.</span> <span class="toc-text"> 特点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#常用的blockingqueue实现类"><span class="toc-number">3.</span> <span class="toc-text"> 常用的BlockingQueue实现类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#arrayblockingqueue"><span class="toc-number">3.1.</span> <span class="toc-text"> ArrayBlockingQueue</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#delayqueue-延迟队列"><span class="toc-number">3.2.</span> <span class="toc-text"> DelayQueue 延迟队列</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#linkedblockingqueue-链阻塞队列"><span class="toc-number">3.3.</span> <span class="toc-text"> LinkedBlockingQueue 链阻塞队列</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#priorityblockingqueue-优先级阻塞队列"><span class="toc-number">3.4.</span> <span class="toc-text"> PriorityBlockingQueue 优先级阻塞队列</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#synchronousqueue-同步队列"><span class="toc-number">3.5.</span> <span class="toc-text"> SynchronousQueue 同步队列</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#blockingdeque-阻塞双端队列"><span class="toc-number">3.6.</span> <span class="toc-text"> BlockingDeque 阻塞双端队列</span></a></li></ol></li></ol>
+    
+    </div>
+  </div>
+
+ -->
+</nav>
+    <div class="container" id="mobile-panel">
+
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/.">
+    <span class="icon iconfont icon-cat"></span>
+    <span class="title"><font class="theme-color">7</font>heEmbers<font class="theme-color">.</font>devFun</span>
+    <span class="subtitle">childlike forever. 😃</span>
+  </a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            <i class="theme-color iconfont icon-home"></i>
+            
+            
+              首页
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            <i class="theme-color iconfont icon-tags"></i>
+            
+            
+              标签
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            <i class="theme-color iconfont icon-categories"></i>
+            
+            
+              分类
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives">
+            <i class="theme-color iconfont icon-archives"></i>
+            
+            
+              归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="https://github.com/Theembers">
+            <i class="theme-color iconfont icon-github"></i>
+            
+            
+              GitHub
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+<div id="topbar" class="topbar hidden">
+  <div class="logo">
+    <a href="/.">
+      <span class="icon iconfont icon-cat"></span>
+      <span class="title"><font class="theme-color">7</font>heEmbers<font class="theme-color">.</font>devFun</span>
+    </a>
+  </div>
+  <div class="menu">
+    
+      
+        <span class="menu-item">
+          <a class="menu-item-link" href="/">
+            <i class="theme-color iconfont icon-home"></i>
+            
+            
+              首页
+            
+          </a>
+        </span>
+      
+        <span class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            <i class="theme-color iconfont icon-tags"></i>
+            
+            
+              标签
+            
+          </a>
+        </span>
+      
+        <span class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            <i class="theme-color iconfont icon-categories"></i>
+            
+            
+              分类
+            
+          </a>
+        </span>
+      
+        <span class="menu-item">
+          <a class="menu-item-link" href="/archives">
+            <i class="theme-color iconfont icon-archives"></i>
+            
+            
+              归档
+            
+          </a>
+        </span>
+      
+        <span class="menu-item">
+          <a class="menu-item-link" href="https://github.com/Theembers">
+            <i class="theme-color iconfont icon-github"></i>
+            
+            
+              GitHub
+            
+          </a>
+        </span>
+      
+  
+  </div>
+</div>
+      </header>
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  
+    <article class="post">
+  
+    <header class="post-header">
+      
+      <!--文章标题 -->
+      <h1 class="post-title">
+        <span class="post-flag">
+          
+          
+          
+        </span>
+        
+          并发[4]-各种BlockingQueue
+          
+        
+      </h1>
+      <!-- 文章信息 -->
+      <div class="post-meta">
+        <span class="post-time">
+          <i class="theme-color iconfont icon-date"></i>
+          2018-09-11
+        </span>
+        <span class="post-count">
+          <i class="theme-color iconfont icon-count"></i>
+          
+          2.5k
+          
+        </span>
+        <span class="post-read">
+          <i class="theme-color iconfont icon-time"></i>
+          
+          23
+          
+        </span>
+        
+          <span class="post-visits">
+              <i class="theme-color iconfont icon-visitor"></i>
+              <span class="visits" data-url="/2018/09/11/thread-4/" data-title="并发[4]-各种BlockingQueue">0</span>
+          </span>
+        
+      </div>
+      
+      
+        <div class="float-right post-meta">
+      
+          <div class="post-category">
+            <i class="theme-color iconfont icon-categories"></i>
+            
+              <a href="/categories/dev/">dev</a>
+            
+              <a href="/categories/dev/java/">java</a>
+            
+              <a href="/categories/dev/java/并发/">并发</a>
+            
+          </div>
+        </div>
+      
+      
+     
+    </header>
+    
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+    
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#生产者-消费者场景"><span class="toc-number">1.</span> <span class="toc-text"> &quot;生产者-消费者&quot;场景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#blockingqueue-基本操作"><span class="toc-number">2.</span> <span class="toc-text"> BlockingQueue 基本操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#插入队列元素"><span class="toc-number">2.1.</span> <span class="toc-text"> 插入队列元素</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#删除元素"><span class="toc-number">2.2.</span> <span class="toc-text"> 删除元素</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查看元素"><span class="toc-number">2.3.</span> <span class="toc-text"> 查看元素</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#特点"><span class="toc-number">2.4.</span> <span class="toc-text"> 特点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#常用的blockingqueue实现类"><span class="toc-number">3.</span> <span class="toc-text"> 常用的BlockingQueue实现类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#arrayblockingqueue"><span class="toc-number">3.1.</span> <span class="toc-text"> ArrayBlockingQueue</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#delayqueue-延迟队列"><span class="toc-number">3.2.</span> <span class="toc-text"> DelayQueue 延迟队列</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#linkedblockingqueue-链阻塞队列"><span class="toc-number">3.3.</span> <span class="toc-text"> LinkedBlockingQueue 链阻塞队列</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#priorityblockingqueue-优先级阻塞队列"><span class="toc-number">3.4.</span> <span class="toc-text"> PriorityBlockingQueue 优先级阻塞队列</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#synchronousqueue-同步队列"><span class="toc-number">3.5.</span> <span class="toc-text"> SynchronousQueue 同步队列</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#blockingdeque-阻塞双端队列"><span class="toc-number">3.6.</span> <span class="toc-text"> BlockingDeque 阻塞双端队列</span></a></li></ol></li></ol>
+    
+    </div>
+  </div>
+
+
+    
+    <div class="post-content ">
+      
+        <div class="detial-post-content">
+          <h2 id="生产者-消费者场景"><a class="headerlink" href="#生产者-消费者场景"></a> &quot;生产者-消费者&quot;场景</h2>
+<p>在 “生产者-消费者” 场景中，队列通常被视作线程间操作的数据容器，这样，可以对各个模块的业务功能进行解耦，生产者将“生产”出来的数据放置在数据容器中，而消费者仅仅只需要在“数据容器”中进行获取数据即可，这样生产者线程和消费者线程就能够进行解耦，只专注于自己的业务功能即可。</p>
+<p>而阻塞队列（BlockingQueue）就被广泛使用在“生产者-消费者”场景中。原因是 BlockingQueue 提供了可阻塞的插入和移除的方法。当队列容器已满，生产者线程会被阻塞，直到队列未满；当队列容器为空时，消费者线程会被阻塞，直至队列非空时为止。</p>
+<h2 id="blockingqueue-基本操作"><a class="headerlink" href="#blockingqueue-基本操作"></a> BlockingQueue 基本操作</h2>
+<p>BlockingQueue基本操作总结如下：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Throws exception</th>
+<th>Special value(true / false)</th>
+<th>Blocks</th>
+<th>Time out</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Insert</strong></td>
+<td>add(e)</td>
+<td>offer(e)</td>
+<td>put(e)</td>
+<td>offer(e,time,unit)</td>
+</tr>
+<tr>
+<td><strong>Remove</strong></td>
+<td>remove()</td>
+<td>poll()</td>
+<td>take()</td>
+<td>poll(time,unit)</td>
+</tr>
+<tr>
+<td><strong>Examine</strong></td>
+<td>element()</td>
+<td>peek()</td>
+<td>[not applicable]</td>
+<td>[not applicable]</td>
+</tr>
+</tbody>
+</table>
+<p>BlockingQueue继承于Queue接口</p>
+<h3 id="插入队列元素"><a class="headerlink" href="#插入队列元素"></a> 插入队列元素</h3>
+<ul>
+<li>add(E e):boolean 往队列插入数据，当队列满时，插入元素时 <strong>会抛出IllegalStateException异常</strong></li>
+<li>offer(E e):boolean 当往队列插入数据时，插入成功返回true，否则则返回false。当队列满时 <strong>不会抛出异常</strong></li>
+<li>put(E e):void 当阻塞队列容量已经满时，往阻塞队列插入数据的线程 <strong>会被阻塞</strong>，直至阻塞队列已经有空余的容量可供使用</li>
+<li>offer(E e, long timeout, TimeUnit unit):boolean 若阻塞队列已经满时，同样会阻塞插入数据的线程，直至阻塞队列已经有空余的地方，与put方法不同的是，该方法会有一个超时时间，若超过当前给定的超时时间，插入数据的线程会退出</li>
+</ul>
+<h3 id="删除元素"><a class="headerlink" href="#删除元素"></a> 删除元素</h3>
+<ul>
+<li>remove(Object o):boolean 从队列中删除数据，成功则返回true，否则为false</li>
+<li>remove():Object 从队列中删除数据，成功则返回元素对象，否则 <strong>会抛出NoSuchElementException异常</strong></li>
+<li>poll:Object 删除并返回数据，当队列为空时，返回null</li>
+<li>poll(long timeout, TimeUnit unit):Object 删除并返回数据，当队列为空时，返回null</li>
+<li>take():Object 删除并返回数据,当阻塞队列为空时，获取队头数据的线程 <strong>会被阻塞</strong></li>
+</ul>
+<h3 id="查看元素"><a class="headerlink" href="#查看元素"></a> 查看元素</h3>
+<ul>
+<li>element:Object 获取队头元素，如果队列为空时则 <strong>抛出NoSuchElementException异常</strong></li>
+<li>peek:Object 获取队头元素，如果队列为空 <strong>则返回null</strong></li>
+</ul>
+<h3 id="特点"><a class="headerlink" href="#特点"></a> 特点</h3>
+<ul>
+<li>
+<p><strong>不接受 null 元素</strong>。<br>
+试图 add、put 或 offer 一个 null 元素时，某些实现会抛出 NullPointerException。null 被用作指示 poll 操作失败的警戒值。</p>
+</li>
+<li>
+<p><strong>可以是限定容量的</strong>。<br>
+它在任意给定时间都可以有一个 remainingCapacity，超出此容量，便无法无阻塞地 put 附加元素。没有任何内部容量约束的 BlockingQueue 总是报告Integer.MAX_VALUE 的剩余容量。</p>
+</li>
+<li>
+<p>实现主要用于生产者-使用者队列，但它另外还支持 Collection 接口。<br>
+因此，举例来说，使用 remove(x) 从队列中移除任意一个元素是有可能的。然而，这种操作通常不会有效执行，只能有计划地偶尔使用，比如在取消排队信息时。</p>
+</li>
+<li>
+<p><strong>实现是线程安全的</strong>。<br>
+所有排队方法都可以使用内部锁或其他形式的并发控制来自动达到它们的目的。然而，大量的 Collection 操作（addAll、containsAll、retainAll 和removeAll）没有 必要自动执行，除非在实现中特别说明。因此，举例来说，在只添加了 c 中的一些元素后，<code>addAll(c)</code> 有可能失败（抛出一个异常）。</p>
+</li>
+</ul>
+<h2 id="常用的blockingqueue实现类"><a class="headerlink" href="#常用的blockingqueue实现类"></a> 常用的BlockingQueue实现类</h2>
+<p>实现BlockingQueue接口的有 ArrayBlockingQueue, DelayQueue, LinkedBlockingDeque, LinkedBlockingQueue, LinkedTransferQueue, PriorityBlockingQueue, SynchronousQueue</p>
+<h3 id="arrayblockingqueue"><a class="headerlink" href="#arrayblockingqueue"></a> ArrayBlockingQueue</h3>
+<p>一个由数组支持的有界阻塞队列。<br>
+此队列按 FIFO（先进先出）原则对元素进行排序。<br>
+队列的头部 是在队列中存在时间最长的元素。队列的尾部 是在队列中存在时间最短的元素。<br>
+新元素插入到队列的尾部，队列获取操作则是从队列头部开始获得元素。</p>
+<p>这是一个典型的“有界缓存区”，固定大小的数组在其中保持生产者插入的元素和使用者提取的元素。一旦创建了这样的缓存区，就不能再增加其容量。试图向已满队列中放入元素会导致操作受阻塞；试图从空队列中提取元素将导致类似阻塞。</p>
+<p>此类支持对等待的生产者线程和使用者线程进行排序的可选公平策略。默认情况下，不保证是这种排序。然而，通过将公平性 (fairness) 设置为 true 而构造的队列允许按照 FIFO 顺序访问线程。公平性通常会降低吞吐量，但也减少了可变性和避免了“不平衡性”</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> BlockingQueue&lt;String&gt; blockingQueue = <span class="keyword">new</span> ArrayBlockingQueue(<span class="number">10</span>,<span class="keyword">true</span>);</span><br></pre></td></tr></table></figure>
+<h3 id="delayqueue-延迟队列"><a class="headerlink" href="#delayqueue-延迟队列"></a> DelayQueue 延迟队列</h3>
+<p>Delayed 元素的一个无界阻塞队列，只有在延迟期满时才能从中提取元素。<br>
+该队列的头部是延迟期满后保存时间最长的 Delayed 元素。<strong>如果延迟都还没有期满，则队列没有头部，并且 poll 将返回 null</strong>。<br>
+当一个元素的 getDelay(TimeUnit.NANOSECONDS) 方法返回一个小于等于 0 的值时，将发生到期。即使无法使用 take 或 poll 移除未到期的元素，也不会将这些元素作为正常元素对待。例如，size 方法同时返回到期和未到期元素的计数。此队列不允许使用 null 元素</p>
+<p>延迟队列示例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> TheEmbers</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@version</span> 1.0</span></span><br><span class="line"><span class="comment"> * createTime 2018-09-11 12:23</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DelayQueueDemo</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">DelayedTask</span> <span class="keyword">implements</span> <span class="title">Delayed</span> </span>&#123;</span><br><span class="line">        <span class="keyword">public</span> Long delayTime; <span class="comment">// -&gt; 阻塞时间</span></span><br><span class="line">        <span class="keyword">public</span> TimeUnit delayTimeUnit; <span class="comment">// -&gt; 阻塞时间单位</span></span><br><span class="line">        <span class="keyword">public</span> Long executeTime;<span class="comment">//ms // -&gt; 执行时间</span></span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">DelayedTask</span><span class="params">(<span class="keyword">long</span> delayTime, TimeUnit delayTimeUnit)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.delayTime = delayTime;</span><br><span class="line">            <span class="keyword">this</span>.delayTimeUnit = delayTimeUnit;</span><br><span class="line">            <span class="keyword">this</span>.executeTime = System.currentTimeMillis() + delayTimeUnit.toMillis(delayTime); <span class="comment">// -&gt; 系统当前时间 + 阻塞时间</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 计算当前时间到执行时间之间还有多长时间</span></span><br><span class="line"><span class="comment">         *</span></span><br><span class="line"><span class="comment">         * <span class="doctag">@param</span> unit</span></span><br><span class="line"><span class="comment">         * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">getDelay</span><span class="params">(TimeUnit unit)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> unit.convert(executeTime - System.currentTimeMillis(), TimeUnit.MILLISECONDS);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 判断队列中元素的顺序谁前谁后。当前元素比队列元素后执行时，返回一个正数，比它先执行时返回一个负数，否则返回0</span></span><br><span class="line"><span class="comment">         *</span></span><br><span class="line"><span class="comment">         * <span class="doctag">@param</span> o</span></span><br><span class="line"><span class="comment">         * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compareTo</span><span class="params">(Delayed o)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="keyword">this</span>.getDelay(TimeUnit.MILLISECONDS) &gt; o.getDelay(TimeUnit.MILLISECONDS)) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">this</span>.getDelay(TimeUnit.MILLISECONDS) &lt; o.getDelay(TimeUnit.MILLISECONDS)) &#123;</span><br><span class="line">                <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">"DelayedTask&#123;"</span> +</span><br><span class="line">                    <span class="string">"delayTime="</span> + delayTime +</span><br><span class="line">                    <span class="string">", delayTimeUnit="</span> + delayTimeUnit +</span><br><span class="line">                    <span class="string">", executeTime="</span> + executeTime +</span><br><span class="line">                    <span class="string">'&#125;'</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        DelayQueue&lt;DelayedTask&gt; queue = <span class="keyword">new</span> DelayQueue&lt;&gt;();</span><br><span class="line">        queue.add(<span class="keyword">new</span> DelayedTask(<span class="number">4L</span>, TimeUnit.SECONDS));</span><br><span class="line">        queue.add(<span class="keyword">new</span> DelayedTask(<span class="number">2L</span>, TimeUnit.SECONDS));</span><br><span class="line">        queue.add(<span class="keyword">new</span> DelayedTask(<span class="number">3L</span>, TimeUnit.SECONDS));</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">"queue put done"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (!queue.isEmpty()) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                DelayedTask task = queue.take();</span><br><span class="line">                System.out.println(task.toString());</span><br><span class="line"></span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 输出： 注意输出顺序与插入顺序的区别</span></span><br><span class="line">    <span class="comment">//    queue put done</span></span><br><span class="line">    <span class="comment">//    DelayedTask&#123;delayTime=2, delayTimeUnit=SECONDS, executeTime=1536640039477&#125;</span></span><br><span class="line">    <span class="comment">//    DelayedTask&#123;delayTime=3, delayTimeUnit=SECONDS, executeTime=1536640040477&#125;</span></span><br><span class="line">    <span class="comment">//    DelayedTask&#123;delayTime=4, delayTimeUnit=SECONDS, executeTime=1536640041477&#125;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="linkedblockingqueue-链阻塞队列"><a class="headerlink" href="#linkedblockingqueue-链阻塞队列"></a> LinkedBlockingQueue 链阻塞队列</h3>
+<p>LinkedBlockingQueue 内部以一个链式结构(链接节点)对其元素进行存储。如果需要的话，这一链式结构可以选择一个上限。如果没有定义上限，将使用 Integer.MAX_VALUE 作为上限。<br>
+LinkedBlockingQueue 内部以 FIFO(先进先出)的顺序对元素进行存储。队列中的头元素在所有元素之中是放入时间最久的那个，而尾元素则是最短的那个。</p>
+<h3 id="priorityblockingqueue-优先级阻塞队列"><a class="headerlink" href="#priorityblockingqueue-优先级阻塞队列"></a> PriorityBlockingQueue 优先级阻塞队列</h3>
+<p>一个无界阻塞队列，它使用与类 PriorityQueue 相同的顺序规则，并且提供了阻塞获取操作。虽然此队列逻辑上是无界的，但是资源被耗尽时试图执行 add 操作也将失败（导致OutOfMemoryError）。此类不允许使用 null 元素。依赖自然顺序的优先级队列也不允许插入不可比较的对象（这样做会导致抛出 ClassCastException）。</p>
+<p>此类及其迭代器可以实现 Collection 和 Iterator 接口的所有可选 方法。iterator() 方法中提供的迭代器并不 保证以特定的顺序遍历 PriorityBlockingQueue 的元素。如果需要有序地进行遍历，则应考虑使用 <code>Arrays.sort(pq.toArray())</code>。此外，可以使用方法 drainTo 按优先级顺序移除 全部或部分元素，并将它们放在另一个 collection 中。</p>
+<p>在此类上进行的操作不保证具有同等优先级的元素的顺序。如果需要实施某一排序，那么可以定义自定义类或者比较器，比较器可使用修改键断开主优先级值之间的联系。例如，以下是应用先进先出 (first-in-first-out) 规则断开可比较元素之间联系的一个类。要使用该类，则需要插入一个新的 FIFOEntry(anEntry) 来替换普通的条目对象。</p>
+<h3 id="synchronousqueue-同步队列"><a class="headerlink" href="#synchronousqueue-同步队列"></a> SynchronousQueue 同步队列</h3>
+<p>SynchronousQueue 是一个特殊的队列，它的内部同时只能够容纳单个元素。如果该队列已有一元素的话，试图向队列中插入一个新元素的线程将会阻塞，直到另一个线程将该元素从队列中抽走。同样，如果该队列为空，试图向队列中抽取一个元素的线程将会阻塞，直到另一个线程向队列中插入了一条新的元素。</p>
+<h3 id="blockingdeque-阻塞双端队列"><a class="headerlink" href="#blockingdeque-阻塞双端队列"></a> BlockingDeque 阻塞双端队列</h3>
+<p>一个基于已链接节点的、任选范围的阻塞双端队列。<br>
+可选的容量范围构造方法参数是一种防止过度膨胀的方式。如果未指定容量，那么容量将等于 Integer.MAX_VALUE。只要插入元素不会使双端队列超出容量，每次插入后都将动态地创建链接节点。<br>
+大多数操作都以固定时间运行（不计阻塞消耗的时间）。异常包括 remove、removeFirstOccurrence、removeLastOccurrence、contains、iterator.remove() 以及批量操作，它们均以线性时间运行。</p>
+
+        </div>
+      
+    </div>
+
+    
+      
+      
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <i class="theme-color iconfont icon-tag"></i>
+              <a href="/tags/java/">java</a>
+            
+              <i class="theme-color iconfont icon-tag"></i>
+              <a href="/tags/并发/">并发</a>
+            
+              <i class="theme-color iconfont icon-tag"></i>
+              <a href="/tags/多线程/">多线程</a>
+            
+              <i class="theme-color iconfont icon-tag"></i>
+              <a href="/tags/BlockingQueue/">BlockingQueue</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2018/09/13/git-0/">
+        <i class="theme-color iconfont icon-left"></i>
+        <span class="prev-text nav-default">git-多密钥配置</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    
+    
+      <a class="next" href="/2018/09/08/linux-0/">
+        <span class="next-text nav-default">linux-常用操作命令</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="theme-color iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+      </footer>
+    
+    
+  <div class="bdsharebuttonbox bd-share-box" id="share">
+    <a href="#" class="theme-color iconfont icon-copy" data-cmd="copy" title="分享到复制地址">
+    </a>
+    <a href="#" class="theme-color iconfont icon-yinxiang" data-cmd="evernotecn" title="分享到印象笔记"></a>
+    <!-- <a href="#" class="bds_youdao" data-cmd="youdao" title="分享到有道云笔记"></a> -->
+    <a href="#" class="theme-color iconfont icon-weibo" data-cmd="tsina" title="分享到新浪微博">
+    </a>
+    <a href="#" class="theme-color iconfont icon-wechat" data-cmd="weixin" title="分享到微信">
+    </a>
+  </div>
+  <script>
+    window._bd_share_config = {
+      "common": {
+        "bdSnsKey": {},
+        "bdText": "",
+        "bdMini": "1",
+        "bdMiniList": false,
+        "bdPic": "",
+        "bdStyle": "2",
+        "bdSize": "24"
+      },
+      "share": {}
+    };
+    // with (document) 0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = 'http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion=' + ~(-new Date() / 36e5)];
+  </script>
+  <script type="text/javascript" src="/lib/share/static/api/js/share.js"></script>
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="vcomments"></div> 
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:unusual7@163.com" class="theme-color iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+           <a href="https://github.com/Theembers" class="theme-color iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+        
+           <a href="https://www.zhihu.com/people/theembers" class="theme-color iconfont icon-zhihu" title="zhihu"></a>
+        
+      
+    
+      
+    
+      
+        
+           <a href="https://music.163.com/#/user/home?id=32131879" class="theme-color iconfont icon-cloudmusic" title="cloudmusic"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+    
+    
+      <a href="/atom.xml" class="theme-color iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+<div class="copyright">
+ <!-- <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span> -->
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2015 - 
+    
+    2020
+
+    <span class="heart">
+      <i class="iconfont icon-heart" style="color:red;"></i>
+    </span>
+    <span class="author">TheEmbers Guo</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="author-wrapper"><div class="author">
+  <div class="info">
+    
+  <div class="author-box">
+  
+    <div class="image-box">
+      <img class="image" src="https://image-1257148187.cos.ap-chengdu.myqcloud.com/picgo_img/person-head.jpeg">
+    </div>
+  
+    <div class="name">TheEmbers Guo</div>
+  
+    <div class="address"><i class="theme-color iconfont icon-address"></i>成都 · 中国</div>
+  
+  </div>
+
+  </div>
+
+  
+
+  <div class="author-categories">
+    <div class="title">
+      <i class="theme-color iconfont icon-categories"></i>
+      <span>分类</span>
+    </div>
+    <a class="category-link" href="/categories/Mac/">Mac<span class="category-count">1</span></a> <a class="category-link" href="/categories/blog/">blog<span class="category-count">12</span></a> <a class="category-link" href="/categories/blog/学习/">学习<span class="category-count">1</span></a> <a class="category-link" href="/categories/blog/年终总结/">年终总结<span class="category-count">4</span></a> <a class="category-link" href="/categories/blog/碎碎念/">碎碎念<span class="category-count">6</span></a> <a class="category-link" href="/categories/dev/">dev<span class="category-count">51</span></a> <a class="category-link" href="/categories/dev/DDD/">DDD<span class="category-count">1</span></a> <a class="category-link" href="/categories/dev/ElasticSearch/">ElasticSearch<span class="category-count">8</span></a> <a class="category-link" href="/categories/dev/database/">database<span class="category-count">6</span></a> <a class="category-link" href="/categories/dev/git/">git<span class="category-count">2</span></a> <a class="category-link" href="/categories/dev/go/">go<span class="category-count">1</span></a> <a class="category-link" href="/categories/dev/java/">java<span class="category-count">20</span></a> <a class="category-link" href="/categories/dev/java/jdk/">jdk<span class="category-count">2</span></a> <a class="category-link" href="/categories/dev/java/jvm/">jvm<span class="category-count">6</span></a> <a class="category-link" href="/categories/dev/java/netty/">netty<span class="category-count">3</span></a> <a class="category-link" href="/categories/dev/java/spring/">spring<span class="category-count">2</span></a> <a class="category-link" href="/categories/dev/java/并发/">并发<span class="category-count">5</span></a> <a class="category-link" href="/categories/dev/linux/">linux<span class="category-count">1</span></a> <a class="category-link" href="/categories/dev/node/">node<span class="category-count">1</span></a> <a class="category-link" href="/categories/dev/redis/">redis<span class="category-count">1</span></a> <a class="category-link" href="/categories/dev/spring-cloud/">spring cloud<span class="category-count">4</span></a> <a class="category-link" href="/categories/dev/tool/">tool<span class="category-count">1</span></a> <a class="category-link" href="/categories/dev/web/">web<span class="category-count">2</span></a> <a class="category-link" href="/categories/dev/消息队列/">消息队列<span class="category-count">1</span></a> <a class="category-link" href="/categories/dev/网络/">网络<span class="category-count">1</span></a> <a class="category-link" href="/categories/iot/">iot<span class="category-count">3</span></a> <a class="category-link" href="/categories/碎碎念/">碎碎念<span class="category-count">1</span></a> <a class="category-link" href="/categories/碎碎念/家装/">家装<span class="category-count">1</span></a>
+  </div>
+  <!--<div class="author-tags">
+    <div class="title">
+      <i class="iconfont icon-tags"></i>
+      <span> 标签</span>
+    </div>
+    <a class="tag-link" href="/tags/BlockingQueue/">BlockingQueue<span class="tag-count">1</span></a><a class="tag-link" href="/tags/ByteBuf/">ByteBuf<span class="tag-count">1</span></a><a class="tag-link" href="/tags/Cerebro/">Cerebro<span class="tag-count">1</span></a><a class="tag-link" href="/tags/ElasticSearch/">ElasticSearch<span class="tag-count">8</span></a><a class="tag-link" href="/tags/HTTP/">HTTP<span class="tag-count">1</span></a><a class="tag-link" href="/tags/Kibana/">Kibana<span class="tag-count">1</span></a><a class="tag-link" href="/tags/Mac/">Mac<span class="tag-count">1</span></a><a class="tag-link" href="/tags/RabbitMQ/">RabbitMQ<span class="tag-count">1</span></a><a class="tag-link" href="/tags/Spring-Cloud-Health/">Spring Cloud Health<span class="tag-count">2</span></a><a class="tag-link" href="/tags/TCP-IP/">TCP/IP<span class="tag-count">1</span></a><a class="tag-link" href="/tags/ThreadLocal/">ThreadLocal<span class="tag-count">1</span></a><a class="tag-link" href="/tags/aop/">aop<span class="tag-count">1</span></a><a class="tag-link" href="/tags/back-end/">back-end<span class="tag-count">2</span></a><a class="tag-link" href="/tags/cat/">cat<span class="tag-count">3</span></a><a class="tag-link" href="/tags/dc/">dc<span class="tag-count">1</span></a><a class="tag-link" href="/tags/dev/">dev<span class="tag-count">1</span></a><a class="tag-link" href="/tags/emoji/">emoji<span class="tag-count">1</span></a><a class="tag-link" href="/tags/fore-end/">fore-end<span class="tag-count">1</span></a><a class="tag-link" href="/tags/framework/">framework<span class="tag-count">2</span></a><a class="tag-link" href="/tags/git/">git<span class="tag-count">2</span></a><a class="tag-link" href="/tags/go/">go<span class="tag-count">1</span></a><a class="tag-link" href="/tags/iot/">iot<span class="tag-count">5</span></a><a class="tag-link" href="/tags/java/">java<span class="tag-count">14</span></a><a class="tag-link" href="/tags/jdk/">jdk<span class="tag-count">2</span></a><a class="tag-link" href="/tags/jvm/">jvm<span class="tag-count">6</span></a><a class="tag-link" href="/tags/linux/">linux<span class="tag-count">1</span></a><a class="tag-link" href="/tags/markdown/">markdown<span class="tag-count">2</span></a><a class="tag-link" href="/tags/mqtt/">mqtt<span class="tag-count">1</span></a><a class="tag-link" href="/tags/mysql/">mysql<span class="tag-count">6</span></a><a class="tag-link" href="/tags/netty/">netty<span class="tag-count">3</span></a><a class="tag-link" href="/tags/nio/">nio<span class="tag-count">2</span></a><a class="tag-link" href="/tags/nodeJs/">nodeJs<span class="tag-count">1</span></a><a class="tag-link" href="/tags/nodejs/">nodejs<span class="tag-count">1</span></a><a class="tag-link" href="/tags/proxy/">proxy<span class="tag-count">1</span></a><a class="tag-link" href="/tags/redis/">redis<span class="tag-count">1</span></a><a class="tag-link" href="/tags/soft/">soft<span class="tag-count">1</span></a><a class="tag-link" href="/tags/spring/">spring<span class="tag-count">2</span></a><a class="tag-link" href="/tags/spring-transaction/">spring transaction<span class="tag-count">1</span></a><a class="tag-link" href="/tags/spring-cloud-bus/">spring-cloud-bus<span class="tag-count">1</span></a><a class="tag-link" href="/tags/spring-cloud-config/">spring-cloud-config<span class="tag-count">1</span></a><a class="tag-link" href="/tags/spring事务管理/">spring事务管理<span class="tag-count">1</span></a><a class="tag-link" href="/tags/test/">test<span class="tag-count">1</span></a><a class="tag-link" href="/tags/volatile/">volatile<span class="tag-count">1</span></a><a class="tag-link" href="/tags/vscode/">vscode<span class="tag-count">1</span></a><a class="tag-link" href="/tags/vue/">vue<span class="tag-count">2</span></a><a class="tag-link" href="/tags/二档起步/">二档起步<span class="tag-count">1</span></a><a class="tag-link" href="/tags/代理模式/">代理模式<span class="tag-count">1</span></a><a class="tag-link" href="/tags/优化/">优化<span class="tag-count">1</span></a><a class="tag-link" href="/tags/句法/">句法<span class="tag-count">1</span></a><a class="tag-link" href="/tags/多线程/">多线程<span class="tag-count">5</span></a><a class="tag-link" href="/tags/学生时代/">学生时代<span class="tag-count">1</span></a><a class="tag-link" href="/tags/家装/">家装<span class="tag-count">1</span></a><a class="tag-link" href="/tags/年终总结/">年终总结<span class="tag-count">5</span></a><a class="tag-link" href="/tags/并发/">并发<span class="tag-count">5</span></a><a class="tag-link" href="/tags/序/">序<span class="tag-count">1</span></a><a class="tag-link" href="/tags/消息队列/">消息队列<span class="tag-count">1</span></a><a class="tag-link" href="/tags/源码解析/">源码解析<span class="tag-count">2</span></a><a class="tag-link" href="/tags/线程池/">线程池<span class="tag-count">1</span></a><a class="tag-link" href="/tags/表情/">表情<span class="tag-count">1</span></a><a class="tag-link" href="/tags/雪糕/">雪糕<span class="tag-count">3</span></a>
+  </div> -->
+  <div class="author-social">
+    
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:unusual7@163.com" class="theme-color iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+           <a href="https://github.com/Theembers" class="theme-color iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+        
+           <a href="https://www.zhihu.com/people/theembers" class="theme-color iconfont icon-zhihu" title="zhihu"></a>
+        
+      
+    
+      
+    
+      
+        
+           <a href="https://music.163.com/#/user/home?id=32131879" class="theme-color iconfont icon-cloudmusic" title="cloudmusic"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+    
+    
+      <a href="/atom.xml" class="theme-color iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+  </div>
+</div>
+
+      </div>
+      
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+
+      <div class="light-dark" id="light-dark">
+        <input type="checkbox" id="md_2">
+        <label for="md_2" class="iconfont write"></label>
+      </div>
+
+    
+  
+  
+
+  
+  
+<!-- valine Comments -->
+<script src="//cdn.jsdelivr.net/npm/valine/dist/Valine.min.js"></script>
+<script type="text/javascript">
+    setTimeout(function(){
+    new Valine({
+            el: '#vcomments',
+            notify: false,
+            verify: false,
+            app_id: "AbQBWhsXzFouhrbyvkHeWaQb-gzGzoHsz",
+            app_key: "JMW5LdbzGvOecjancFT4b9zm",
+            placeholder: "你要说什么啊😊",
+            avatar: 'retro',
+            meta: ['nick']
+        });
+    },300)
+   
+</script>
+
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.cookie.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/countup/countUp.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/growl/jquery.growl.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=1.1.4"></script>
+
+
+    <div class="back-img-box">
+      
+    </div>
+  </div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/assets/hijiki.model.json"},"display":{"position":"left","width":150,"height":300,"hOffset":20,"vOffset":-20},"mobile":{"show":false,"scale":0.5,"motion":true},"react":{"opacity":1},"log":false});</script></body>
+</html>

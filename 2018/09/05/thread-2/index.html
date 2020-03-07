@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><meta name="generator" content="Hexo 3.9.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="并发[2]-ThreadLocal">
+
+
+
+
+  <meta name="keywords" content="开发, dev, blog, 博客, java, hexo, even, theembers, theembers, theEmbers.devFun, 小轴, 郭小轴">
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="TheEmbers.devFun">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1.4">
+
+
+
+<link rel="canonical" href="https://theembers.github.io/2018/09/05/thread-2/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1.4">
+
+
+
+  
+  <script id="baidu_analytics">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?6053c2edabf3ee9b02ecc553130da68a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+  <script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.10.0/dist/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "AbQBWhsXzFouhrbyvkHeWaQb-gzGzoHsz",
+      appKey: "JMW5LdbzGvOecjancFT4b9zm"
+    });
+  </script>
+
+
+
+
+<script>
+  window.config = {"title":"TheEmbers.devFun","subtitle":"childlike forever. 😃","description":"","author":"TheEmbers Guo","language":"zh-cn","timezone":"","url":"https://theembers.github.io","root":"/","permalink":":year/:month/:day/:title/","permalink_defaults":{},"source_dir":"source","public_dir":"public","tag_dir":"tags","archive_dir":"archives","category_dir":"categories","code_dir":"downloads/code","i18n_dir":":lang","skip_render":[],"new_post_name":":title.md","default_layout":"post","titlecase":false,"external_link":true,"filename_case":0,"render_drafts":false,"post_asset_folder":true,"relative_link":false,"future":true,"highlight":{"enable":true,"auto_detect":false,"line_number":true,"tab_replace":"","first_line_number":"always1"},"default_category":"uncategorized","category_map":{},"tag_map":{},"date_format":"YYYY-MM-DD","time_format":"HH:mm:ss","per_page":10,"pagination_dir":"page","theme":"even","deploy":[{"type":"git","repository":"git@github.com:Theembers/theembers.github.com.git","branch":"master"},{"type":"git","repository":"git@gitee.com:theembers/theembers.git","branch":"master"}],"ignore":[],"logo":"/image/logo.png","title_art":"<font class=\"theme-color\">7</font>heEmbers<font class=\"theme-color\">.</font>devFun","keywords":"开发, dev, blog, 博客, java, hexo, even, theembers, theembers, theEmbers.devFun, 小轴, 郭小轴","author_image":"https://image-1257148187.cos.ap-chengdu.myqcloud.com/picgo_img/person-head.jpeg","address":"成都 · 中国","default_bgimg":["https://image-1257148187.cos.ap-chengdu.myqcloud.com/picgo_img/WechatIMG15.jpg","https://image-1257148187.cos.ap-chengdu.myqcloud.com/picgo_img/timg.jpeg","https://image-1257148187.cos.ap-chengdu.myqcloud.com/picgo_img/tes11af.jpg","https://image-1257148187.cos.ap-chengdu.myqcloud.com/picgo_img/simptab-wallpaper-20190526195946.png","https://image-1257148187.cos.ap-chengdu.myqcloud.com/picgo_img/a44d4bddb4e7d119baf614e0e6698ba4.jpg","https://image-1257148187.cos.ap-chengdu.myqcloud.com/picgo_img/simptab-wallpaper-20190107131809.png"],"markdown_it_plus":{"highlight":true,"html":true,"xhtmlOut":true,"breaks":true,"langPrefix":null,"linkify":true,"typographer":null,"quotes":"“”‘’","pre_class":"highlight","plugins":[{"plugin":{"name":"markdown-it-mark","enable":true}},{"plugin":{"name":"markdown-it-toc-and-anchor","enable":true,"options":{"toc":true,"tocClassName":"markdownIt-TOC","tocFirstLevel":2,"tocLastLevel":6,"tocCallback":null,"anchorLink":true,"anchorLinkSymbol":"","anchorFirstLevel":2,"anchorLastLevel":6,"anchorLinkSpace":true,"anchorLinkSymbolClassName":null,"anchorLinkBefore":true,"anchorClassName":"headerlink","resetIds":true}}}]},"index_generator":{"per_page":10,"order_by":"-date","path":""},"archive_generator":{"per_page":20,"yearly":true,"monthly":true,"daily":false,"order_by":"-date"},"tag_generator":{"per_page":20},"category_generator":{"per_page":20},"neat_enable":false,"neat_html":{"enable":true,"exclude":null},"neat_css":{"enable":true,"exclude":["*.min.css"]},"neat_js":{"enable":true,"mangle":true,"output":null,"compress":null,"exclude":["*.min.js"]},"image_caption":{"enable":true,"class_name":null},"live2d":{"enable":true,"scriptFrom":"local","pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"use":"live2d-widget-model-hijiki"},"display":{"position":"left","width":150,"height":300,"hOffset":20,"vOffset":-20},"mobile":{"show":false,"scale":0.5,"motion":true},"react":{"opacity":1}},"encrypt":{"enable":true,"abstract":"有东西被加密了, 需要密码才能看.","message":"需要密码才可以看哦.","wrong_pass_message":"抱歉, 这个密码看着不太对, 请再试试.","wrong_hash_message":"抱歉, 这个文章不能被校验, 不过还是能看看解密后的内容."},"feed":{"type":"atom","limit":20,"hub":"","content":true,"content_limit":140,"content_limit_delim":"","path":"atom.xml"},"server":{"port":4000,"log":false,"ip":"0.0.0.0","compress":false,"header":true},"since":2015,"favicon":"/favicon.ico","rss":"/atom.xml","menu":{"Home":"/","Tags":"/tags","Categories":"/categories","Archives":"/archives","GitHub":"https://github.com/Theembers"},"color":"Default","toc":true,"total":false,"newPost":604800000,"fancybox":true,"pjax":true,"copyright":{"enable":false,"license":"<a rel=\"license\" href=\"http://creativecommons.org/licenses/by-nc/4.0/\"><img alt=\"知识共享许可协议\" style=\"border-width:0\" src=\"https://i.creativecommons.org/l/by-nc/4.0/80x15.png\" /></a>本作品采用<a rel=\"license\" href=\"http://creativecommons.org/licenses/by-nc/4.0/\">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可。"},"reward":{"enable":false,"qrCode":{"wechat":"/image/reward/wechat.jpg","alipay":"/image/reward/alipay.jpg"}},"social":{"email":"unusual7@163.com","stack-overflow":null,"twitter":null,"facebook":null,"linkedin":null,"google":null,"github":"https://github.com/Theembers","weibo":null,"zhihu":"https://www.zhihu.com/people/theembers","wechat":null,"cloudmusic":"https://music.163.com/#/user/home?id=32131879","douban":null,"pocket":null,"tumblr":null,"instagram":null},"local_search":{"enable":true},"leancloud":{"app_id":"AbQBWhsXzFouhrbyvkHeWaQb-gzGzoHsz","app_key":"JMW5LdbzGvOecjancFT4b9zm"},"baidu_analytics":"6053c2edabf3ee9b02ecc553130da68a","baidu_verification":null,"google_analytics":null,"google_verification":null,"disqus_shortname":null,"changyan":{"appid":null,"appkey":null},"livere_datauid":null,"valine":{"appid":"AbQBWhsXzFouhrbyvkHeWaQb-gzGzoHsz","appkey":"JMW5LdbzGvOecjancFT4b9zm","notify":false,"verify":false,"avatar":"retro","placeholder":"你要说什么啊😊","meta":"['nick']"},"version":"1.1.4"};
+</script>
+
+    <title> 并发[2]-ThreadLocal - TheEmbers.devFun </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <i class="image iconfont icon-cat"></i>
+    <span class="title">TheEmbers.devFun</span>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+  
+    <div class="mobile-post-toc-blank">
+    </div>
+   <!-- <div class="mobile-post-toc-icon">
+      <i class="iconfont icon-catalog"></i>
+    </div> -->
+  
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  
+  <div class="author-box">
+  
+    <div class="image-box">
+      <img class="image" src="https://image-1257148187.cos.ap-chengdu.myqcloud.com/picgo_img/person-head.jpeg">
+    </div>
+  
+    <div class="name">TheEmbers Guo</div>
+  
+    <div class="address"><i class="theme-color iconfont icon-address"></i>成都 · 中国</div>
+  
+  </div>
+
+
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          <i class="theme-color iconfont icon-home"></i>
+          
+          
+            首页
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          <i class="theme-color iconfont icon-tags"></i>
+          
+          
+            标签
+          
+        </li>
+      </a>
+    
+      <a href="/categories">
+        <li class="mobile-menu-item">
+          <i class="theme-color iconfont icon-categories"></i>
+          
+          
+            分类
+          
+        </li>
+      </a>
+    
+      <a href="/archives">
+        <li class="mobile-menu-item">
+          <i class="theme-color iconfont icon-archives"></i>
+          
+          
+            归档
+          
+        </li>
+      </a>
+    
+      <a href="https://github.com/Theembers">
+        <li class="mobile-menu-item">
+          <i class="theme-color iconfont icon-github"></i>
+          
+          
+            GitHub
+          
+        </li>
+      </a>
+    
+  </ul>
+
+  <div class="mobile-menu-social">
+    
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:unusual7@163.com" class="theme-color iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+           <a href="https://github.com/Theembers" class="theme-color iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+        
+           <a href="https://www.zhihu.com/people/theembers" class="theme-color iconfont icon-zhihu" title="zhihu"></a>
+        
+      
+    
+      
+    
+      
+        
+           <a href="https://music.163.com/#/user/home?id=32131879" class="theme-color iconfont icon-cloudmusic" title="cloudmusic"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+    
+    
+      <a href="/atom.xml" class="theme-color iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+  </div>
+  
+</nav>
+
+<nav id="mobile-toc" class="mobile-toc slideout-menu">
+ <!-- 
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+    
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#说明"><span class="toc-number">1.</span> <span class="toc-text"> 说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基本使用"><span class="toc-number">2.</span> <span class="toc-text"> 基本使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#源码解析"><span class="toc-number">3.</span> <span class="toc-text"> 源码解析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#threadlocal-的定义"><span class="toc-number">3.1.</span> <span class="toc-text"> ThreadLocal 的定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#threadlocalmap-的定义"><span class="toc-number">3.2.</span> <span class="toc-text"> ThreadLocalMap 的定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#set方法"><span class="toc-number">3.3.</span> <span class="toc-text"> set()方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#代码块-1set-方法"><span class="toc-number">3.3.1.</span> <span class="toc-text"> 代码块 1：set 方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#代码块-2replacestaleentry-方法"><span class="toc-number">3.3.2.</span> <span class="toc-text"> 代码块 2：replaceStaleEntry 方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#代码块-3cleansomeslots-方法"><span class="toc-number">3.3.3.</span> <span class="toc-text"> 代码块 3：cleanSomeSlots 方法</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#get方法"><span class="toc-number">3.4.</span> <span class="toc-text"> get()方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#代码块-4setinitialvalue-方法"><span class="toc-number">3.4.1.</span> <span class="toc-text"> 代码块 4：setInitialValue 方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#代码块-5getentry-方法"><span class="toc-number">3.4.2.</span> <span class="toc-text"> 代码块 5：getEntry 方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#代码块-6getentryaftermiss-方法"><span class="toc-number">3.4.3.</span> <span class="toc-text"> 代码块 6：getEntryAfterMiss 方法</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#remove方法"><span class="toc-number">3.5.</span> <span class="toc-text"> remove()方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#expungestaleentry-方法"><span class="toc-number">3.6.</span> <span class="toc-text"> expungeStaleEntry 方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#rehash-方法"><span class="toc-number">3.7.</span> <span class="toc-text"> rehash 方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#内存泄漏问题"><span class="toc-number">4.</span> <span class="toc-text"> 内存泄漏问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#如何避免内存泄漏"><span class="toc-number">4.1.</span> <span class="toc-text"> 如何避免内存泄漏</span></a></li></ol></li></ol>
+    
+    </div>
+  </div>
+
+ -->
+</nav>
+    <div class="container" id="mobile-panel">
+
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/.">
+    <span class="icon iconfont icon-cat"></span>
+    <span class="title"><font class="theme-color">7</font>heEmbers<font class="theme-color">.</font>devFun</span>
+    <span class="subtitle">childlike forever. 😃</span>
+  </a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            <i class="theme-color iconfont icon-home"></i>
+            
+            
+              首页
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            <i class="theme-color iconfont icon-tags"></i>
+            
+            
+              标签
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            <i class="theme-color iconfont icon-categories"></i>
+            
+            
+              分类
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives">
+            <i class="theme-color iconfont icon-archives"></i>
+            
+            
+              归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="https://github.com/Theembers">
+            <i class="theme-color iconfont icon-github"></i>
+            
+            
+              GitHub
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+<div id="topbar" class="topbar hidden">
+  <div class="logo">
+    <a href="/.">
+      <span class="icon iconfont icon-cat"></span>
+      <span class="title"><font class="theme-color">7</font>heEmbers<font class="theme-color">.</font>devFun</span>
+    </a>
+  </div>
+  <div class="menu">
+    
+      
+        <span class="menu-item">
+          <a class="menu-item-link" href="/">
+            <i class="theme-color iconfont icon-home"></i>
+            
+            
+              首页
+            
+          </a>
+        </span>
+      
+        <span class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            <i class="theme-color iconfont icon-tags"></i>
+            
+            
+              标签
+            
+          </a>
+        </span>
+      
+        <span class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            <i class="theme-color iconfont icon-categories"></i>
+            
+            
+              分类
+            
+          </a>
+        </span>
+      
+        <span class="menu-item">
+          <a class="menu-item-link" href="/archives">
+            <i class="theme-color iconfont icon-archives"></i>
+            
+            
+              归档
+            
+          </a>
+        </span>
+      
+        <span class="menu-item">
+          <a class="menu-item-link" href="https://github.com/Theembers">
+            <i class="theme-color iconfont icon-github"></i>
+            
+            
+              GitHub
+            
+          </a>
+        </span>
+      
+  
+  </div>
+</div>
+      </header>
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  
+    <article class="post">
+  
+    <header class="post-header">
+      
+      <!--文章标题 -->
+      <h1 class="post-title">
+        <span class="post-flag">
+          
+          
+          
+        </span>
+        
+          并发[2]-ThreadLocal
+          
+        
+      </h1>
+      <!-- 文章信息 -->
+      <div class="post-meta">
+        <span class="post-time">
+          <i class="theme-color iconfont icon-date"></i>
+          2018-09-05
+        </span>
+        <span class="post-count">
+          <i class="theme-color iconfont icon-count"></i>
+          
+          4.1k
+          
+        </span>
+        <span class="post-read">
+          <i class="theme-color iconfont icon-time"></i>
+          
+          36
+          
+        </span>
+        
+          <span class="post-visits">
+              <i class="theme-color iconfont icon-visitor"></i>
+              <span class="visits" data-url="/2018/09/05/thread-2/" data-title="并发[2]-ThreadLocal">0</span>
+          </span>
+        
+      </div>
+      
+      
+        <div class="float-right post-meta">
+      
+          <div class="post-category">
+            <i class="theme-color iconfont icon-categories"></i>
+            
+              <a href="/categories/dev/">dev</a>
+            
+              <a href="/categories/dev/java/">java</a>
+            
+              <a href="/categories/dev/java/并发/">并发</a>
+            
+          </div>
+        </div>
+      
+      
+     
+    </header>
+    
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+    
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#说明"><span class="toc-number">1.</span> <span class="toc-text"> 说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基本使用"><span class="toc-number">2.</span> <span class="toc-text"> 基本使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#源码解析"><span class="toc-number">3.</span> <span class="toc-text"> 源码解析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#threadlocal-的定义"><span class="toc-number">3.1.</span> <span class="toc-text"> ThreadLocal 的定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#threadlocalmap-的定义"><span class="toc-number">3.2.</span> <span class="toc-text"> ThreadLocalMap 的定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#set方法"><span class="toc-number">3.3.</span> <span class="toc-text"> set()方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#代码块-1set-方法"><span class="toc-number">3.3.1.</span> <span class="toc-text"> 代码块 1：set 方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#代码块-2replacestaleentry-方法"><span class="toc-number">3.3.2.</span> <span class="toc-text"> 代码块 2：replaceStaleEntry 方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#代码块-3cleansomeslots-方法"><span class="toc-number">3.3.3.</span> <span class="toc-text"> 代码块 3：cleanSomeSlots 方法</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#get方法"><span class="toc-number">3.4.</span> <span class="toc-text"> get()方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#代码块-4setinitialvalue-方法"><span class="toc-number">3.4.1.</span> <span class="toc-text"> 代码块 4：setInitialValue 方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#代码块-5getentry-方法"><span class="toc-number">3.4.2.</span> <span class="toc-text"> 代码块 5：getEntry 方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#代码块-6getentryaftermiss-方法"><span class="toc-number">3.4.3.</span> <span class="toc-text"> 代码块 6：getEntryAfterMiss 方法</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#remove方法"><span class="toc-number">3.5.</span> <span class="toc-text"> remove()方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#expungestaleentry-方法"><span class="toc-number">3.6.</span> <span class="toc-text"> expungeStaleEntry 方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#rehash-方法"><span class="toc-number">3.7.</span> <span class="toc-text"> rehash 方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#内存泄漏问题"><span class="toc-number">4.</span> <span class="toc-text"> 内存泄漏问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#如何避免内存泄漏"><span class="toc-number">4.1.</span> <span class="toc-text"> 如何避免内存泄漏</span></a></li></ol></li></ol>
+    
+    </div>
+  </div>
+
+
+    
+    <div class="post-content ">
+      
+        <div class="detial-post-content">
+          <h2 id="说明"><a class="headerlink" href="#说明"></a> 说明</h2>
+<p>ThreadLocal 的作用是提供线程内的局部变量，这种变量在多线程环境下访问时能够保证各个线程里变量的独立性。</p>
+<h2 id="基本使用"><a class="headerlink" href="#基本使用"></a> 基本使用</h2>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ThreadLocalDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> ThreadLocal&lt;Integer&gt; threadLocal = <span class="keyword">new</span> ThreadLocal&lt;Integer&gt;();</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> ThreadLocal&lt;User&gt; threadLocalUser = <span class="keyword">new</span> ThreadLocal&lt;User&gt;();</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> </span>&#123;</span><br><span class="line">		threadLocal.set(<span class="number">100</span>);	<span class="comment">// 保存值</span></span><br><span class="line">		System.out.println(threadLocal.get());	<span class="comment">// 获取值</span></span><br><span class="line"></span><br><span class="line">		User user = <span class="keyword">new</span> User();</span><br><span class="line">		user.setName(<span class="string">"Tom"</span>);</span><br><span class="line">		user.setAge(<span class="number">25</span>);</span><br><span class="line">		threadLocalUser.set(user);	<span class="comment">// 保存值</span></span><br><span class="line">		System.out.println(threadLocalUser.get());	<span class="comment">// 获取值</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span></span>&#123;</span><br><span class="line">		String name;</span><br><span class="line">		Integer age;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// geter&amp;seter..</span></span><br><span class="line"></span><br><span class="line">		<span class="meta">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="string">"User [name="</span> + name + <span class="string">", age="</span> + age + <span class="string">"]"</span>;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 输出结果</span></span><br><span class="line"><span class="comment">// 100</span></span><br><span class="line"><span class="comment">// User [name=Tom, age=25]</span></span><br></pre></td></tr></table></figure>
+<h2 id="源码解析"><a class="headerlink" href="#源码解析"></a> 源码解析</h2>
+<h3 id="threadlocal-的定义"><a class="headerlink" href="#threadlocal-的定义"></a> ThreadLocal 的定义</h3>
+<p>ThreadLocal 提供了线程局部变量。能使线程中的某个值与保存值的对象关联起来。ThreadLocal 提供了 get 与 set 等访问接口或方法，这些方法为每个使用该变量的线程都存有一份独立的副本（即每个线程的 threadLocals 属性），因此 get 总是返回由当前执行线程在调用 set 时设置的最新值。</p>
+<p>只要线程处于活动状态并且 Threadocal 实例可以访问，每个线程就拥有对其线程局部变量副本的隐式引用；在一个线程消失之后，线程本地实例的所有副本都会被垃圾收集（除非存在对这些副本的其他引用）。</p>
+<p>ThreadLocal 的 hashcode（threadLocalHashCode）是从 0 开始，每新建一个 ThreadLocal，对应的 hashcode 就加 0x61c88647。如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> threadLocalHashCode = nextHashCode();</span><br><span class="line"></span><br><span class="line"><span class="comment">// AtomicInteger类型，从0开始</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> AtomicInteger nextHashCode =</span><br><span class="line">    <span class="keyword">new</span> AtomicInteger();</span><br><span class="line"></span><br><span class="line"><span class="comment">// hash code每次增加1640531527</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> HASH_INCREMENT = <span class="number">0x61c88647</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 下一个hash code</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">nextHashCode</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> nextHashCode.getAndAdd(HASH_INCREMENT);</span><br></pre></td></tr></table></figure>
+<h3 id="threadlocalmap-的定义"><a class="headerlink" href="#threadlocalmap-的定义"></a> ThreadLocalMap 的定义</h3>
+<p>ThreadLocalMap 是一个自定义哈希映射，仅用于维护线程本地变量值。ThreadLocalMap 是 ThreadLocal 的内部类，主要有一个 Entry 数组，Entry 的 key 为 ThreadLocal，value 为 ThreadLocal 对应的值。每个线程都有一个 ThreadLocalMap 类型的 threadLocals 变量。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Entry</span> <span class="keyword">extends</span> <span class="title">WeakReference</span>&lt;<span class="title">ThreadLocal</span>&lt;?&gt;&gt; </span>&#123;</span><br><span class="line">    <span class="comment">/** The value associated with this ThreadLocal. */</span></span><br><span class="line">    Object value;</span><br><span class="line"></span><br><span class="line">    Entry(ThreadLocal&lt;?&gt; k, Object v) &#123;</span><br><span class="line">        <span class="keyword">super</span>(k);</span><br><span class="line">        value = v;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="set方法"><a class="headerlink" href="#set方法"></a> set()方法</h3>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">set</span><span class="params">(T value)</span> </span>&#123;</span><br><span class="line">    Thread t = Thread.currentThread();</span><br><span class="line">    ThreadLocalMap map = getMap(t); <span class="comment">// 获取当前线程的ThreadLocalMap</span></span><br><span class="line">    <span class="comment">// 当前线程的ThreadLocalMap不为空则调用set方法, this为调用该方法的ThreadLocal对象</span></span><br><span class="line">    <span class="keyword">if</span> (map != <span class="keyword">null</span>)</span><br><span class="line">        map.set(<span class="keyword">this</span>, value); <span class="comment">// --&gt; 代码块 1</span></span><br><span class="line">    <span class="comment">// map为空则调用createMap方法创建一个新的ThreadLocalMap, 并新建一个Entry放入该</span></span><br><span class="line">    <span class="comment">// ThreadLocalMap, 调用set方法的ThreadLocal和传入的value作为该Entry的key和value</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        createMap(t, value);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">ThreadLocalMap <span class="title">getMap</span><span class="params">(Thread t)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> t.threadLocals;	<span class="comment">// 返回线程t的threadLocals属性</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol>
+<li>先拿到当前线程，再使用 getMap 方法拿到当前线程的 threadLocals 变量</li>
+<li>如果 threadLocals 不为空，则将当前 ThreadLocal 作为 key，传入的值作为 value，调用 set 方法（见下文代码块 1 详解）插入 threadLocals。</li>
+<li>如果 threadLocals 为空则调用创建一个 ThreadLocalMap，并新建一个 Entry 放入该 ThreadLocalMap, 调用 set 方法的 ThreadLocal 和传入的 value 作为该 Entry 的 key 和 value</li>
+</ol>
+<blockquote>
+<p>注意此处的 threadLocals 变量是一个 ThreadLocalMap，是 Thread 的一个局部变量，因此它只与当前线程绑定。</p>
+</blockquote>
+<h4 id="代码块-1set-方法"><a class="headerlink" href="#代码块-1set-方法"></a> 代码块 1：set 方法</h4>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">set</span><span class="params">(ThreadLocal&lt;?&gt; key, Object value)</span> </span>&#123;</span><br><span class="line">    Entry[] tab = table;</span><br><span class="line">    <span class="keyword">int</span> len = tab.length;</span><br><span class="line">    <span class="keyword">int</span> i = key.threadLocalHashCode &amp; (len-<span class="number">1</span>);  <span class="comment">// 计算出索引的位置</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 从索引位置开始遍历,由于不是链表结构,因此通过nextIndex方法来寻找下一个索引位置</span></span><br><span class="line">    <span class="keyword">for</span> (Entry e = tab[i];</span><br><span class="line">        e != <span class="keyword">null</span>;	<span class="comment">// 当遍历到的Entry为空时结束遍历</span></span><br><span class="line">        e = tab[i = nextIndex(i, len)]) &#123;</span><br><span class="line">        ThreadLocal&lt;?&gt; k = e.get(); <span class="comment">// 拿到Entry的key，也就是ThreadLocal</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 该Entry的key和传入的key相等, 则用传入的value替换掉原来的value</span></span><br><span class="line">        <span class="keyword">if</span> (k == key) &#123;</span><br><span class="line">            e.value = value;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 该Entry的key为空, 则代表该Entry需要被清空,</span></span><br><span class="line">        <span class="comment">// 调用replaceStaleEntry方法</span></span><br><span class="line">        <span class="keyword">if</span> (k == <span class="keyword">null</span>) &#123;</span><br><span class="line">        	<span class="comment">// 该方法会继续寻找传入key的安放位置, 并清理掉key为空的Entry</span></span><br><span class="line">            replaceStaleEntry(key, value, i); <span class="comment">// --&gt; 代码块 2</span></span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 寻找到一个空位置,　则放置在该位置上</span></span><br><span class="line">    tab[i] = <span class="keyword">new</span> Entry(key, value);</span><br><span class="line">    <span class="keyword">int</span> sz = ++size;</span><br><span class="line">    <span class="comment">// cleanSomeSlots是用来清理掉key为空的Entry,如果此方法返回true,则代表至少清理</span></span><br><span class="line">    <span class="comment">// 了1个元素, 则此次set必然不需要扩容, 如果此方法返回false则判断sz是否大于阈值</span></span><br><span class="line">    <span class="keyword">if</span> (!cleanSomeSlots(i, sz) &amp;&amp; sz &gt;= threshold)</span><br><span class="line">        rehash();   <span class="comment">// 扩容</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol>
+<li>通过传入的 key 的 hashCode 计算出索引的位置</li>
+<li>从索引位置开始遍历，由于不是链表结构，因此通过 nextIndex 方法来寻找下一个索引位置</li>
+<li>如果找到某个 Entry 的 key 和传入的 key 相同，则用传入的 value 替换掉该 Entry 的 value。</li>
+<li>如果遍历到某个 Entry 的 key 为空，则调用 replaceStaleEntry 方法（见下文代码块 2 详解）</li>
+<li>如果通过 nextIndex 寻找到一个空位置（代表没有找到 key 相同的），则将元素放在该位置上</li>
+<li>调用 cleanSomeSlots 方法清理 key 为 null 的 Entry，并判断是否需要扩容，如果需要则调用 rehash 方法进行扩容（见下文 rehash 方法详解）。</li>
+</ol>
+<h4 id="代码块-2replacestaleentry-方法"><a class="headerlink" href="#代码块-2replacestaleentry-方法"></a> 代码块 2：replaceStaleEntry 方法</h4>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">replaceStaleEntry</span><span class="params">(ThreadLocal&lt;?&gt; key, Object value,<span class="keyword">int</span> staleSlot)</span> </span>&#123;</span><br><span class="line">    Entry[] tab = table;</span><br><span class="line">    <span class="keyword">int</span> len = tab.length;</span><br><span class="line">    Entry e;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> slotToExpunge = staleSlot;	<span class="comment">// 清除元素的开始位置（记录索引位置最前面的）</span></span><br><span class="line">    <span class="comment">// 向前遍历，直到遇到Entry为空</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = prevIndex(staleSlot, len);</span><br><span class="line">        (e = tab[i]) != <span class="keyword">null</span>;</span><br><span class="line">        i = prevIndex(i, len))</span><br><span class="line">        <span class="keyword">if</span> (e.get() == <span class="keyword">null</span>)</span><br><span class="line">            slotToExpunge = i;	<span class="comment">// 记录最后一个key为null的索引位置</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Find either the key or trailing null slot of run, whichever</span></span><br><span class="line">    <span class="comment">// occurs first</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = nextIndex(staleSlot, len); <span class="comment">// 向后遍历，直到遇到Entry为空</span></span><br><span class="line">        (e = tab[i]) != <span class="keyword">null</span>;</span><br><span class="line">        i = nextIndex(i, len)) &#123;</span><br><span class="line">        ThreadLocal&lt;?&gt; k = e.get();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 该Entry的key和传入的key相等, 则将传入的value替换掉该Entry的value</span></span><br><span class="line">        <span class="keyword">if</span> (k == key) &#123;</span><br><span class="line">            e.value = value;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 将i位置和staleSlot位置的元素对换（staleSlot位置较前，是要清除的元素）</span></span><br><span class="line">            tab[i] = tab[staleSlot];</span><br><span class="line">            tab[staleSlot] = e;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 如果相等, 则代表上面的向前寻找key为null的遍历没有找到，</span></span><br><span class="line">            <span class="comment">// 即staleSlot位置前面的元素没有需要清除的，此时将slotToExpunge设置为i,</span></span><br><span class="line">            <span class="comment">// 因为原staleSlot的元素已经被放到i位置了，这时位置i前面的元素都不需要清除</span></span><br><span class="line">            <span class="keyword">if</span> (slotToExpunge == staleSlot)</span><br><span class="line">                slotToExpunge = i;</span><br><span class="line">            <span class="comment">// 从slotToExpunge位置开始清除key为空的Entry</span></span><br><span class="line">            cleanSomeSlots(expungeStaleEntry(slotToExpunge), len);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 如果第一次遍历到key为null的元素，并且上面的向前寻找key为null的遍历没有找到，</span></span><br><span class="line">        <span class="comment">// 则将slotToExpunge设置为当前的位置</span></span><br><span class="line">        <span class="keyword">if</span> (k == <span class="keyword">null</span> &amp;&amp; slotToExpunge == staleSlot)</span><br><span class="line">            slotToExpunge = i;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 如果key没有找到，则新建一个Entry，放在staleSlot位置</span></span><br><span class="line">    tab[staleSlot].value = <span class="keyword">null</span>;</span><br><span class="line">    tab[staleSlot] = <span class="keyword">new</span> Entry(key, value);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 如果slotToExpunge!=staleSlot，代表除了staleSlot位置还有其他位置的元素需要清除</span></span><br><span class="line">    <span class="comment">// 需要清除的定义：key为null的Entry，调用cleanSomeSlots方法清除key为null的Entry</span></span><br><span class="line">    <span class="keyword">if</span> (slotToExpunge != staleSlot)</span><br><span class="line">        cleanSomeSlots(expungeStaleEntry(slotToExpunge), len); <span class="comment">// --&gt; 代码块 3</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol>
+<li>slotToExpunge 始终记录着需要清除的元素的最前面的位置（即 slotToExpunge 前面的元素是不需要清除的）</li>
+<li>从位置 staleSlot 向前遍历，直到遇到 Entry 为空，用 staleSlot 记录最后一个 key 为 null 的索引位置（也就是遍历过位置最前的 key 为 null 的位置）</li>
+<li>从位置 staleSlot 向后遍历，直到遇到 Entry 为空，如果遍历到 key 和入参 key 相同的，则将入参的 value 替换掉该 Entry 的 value，并将 i 位置和 staleSlot 位置的元素对换（staleSlot 位置较前，是要清除的元素），遍历的时候判断 slotToExpunge 的值是否需要调整，最后调用 expungeStaleEntry 方法（见下文 expungeStaleEntry 方法详解）和 cleanSomeSlots 方法（见下文代码块 3 详解）清除 key 为 null 的元素。</li>
+<li>如果 key 没有找到，则使用入参的 key 和 value 新建一个 Entry，放在 staleSlot 位置</li>
+<li>判断是否还有其他位置的元素 key 为 null，如果有则调用 expungeStaleEntry 方法和 cleanSomeSlots 方法清除 key 为 null 的元素</li>
+</ol>
+<h4 id="代码块-3cleansomeslots-方法"><a class="headerlink" href="#代码块-3cleansomeslots-方法"></a> 代码块 3：cleanSomeSlots 方法</h4>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">cleanSomeSlots</span><span class="params">(<span class="keyword">int</span> i, <span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">boolean</span> removed = <span class="keyword">false</span>;</span><br><span class="line">    Entry[] tab = table;</span><br><span class="line">    <span class="keyword">int</span> len = tab.length;</span><br><span class="line">    <span class="keyword">do</span> &#123;</span><br><span class="line">        i = nextIndex(i, len);	<span class="comment">// 下一个索引位置</span></span><br><span class="line">        Entry e = tab[i];</span><br><span class="line">        <span class="keyword">if</span> (e != <span class="keyword">null</span> &amp;&amp; e.get() == <span class="keyword">null</span>) &#123;	<span class="comment">// 遍历到key为null的元素</span></span><br><span class="line">            n = len;	<span class="comment">// 重置n的值</span></span><br><span class="line">            removed = <span class="keyword">true</span>;	<span class="comment">// 标志有移除元素</span></span><br><span class="line">            i = expungeStaleEntry(i);	<span class="comment">// 移除i位置及之后的key为null的元素</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">while</span> ( (n &gt;&gt;&gt;= <span class="number">1</span>) != <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">return</span> removed;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从 i 开始，清除 key 为空的 Entry，遍历次数由当前的 table 长度决定，当遍历到一个 key 为 null 的元素时，调用 expungeStaleEntry 清除，并将遍历次数重置。至于为什么使用 table 长度来决定遍历次数，官方给出的解释是这个方法简单、快速，并且效果不错。</p>
+<h3 id="get方法"><a class="headerlink" href="#get方法"></a> get()方法</h3>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> T <span class="title">get</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Thread t = Thread.currentThread();</span><br><span class="line">    ThreadLocalMap map = getMap(t);</span><br><span class="line">    <span class="keyword">if</span> (map != <span class="keyword">null</span>) &#123;</span><br><span class="line">    	<span class="comment">//调用getEntry方法, 通过调用get()方法的ThreadLocal获取对应的Entry</span></span><br><span class="line">        ThreadLocalMap.Entry e = map.getEntry(<span class="keyword">this</span>); <span class="comment">// --&gt; 代码块 5</span></span><br><span class="line">        <span class="keyword">if</span> (e != <span class="keyword">null</span>) &#123;    <span class="comment">//Entry不为空则代表找到目标Entry, 返回该Entry的value值</span></span><br><span class="line">            <span class="meta">@SuppressWarnings</span>(<span class="string">"unchecked"</span>)</span><br><span class="line">            T result = (T)e.value;</span><br><span class="line">            <span class="keyword">return</span> result;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> setInitialValue();   <span class="comment">//该线程的ThreadLocalMap为空则初始化一个 --&gt; 代码块 4</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol>
+<li>跟 set 方法差不多，先拿到当前的线程，再使用 getMap 方法拿到当前线程的 threadLocals 变量</li>
+<li>如果 threadLocals 不为空，则将调用 get 方法的 ThreadLocal 作为 key，调用 getEntry 方法（见下文代码块 5 详解）找到对应的 Entry。</li>
+<li>如果 threadLocals 为空或者找不到目标 Entry，则调用 setInitialValue 方法（见下文代码块 4 详解）进行初始化。</li>
+</ol>
+<h4 id="代码块-4setinitialvalue-方法"><a class="headerlink" href="#代码块-4setinitialvalue-方法"></a> 代码块 4：setInitialValue 方法</h4>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> T <span class="title">setInitialValue</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    T value = initialValue();	<span class="comment">// 默认null，需要用户自己重写该方法，</span></span><br><span class="line">    Thread t = Thread.currentThread();	<span class="comment">// 当前线程</span></span><br><span class="line">    ThreadLocalMap map = getMap(t);	<span class="comment">// 拿到当前线程的threadLocals</span></span><br><span class="line">    <span class="comment">// threadLocals不为空则将当前的ThreadLocal作为key，null作为value，插入到ThreadLocalMap</span></span><br><span class="line">    <span class="keyword">if</span> (map != <span class="keyword">null</span>)</span><br><span class="line">        map.set(<span class="keyword">this</span>, value);</span><br><span class="line">    <span class="comment">// threadLocals为空则调用创建一个ThreadLocalMap，并新建一个Entry放入该ThreadLocalMap,</span></span><br><span class="line">    <span class="comment">// 调用set方法的ThreadLocal和value作为该Entry的key和value</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        createMap(t, value);</span><br><span class="line">    <span class="keyword">return</span> value;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol>
+<li>如果是 threadLocals 为空，创建一个新的 ThreadLocalMap，并将当前的 ThreadLocal 作为 key，null 作为 value，插入到新创建的 ThreadLocalMap，并返回 null。</li>
+<li>如果 threadLocals 不为空，则将当前的 ThreadLocal 作为 key，null 作为 value，插入到 threadLocals。</li>
+<li>注意上面的 initialValue()方法为 protected，如果希望线程局部变量具有非 null 的初始值，则必须对 ThreadLocal 进行子类化，并重写此方法。</li>
+</ol>
+<h4 id="代码块-5getentry-方法"><a class="headerlink" href="#代码块-5getentry-方法"></a> 代码块 5：getEntry 方法</h4>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> Entry <span class="title">getEntry</span><span class="params">(ThreadLocal&lt;?&gt; key)</span> </span>&#123;</span><br><span class="line">	<span class="comment">//根据hash code计算出索引位置</span></span><br><span class="line">    <span class="keyword">int</span> i = key.threadLocalHashCode &amp; (table.length - <span class="number">1</span>);</span><br><span class="line">    Entry e = table[i];</span><br><span class="line">    <span class="comment">// 如果该Entry的key和传入的key相等, 则为目标Entry, 直接返回</span></span><br><span class="line">    <span class="keyword">if</span> (e != <span class="keyword">null</span> &amp;&amp; e.get() == key)</span><br><span class="line">        <span class="keyword">return</span> e;</span><br><span class="line">    <span class="comment">// 否则，e不是目标Entry, 则从e之后继续寻找目标Entry</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="keyword">return</span> getEntryAfterMiss(key, i, e); <span class="comment">// --&gt; 代码块 6</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol>
+<li>根据 hash code 计算出索引位置</li>
+<li>如果该索引位置 Entry 的 key 和传入的 key 相等，则为目标 Entry，直接返回</li>
+<li>否则，e 不是目标 Entry，调用 getEntryAfterMiss 方法（见下文代码块 6 详解）继续遍历。</li>
+</ol>
+<h4 id="代码块-6getentryaftermiss-方法"><a class="headerlink" href="#代码块-6getentryaftermiss-方法"></a> 代码块 6：getEntryAfterMiss 方法</h4>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> Entry <span class="title">getEntryAfterMiss</span><span class="params">(ThreadLocal&lt;?&gt; key, <span class="keyword">int</span> i, Entry e)</span> </span>&#123;</span><br><span class="line">    Entry[] tab = table;</span><br><span class="line">    <span class="keyword">int</span> len = tab.length;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (e != <span class="keyword">null</span>) &#123;</span><br><span class="line">        ThreadLocal&lt;?&gt; k = e.get();</span><br><span class="line">        <span class="comment">// 找到目标Entry，直接返回</span></span><br><span class="line">        <span class="keyword">if</span> (k == key)</span><br><span class="line">            <span class="keyword">return</span> e;</span><br><span class="line">        <span class="comment">// 调用expungeStaleEntry清除key为null的元素</span></span><br><span class="line">        <span class="keyword">if</span> (k == <span class="keyword">null</span>)</span><br><span class="line">            expungeStaleEntry(i);</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            i = nextIndex(i, len);  <span class="comment">// 下一个索引位置</span></span><br><span class="line">        e = tab[i]; <span class="comment">// 下一个遍历的Entry</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;    <span class="comment">// 找不到, 返回空</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从元素 e 开始向后遍历，如果找到目标 Entry 元素直接返回；如果遇到 key 为 null 的元素，调用 expungeStaleEntry 方法（见下文 expungeStaleEntry 方法详解）进行清除；否则，遍历到 Entry 为 nu</p>
+<h3 id="remove方法"><a class="headerlink" href="#remove方法"></a> remove()方法</h3>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">remove</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="comment">// 获取当前线程的ThreadLocalMap</span></span><br><span class="line">	ThreadLocalMap m = getMap(Thread.currentThread());</span><br><span class="line">	<span class="keyword">if</span> (m != <span class="keyword">null</span>)</span><br><span class="line">		m.remove(<span class="keyword">this</span>);    <span class="comment">// 调用此方法的ThreadLocal作为入参，调用remove方法</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">remove</span><span class="params">(ThreadLocal&lt;?&gt; key)</span> </span>&#123;</span><br><span class="line">    Entry[] tab = table;</span><br><span class="line">    <span class="keyword">int</span> len = tab.length;</span><br><span class="line">    <span class="comment">// 根据hashCode计算出当前ThreadLocal的索引位置</span></span><br><span class="line">    <span class="keyword">int</span> i = key.threadLocalHashCode &amp; (len-<span class="number">1</span>);</span><br><span class="line">    <span class="comment">// 从位置i开始遍历，直到Entry为null</span></span><br><span class="line">    <span class="keyword">for</span> (Entry e = tab[i];</span><br><span class="line">        e != <span class="keyword">null</span>;</span><br><span class="line">        e = tab[i = nextIndex(i, len)]) &#123;</span><br><span class="line">        <span class="keyword">if</span> (e.get() == key) &#123;   <span class="comment">// 如果找到key相同的</span></span><br><span class="line">            e.clear(); 	<span class="comment">// 则调用clear方法, 该方法会把key的引用清空</span></span><br><span class="line">            expungeStaleEntry(i);<span class="comment">//调用expungeStaleEntry方法清除key为null的Entry</span></span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>方法很简单，拿到当前线程的 threadLocals 属性，如果不为空，则将 key 为当前 ThreadLocal 的键值对移除，并且会调用 expungeStaleEntry 方法清除 key 为空的 Entry。</p>
+<h3 id="expungestaleentry-方法"><a class="headerlink" href="#expungestaleentry-方法"></a> expungeStaleEntry 方法</h3>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 从staleSlot开始, 清除key为空的Entry, 并将不为空的元素放到合适的位置，最后返回Entry为空的位置</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">expungeStaleEntry</span><span class="params">(<span class="keyword">int</span> staleSlot)</span> </span>&#123;</span><br><span class="line">    Entry[] tab = table;</span><br><span class="line">    <span class="keyword">int</span> len = tab.length;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// expunge entry at staleSlot</span></span><br><span class="line">    tab[staleSlot].value = <span class="keyword">null</span>;    <span class="comment">// 将tab上staleSlot位置的对象清空</span></span><br><span class="line">    tab[staleSlot] = <span class="keyword">null</span>;</span><br><span class="line">    size--;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Rehash until we encounter null</span></span><br><span class="line">    Entry e;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">for</span> (i = nextIndex(staleSlot, len); <span class="comment">// 遍历下一个元素, 即(i+1)%len位置的元素</span></span><br><span class="line">        (e = tab[i]) != <span class="keyword">null</span>;	<span class="comment">// 遍历到Entry为空时, 跳出循环并返回索引位置</span></span><br><span class="line">        i = nextIndex(i, len)) &#123;</span><br><span class="line">        ThreadLocal&lt;?&gt; k = e.get();</span><br><span class="line">        <span class="keyword">if</span> (k == <span class="keyword">null</span>) &#123;    <span class="comment">// 当前遍历Entry的key为空, 则将该位置的对象清空</span></span><br><span class="line">            e.value = <span class="keyword">null</span>;</span><br><span class="line">            tab[i] = <span class="keyword">null</span>;</span><br><span class="line">            size--;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;    <span class="comment">// 当前遍历Entry的key不为空</span></span><br><span class="line">            <span class="keyword">int</span> h = k.threadLocalHashCode &amp; (len - <span class="number">1</span>);  <span class="comment">// 重新计算该Entry的索引位置</span></span><br><span class="line">            <span class="keyword">if</span> (h != i) &#123;   <span class="comment">// 如果索引位置不为当前索引位置i</span></span><br><span class="line">                tab[i] = <span class="keyword">null</span>;  <span class="comment">// 则将i位置对象清空, 替当前Entry寻找正确的位置</span></span><br><span class="line"></span><br><span class="line">                <span class="comment">// 如果h位置不为null，则向后寻找当前Entry的位置</span></span><br><span class="line">                <span class="keyword">while</span> (tab[h] != <span class="keyword">null</span>)</span><br><span class="line">                    h = nextIndex(h, len);</span><br><span class="line">                tab[h] = e;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> i;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从 staleSlot 开始，清除 key 为 null 的 Entry，并将不为空的元素放到合适的位置，最后遍历到 Entry 为空的元素时，跳出循环返回当前索引位置。</p>
+<p>set、get、remove 方法，在遍历的时候如果遇到 key 为 null 的情况，都会调用 expungeStaleEntry 方法来清除 key 为 null 的 Entry。</p>
+<h3 id="rehash-方法"><a class="headerlink" href="#rehash-方法"></a> rehash 方法</h3>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">rehash</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    expungeStaleEntries();  <span class="comment">// 调用expungeStaleEntries方法清理key为空的Entry</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 如果清理后size超过阈值的3/4, 则进行扩容</span></span><br><span class="line">    <span class="keyword">if</span> (size &gt;= threshold - threshold / <span class="number">4</span>)</span><br><span class="line">        resize();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Double the capacity of the table.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">resize</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Entry[] oldTab = table;</span><br><span class="line">    <span class="keyword">int</span> oldLen = oldTab.length;</span><br><span class="line">    <span class="keyword">int</span> newLen = oldLen * <span class="number">2</span>;	<span class="comment">// 新表长度为老表2倍</span></span><br><span class="line">    Entry[] newTab = <span class="keyword">new</span> Entry[newLen];	<span class="comment">// 创建新表</span></span><br><span class="line">    <span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; oldLen; ++j) &#123;	<span class="comment">// 遍历所有元素</span></span><br><span class="line">        Entry e = oldTab[j];	<span class="comment">// 拿到对应位置的Entry</span></span><br><span class="line">        <span class="keyword">if</span> (e != <span class="keyword">null</span>) &#123;</span><br><span class="line">            ThreadLocal&lt;?&gt; k = e.get();</span><br><span class="line">            <span class="keyword">if</span> (k == <span class="keyword">null</span>) &#123;	<span class="comment">// 如果key为null，将value清空</span></span><br><span class="line">                e.value = <span class="keyword">null</span>; <span class="comment">// Help the GC</span></span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            	<span class="comment">// 通过hash code计算新表的索引位置</span></span><br><span class="line">                <span class="keyword">int</span> h = k.threadLocalHashCode &amp; (newLen - <span class="number">1</span>);</span><br><span class="line">                <span class="comment">// 如果新表的该位置已经有元素，则调用nextIndex方法直到寻找到空位置</span></span><br><span class="line">                <span class="keyword">while</span> (newTab[h] != <span class="keyword">null</span>)</span><br><span class="line">                    h = nextIndex(h, newLen);</span><br><span class="line">                newTab[h] = e;	<span class="comment">// 将元素放在对应位置</span></span><br><span class="line">                count++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    setThreshold(newLen);	<span class="comment">// 设置新表扩容的阈值</span></span><br><span class="line">    size = count;	<span class="comment">// 更新size</span></span><br><span class="line">    table = newTab;	<span class="comment">// table指向新表</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol>
+<li>调用 expungeStaleEntries 方法（该方法和 expungeStaleEntry 类似，只是把搜索范围扩大到整个表）清理 key 为空的 Entry</li>
+<li>如果清理后 size 超过阈值的 3/4，则进行扩容。</li>
+<li>新表长度为老表 2 倍，创建新表。</li>
+<li>遍历老表所有元素，如果 key 为 null，将 value 清空；否则通过 hash code 计算新表的索引位置 h，如果 h 已经有元素，则调用 nextIndex 方法直到寻找到空位置，将元素放在新表的对应位置。</li>
+<li>设置新表扩容的阈值、更新 size、table 指向新表。</li>
+</ol>
+<h2 id="内存泄漏问题"><a class="headerlink" href="#内存泄漏问题"></a> 内存泄漏问题</h2>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Entry</span> <span class="keyword">extends</span> <span class="title">WeakReference</span>&lt;<span class="title">ThreadLocal</span>&lt;?&gt;&gt; </span>&#123;</span><br><span class="line">    <span class="comment">/** The value associated with this ThreadLocal. */</span></span><br><span class="line">    Object value;</span><br><span class="line"></span><br><span class="line">    Entry(ThreadLocal&lt;?&gt; k, Object v) &#123;</span><br><span class="line">        <span class="keyword">super</span>(k);</span><br><span class="line">        value = v;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从上面源码可以看出，ThreadLocalMap 使用 ThreadLocal 的弱引用作为 Entry 的 key，如果一个 ThreadLocal 没有外部强引用来引用它，下一次系统 GC 时，这个 ThreadLocal 必然会被回收，这样一来，ThreadLocalMap 中就会出现 key 为 null 的 Entry，就没有办法访问这些 key 为 null 的 Entry 的 value。</p>
+<p>我们上面介绍的 get、set、remove 等方法中，都会对 key 为 null 的 Entry 进行清除（expungeStaleEntry 方法，将 Entry 的 value 清空，等下一次垃圾回收时，这些 Entry 将会被彻底回收）。</p>
+<p>但是如果当前线程一直在运行，并且一直不执行 get、set、remove 方法，这些 key 为 null 的 Entry 的 value 就会一直存在一条强引用链：Thread Ref -&gt; Thread -&gt; ThreadLocalMap -&gt; Entry -&gt; value，导致这些 key 为 null 的 Entry 的 value 永远无法回收，造成内存泄漏。</p>
+<h3 id="如何避免内存泄漏"><a class="headerlink" href="#如何避免内存泄漏"></a> 如何避免内存泄漏</h3>
+<p>为了避免这种情况，我们可以在使用完 ThreadLocal 后，手动调用 remove 方法，以避免出现内存泄漏。</p>
+
+        </div>
+      
+    </div>
+
+    
+      
+      
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <i class="theme-color iconfont icon-tag"></i>
+              <a href="/tags/java/">java</a>
+            
+              <i class="theme-color iconfont icon-tag"></i>
+              <a href="/tags/并发/">并发</a>
+            
+              <i class="theme-color iconfont icon-tag"></i>
+              <a href="/tags/多线程/">多线程</a>
+            
+              <i class="theme-color iconfont icon-tag"></i>
+              <a href="/tags/ThreadLocal/">ThreadLocal</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2018/09/06/thread-pool/">
+        <i class="theme-color iconfont icon-left"></i>
+        <span class="prev-text nav-default">并发[3]-线程池怎么玩</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    
+    
+      <a class="next" href="/2018/09/05/markdown-syntax/">
+        <span class="next-text nav-default">markdown-syntax[markdown句法说明]</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="theme-color iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+      </footer>
+    
+    
+  <div class="bdsharebuttonbox bd-share-box" id="share">
+    <a href="#" class="theme-color iconfont icon-copy" data-cmd="copy" title="分享到复制地址">
+    </a>
+    <a href="#" class="theme-color iconfont icon-yinxiang" data-cmd="evernotecn" title="分享到印象笔记"></a>
+    <!-- <a href="#" class="bds_youdao" data-cmd="youdao" title="分享到有道云笔记"></a> -->
+    <a href="#" class="theme-color iconfont icon-weibo" data-cmd="tsina" title="分享到新浪微博">
+    </a>
+    <a href="#" class="theme-color iconfont icon-wechat" data-cmd="weixin" title="分享到微信">
+    </a>
+  </div>
+  <script>
+    window._bd_share_config = {
+      "common": {
+        "bdSnsKey": {},
+        "bdText": "",
+        "bdMini": "1",
+        "bdMiniList": false,
+        "bdPic": "",
+        "bdStyle": "2",
+        "bdSize": "24"
+      },
+      "share": {}
+    };
+    // with (document) 0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = 'http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion=' + ~(-new Date() / 36e5)];
+  </script>
+  <script type="text/javascript" src="/lib/share/static/api/js/share.js"></script>
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="vcomments"></div> 
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:unusual7@163.com" class="theme-color iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+           <a href="https://github.com/Theembers" class="theme-color iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+        
+           <a href="https://www.zhihu.com/people/theembers" class="theme-color iconfont icon-zhihu" title="zhihu"></a>
+        
+      
+    
+      
+    
+      
+        
+           <a href="https://music.163.com/#/user/home?id=32131879" class="theme-color iconfont icon-cloudmusic" title="cloudmusic"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+    
+    
+      <a href="/atom.xml" class="theme-color iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+<div class="copyright">
+ <!-- <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span> -->
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2015 - 
+    
+    2020
+
+    <span class="heart">
+      <i class="iconfont icon-heart" style="color:red;"></i>
+    </span>
+    <span class="author">TheEmbers Guo</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="author-wrapper"><div class="author">
+  <div class="info">
+    
+  <div class="author-box">
+  
+    <div class="image-box">
+      <img class="image" src="https://image-1257148187.cos.ap-chengdu.myqcloud.com/picgo_img/person-head.jpeg">
+    </div>
+  
+    <div class="name">TheEmbers Guo</div>
+  
+    <div class="address"><i class="theme-color iconfont icon-address"></i>成都 · 中国</div>
+  
+  </div>
+
+  </div>
+
+  
+
+  <div class="author-categories">
+    <div class="title">
+      <i class="theme-color iconfont icon-categories"></i>
+      <span>分类</span>
+    </div>
+    <a class="category-link" href="/categories/Mac/">Mac<span class="category-count">1</span></a> <a class="category-link" href="/categories/blog/">blog<span class="category-count">12</span></a> <a class="category-link" href="/categories/blog/学习/">学习<span class="category-count">1</span></a> <a class="category-link" href="/categories/blog/年终总结/">年终总结<span class="category-count">4</span></a> <a class="category-link" href="/categories/blog/碎碎念/">碎碎念<span class="category-count">6</span></a> <a class="category-link" href="/categories/dev/">dev<span class="category-count">51</span></a> <a class="category-link" href="/categories/dev/DDD/">DDD<span class="category-count">1</span></a> <a class="category-link" href="/categories/dev/ElasticSearch/">ElasticSearch<span class="category-count">8</span></a> <a class="category-link" href="/categories/dev/database/">database<span class="category-count">6</span></a> <a class="category-link" href="/categories/dev/git/">git<span class="category-count">2</span></a> <a class="category-link" href="/categories/dev/go/">go<span class="category-count">1</span></a> <a class="category-link" href="/categories/dev/java/">java<span class="category-count">20</span></a> <a class="category-link" href="/categories/dev/java/jdk/">jdk<span class="category-count">2</span></a> <a class="category-link" href="/categories/dev/java/jvm/">jvm<span class="category-count">6</span></a> <a class="category-link" href="/categories/dev/java/netty/">netty<span class="category-count">3</span></a> <a class="category-link" href="/categories/dev/java/spring/">spring<span class="category-count">2</span></a> <a class="category-link" href="/categories/dev/java/并发/">并发<span class="category-count">5</span></a> <a class="category-link" href="/categories/dev/linux/">linux<span class="category-count">1</span></a> <a class="category-link" href="/categories/dev/node/">node<span class="category-count">1</span></a> <a class="category-link" href="/categories/dev/redis/">redis<span class="category-count">1</span></a> <a class="category-link" href="/categories/dev/spring-cloud/">spring cloud<span class="category-count">4</span></a> <a class="category-link" href="/categories/dev/tool/">tool<span class="category-count">1</span></a> <a class="category-link" href="/categories/dev/web/">web<span class="category-count">2</span></a> <a class="category-link" href="/categories/dev/消息队列/">消息队列<span class="category-count">1</span></a> <a class="category-link" href="/categories/dev/网络/">网络<span class="category-count">1</span></a> <a class="category-link" href="/categories/iot/">iot<span class="category-count">3</span></a> <a class="category-link" href="/categories/碎碎念/">碎碎念<span class="category-count">1</span></a> <a class="category-link" href="/categories/碎碎念/家装/">家装<span class="category-count">1</span></a>
+  </div>
+  <!--<div class="author-tags">
+    <div class="title">
+      <i class="iconfont icon-tags"></i>
+      <span> 标签</span>
+    </div>
+    <a class="tag-link" href="/tags/BlockingQueue/">BlockingQueue<span class="tag-count">1</span></a><a class="tag-link" href="/tags/ByteBuf/">ByteBuf<span class="tag-count">1</span></a><a class="tag-link" href="/tags/Cerebro/">Cerebro<span class="tag-count">1</span></a><a class="tag-link" href="/tags/ElasticSearch/">ElasticSearch<span class="tag-count">8</span></a><a class="tag-link" href="/tags/HTTP/">HTTP<span class="tag-count">1</span></a><a class="tag-link" href="/tags/Kibana/">Kibana<span class="tag-count">1</span></a><a class="tag-link" href="/tags/Mac/">Mac<span class="tag-count">1</span></a><a class="tag-link" href="/tags/RabbitMQ/">RabbitMQ<span class="tag-count">1</span></a><a class="tag-link" href="/tags/Spring-Cloud-Health/">Spring Cloud Health<span class="tag-count">2</span></a><a class="tag-link" href="/tags/TCP-IP/">TCP/IP<span class="tag-count">1</span></a><a class="tag-link" href="/tags/ThreadLocal/">ThreadLocal<span class="tag-count">1</span></a><a class="tag-link" href="/tags/aop/">aop<span class="tag-count">1</span></a><a class="tag-link" href="/tags/back-end/">back-end<span class="tag-count">2</span></a><a class="tag-link" href="/tags/cat/">cat<span class="tag-count">3</span></a><a class="tag-link" href="/tags/dc/">dc<span class="tag-count">1</span></a><a class="tag-link" href="/tags/dev/">dev<span class="tag-count">1</span></a><a class="tag-link" href="/tags/emoji/">emoji<span class="tag-count">1</span></a><a class="tag-link" href="/tags/fore-end/">fore-end<span class="tag-count">1</span></a><a class="tag-link" href="/tags/framework/">framework<span class="tag-count">2</span></a><a class="tag-link" href="/tags/git/">git<span class="tag-count">2</span></a><a class="tag-link" href="/tags/go/">go<span class="tag-count">1</span></a><a class="tag-link" href="/tags/iot/">iot<span class="tag-count">5</span></a><a class="tag-link" href="/tags/java/">java<span class="tag-count">14</span></a><a class="tag-link" href="/tags/jdk/">jdk<span class="tag-count">2</span></a><a class="tag-link" href="/tags/jvm/">jvm<span class="tag-count">6</span></a><a class="tag-link" href="/tags/linux/">linux<span class="tag-count">1</span></a><a class="tag-link" href="/tags/markdown/">markdown<span class="tag-count">2</span></a><a class="tag-link" href="/tags/mqtt/">mqtt<span class="tag-count">1</span></a><a class="tag-link" href="/tags/mysql/">mysql<span class="tag-count">6</span></a><a class="tag-link" href="/tags/netty/">netty<span class="tag-count">3</span></a><a class="tag-link" href="/tags/nio/">nio<span class="tag-count">2</span></a><a class="tag-link" href="/tags/nodeJs/">nodeJs<span class="tag-count">1</span></a><a class="tag-link" href="/tags/nodejs/">nodejs<span class="tag-count">1</span></a><a class="tag-link" href="/tags/proxy/">proxy<span class="tag-count">1</span></a><a class="tag-link" href="/tags/redis/">redis<span class="tag-count">1</span></a><a class="tag-link" href="/tags/soft/">soft<span class="tag-count">1</span></a><a class="tag-link" href="/tags/spring/">spring<span class="tag-count">2</span></a><a class="tag-link" href="/tags/spring-transaction/">spring transaction<span class="tag-count">1</span></a><a class="tag-link" href="/tags/spring-cloud-bus/">spring-cloud-bus<span class="tag-count">1</span></a><a class="tag-link" href="/tags/spring-cloud-config/">spring-cloud-config<span class="tag-count">1</span></a><a class="tag-link" href="/tags/spring事务管理/">spring事务管理<span class="tag-count">1</span></a><a class="tag-link" href="/tags/test/">test<span class="tag-count">1</span></a><a class="tag-link" href="/tags/volatile/">volatile<span class="tag-count">1</span></a><a class="tag-link" href="/tags/vscode/">vscode<span class="tag-count">1</span></a><a class="tag-link" href="/tags/vue/">vue<span class="tag-count">2</span></a><a class="tag-link" href="/tags/二档起步/">二档起步<span class="tag-count">1</span></a><a class="tag-link" href="/tags/代理模式/">代理模式<span class="tag-count">1</span></a><a class="tag-link" href="/tags/优化/">优化<span class="tag-count">1</span></a><a class="tag-link" href="/tags/句法/">句法<span class="tag-count">1</span></a><a class="tag-link" href="/tags/多线程/">多线程<span class="tag-count">5</span></a><a class="tag-link" href="/tags/学生时代/">学生时代<span class="tag-count">1</span></a><a class="tag-link" href="/tags/家装/">家装<span class="tag-count">1</span></a><a class="tag-link" href="/tags/年终总结/">年终总结<span class="tag-count">5</span></a><a class="tag-link" href="/tags/并发/">并发<span class="tag-count">5</span></a><a class="tag-link" href="/tags/序/">序<span class="tag-count">1</span></a><a class="tag-link" href="/tags/消息队列/">消息队列<span class="tag-count">1</span></a><a class="tag-link" href="/tags/源码解析/">源码解析<span class="tag-count">2</span></a><a class="tag-link" href="/tags/线程池/">线程池<span class="tag-count">1</span></a><a class="tag-link" href="/tags/表情/">表情<span class="tag-count">1</span></a><a class="tag-link" href="/tags/雪糕/">雪糕<span class="tag-count">3</span></a>
+  </div> -->
+  <div class="author-social">
+    
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:unusual7@163.com" class="theme-color iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+           <a href="https://github.com/Theembers" class="theme-color iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+        
+           <a href="https://www.zhihu.com/people/theembers" class="theme-color iconfont icon-zhihu" title="zhihu"></a>
+        
+      
+    
+      
+    
+      
+        
+           <a href="https://music.163.com/#/user/home?id=32131879" class="theme-color iconfont icon-cloudmusic" title="cloudmusic"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+    
+    
+      <a href="/atom.xml" class="theme-color iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+  </div>
+</div>
+
+      </div>
+      
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+
+      <div class="light-dark" id="light-dark">
+        <input type="checkbox" id="md_2">
+        <label for="md_2" class="iconfont write"></label>
+      </div>
+
+    
+  
+  
+
+  
+  
+<!-- valine Comments -->
+<script src="//cdn.jsdelivr.net/npm/valine/dist/Valine.min.js"></script>
+<script type="text/javascript">
+    setTimeout(function(){
+    new Valine({
+            el: '#vcomments',
+            notify: false,
+            verify: false,
+            app_id: "AbQBWhsXzFouhrbyvkHeWaQb-gzGzoHsz",
+            app_key: "JMW5LdbzGvOecjancFT4b9zm",
+            placeholder: "你要说什么啊😊",
+            avatar: 'retro',
+            meta: ['nick']
+        });
+    },300)
+   
+</script>
+
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.cookie.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/countup/countUp.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/growl/jquery.growl.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=1.1.4"></script>
+
+
+    <div class="back-img-box">
+      
+    </div>
+  </div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/assets/hijiki.model.json"},"display":{"position":"left","width":150,"height":300,"hOffset":20,"vOffset":-20},"mobile":{"show":false,"scale":0.5,"motion":true},"react":{"opacity":1},"log":false});</script></body>
+</html>

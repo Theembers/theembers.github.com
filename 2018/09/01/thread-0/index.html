@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><meta name="generator" content="Hexo 3.9.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="并发[0]-二档起步：线程">
+
+
+
+
+  <meta name="keywords" content="开发, dev, blog, 博客, java, hexo, even, theembers, theembers, theEmbers.devFun, 小轴, 郭小轴">
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="TheEmbers.devFun">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1.4">
+
+
+
+<link rel="canonical" href="https://theembers.github.io/2018/09/01/thread-0/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1.4">
+
+
+
+  
+  <script id="baidu_analytics">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?6053c2edabf3ee9b02ecc553130da68a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+  <script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.10.0/dist/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "AbQBWhsXzFouhrbyvkHeWaQb-gzGzoHsz",
+      appKey: "JMW5LdbzGvOecjancFT4b9zm"
+    });
+  </script>
+
+
+
+
+<script>
+  window.config = {"title":"TheEmbers.devFun","subtitle":"childlike forever. 😃","description":"","author":"TheEmbers Guo","language":"zh-cn","timezone":"","url":"https://theembers.github.io","root":"/","permalink":":year/:month/:day/:title/","permalink_defaults":{},"source_dir":"source","public_dir":"public","tag_dir":"tags","archive_dir":"archives","category_dir":"categories","code_dir":"downloads/code","i18n_dir":":lang","skip_render":[],"new_post_name":":title.md","default_layout":"post","titlecase":false,"external_link":true,"filename_case":0,"render_drafts":false,"post_asset_folder":true,"relative_link":false,"future":true,"highlight":{"enable":true,"auto_detect":false,"line_number":true,"tab_replace":"","first_line_number":"always1"},"default_category":"uncategorized","category_map":{},"tag_map":{},"date_format":"YYYY-MM-DD","time_format":"HH:mm:ss","per_page":10,"pagination_dir":"page","theme":"even","deploy":[{"type":"git","repository":"git@github.com:Theembers/theembers.github.com.git","branch":"master"},{"type":"git","repository":"git@gitee.com:theembers/theembers.git","branch":"master"}],"ignore":[],"logo":"/image/logo.png","title_art":"<font class=\"theme-color\">7</font>heEmbers<font class=\"theme-color\">.</font>devFun","keywords":"开发, dev, blog, 博客, java, hexo, even, theembers, theembers, theEmbers.devFun, 小轴, 郭小轴","author_image":"https://image-1257148187.cos.ap-chengdu.myqcloud.com/picgo_img/person-head.jpeg","address":"成都 · 中国","default_bgimg":["https://image-1257148187.cos.ap-chengdu.myqcloud.com/picgo_img/WechatIMG15.jpg","https://image-1257148187.cos.ap-chengdu.myqcloud.com/picgo_img/timg.jpeg","https://image-1257148187.cos.ap-chengdu.myqcloud.com/picgo_img/tes11af.jpg","https://image-1257148187.cos.ap-chengdu.myqcloud.com/picgo_img/simptab-wallpaper-20190526195946.png","https://image-1257148187.cos.ap-chengdu.myqcloud.com/picgo_img/a44d4bddb4e7d119baf614e0e6698ba4.jpg","https://image-1257148187.cos.ap-chengdu.myqcloud.com/picgo_img/simptab-wallpaper-20190107131809.png"],"markdown_it_plus":{"highlight":true,"html":true,"xhtmlOut":true,"breaks":true,"langPrefix":null,"linkify":true,"typographer":null,"quotes":"“”‘’","pre_class":"highlight","plugins":[{"plugin":{"name":"markdown-it-mark","enable":true}},{"plugin":{"name":"markdown-it-toc-and-anchor","enable":true,"options":{"toc":true,"tocClassName":"markdownIt-TOC","tocFirstLevel":2,"tocLastLevel":6,"tocCallback":null,"anchorLink":true,"anchorLinkSymbol":"","anchorFirstLevel":2,"anchorLastLevel":6,"anchorLinkSpace":true,"anchorLinkSymbolClassName":null,"anchorLinkBefore":true,"anchorClassName":"headerlink","resetIds":true}}}]},"index_generator":{"per_page":10,"order_by":"-date","path":""},"archive_generator":{"per_page":20,"yearly":true,"monthly":true,"daily":false,"order_by":"-date"},"tag_generator":{"per_page":20},"category_generator":{"per_page":20},"neat_enable":false,"neat_html":{"enable":true,"exclude":null},"neat_css":{"enable":true,"exclude":["*.min.css"]},"neat_js":{"enable":true,"mangle":true,"output":null,"compress":null,"exclude":["*.min.js"]},"image_caption":{"enable":true,"class_name":null},"live2d":{"enable":true,"scriptFrom":"local","pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"use":"live2d-widget-model-hijiki"},"display":{"position":"left","width":150,"height":300,"hOffset":20,"vOffset":-20},"mobile":{"show":false,"scale":0.5,"motion":true},"react":{"opacity":1}},"encrypt":{"enable":true,"abstract":"有东西被加密了, 需要密码才能看.","message":"需要密码才可以看哦.","wrong_pass_message":"抱歉, 这个密码看着不太对, 请再试试.","wrong_hash_message":"抱歉, 这个文章不能被校验, 不过还是能看看解密后的内容."},"feed":{"type":"atom","limit":20,"hub":"","content":true,"content_limit":140,"content_limit_delim":"","path":"atom.xml"},"server":{"port":4000,"log":false,"ip":"0.0.0.0","compress":false,"header":true},"since":2015,"favicon":"/favicon.ico","rss":"/atom.xml","menu":{"Home":"/","Tags":"/tags","Categories":"/categories","Archives":"/archives","GitHub":"https://github.com/Theembers"},"color":"Default","toc":true,"total":false,"newPost":604800000,"fancybox":true,"pjax":true,"copyright":{"enable":false,"license":"<a rel=\"license\" href=\"http://creativecommons.org/licenses/by-nc/4.0/\"><img alt=\"知识共享许可协议\" style=\"border-width:0\" src=\"https://i.creativecommons.org/l/by-nc/4.0/80x15.png\" /></a>本作品采用<a rel=\"license\" href=\"http://creativecommons.org/licenses/by-nc/4.0/\">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可。"},"reward":{"enable":false,"qrCode":{"wechat":"/image/reward/wechat.jpg","alipay":"/image/reward/alipay.jpg"}},"social":{"email":"unusual7@163.com","stack-overflow":null,"twitter":null,"facebook":null,"linkedin":null,"google":null,"github":"https://github.com/Theembers","weibo":null,"zhihu":"https://www.zhihu.com/people/theembers","wechat":null,"cloudmusic":"https://music.163.com/#/user/home?id=32131879","douban":null,"pocket":null,"tumblr":null,"instagram":null},"local_search":{"enable":true},"leancloud":{"app_id":"AbQBWhsXzFouhrbyvkHeWaQb-gzGzoHsz","app_key":"JMW5LdbzGvOecjancFT4b9zm"},"baidu_analytics":"6053c2edabf3ee9b02ecc553130da68a","baidu_verification":null,"google_analytics":null,"google_verification":null,"disqus_shortname":null,"changyan":{"appid":null,"appkey":null},"livere_datauid":null,"valine":{"appid":"AbQBWhsXzFouhrbyvkHeWaQb-gzGzoHsz","appkey":"JMW5LdbzGvOecjancFT4b9zm","notify":false,"verify":false,"avatar":"retro","placeholder":"你要说什么啊😊","meta":"['nick']"},"version":"1.1.4"};
+</script>
+
+    <title> 并发[0]-二档起步：线程 - TheEmbers.devFun </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <i class="image iconfont icon-cat"></i>
+    <span class="title">TheEmbers.devFun</span>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+  
+    <div class="mobile-post-toc-blank">
+    </div>
+   <!-- <div class="mobile-post-toc-icon">
+      <i class="iconfont icon-catalog"></i>
+    </div> -->
+  
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  
+  <div class="author-box">
+  
+    <div class="image-box">
+      <img class="image" src="https://image-1257148187.cos.ap-chengdu.myqcloud.com/picgo_img/person-head.jpeg">
+    </div>
+  
+    <div class="name">TheEmbers Guo</div>
+  
+    <div class="address"><i class="theme-color iconfont icon-address"></i>成都 · 中国</div>
+  
+  </div>
+
+
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          <i class="theme-color iconfont icon-home"></i>
+          
+          
+            首页
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          <i class="theme-color iconfont icon-tags"></i>
+          
+          
+            标签
+          
+        </li>
+      </a>
+    
+      <a href="/categories">
+        <li class="mobile-menu-item">
+          <i class="theme-color iconfont icon-categories"></i>
+          
+          
+            分类
+          
+        </li>
+      </a>
+    
+      <a href="/archives">
+        <li class="mobile-menu-item">
+          <i class="theme-color iconfont icon-archives"></i>
+          
+          
+            归档
+          
+        </li>
+      </a>
+    
+      <a href="https://github.com/Theembers">
+        <li class="mobile-menu-item">
+          <i class="theme-color iconfont icon-github"></i>
+          
+          
+            GitHub
+          
+        </li>
+      </a>
+    
+  </ul>
+
+  <div class="mobile-menu-social">
+    
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:unusual7@163.com" class="theme-color iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+           <a href="https://github.com/Theembers" class="theme-color iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+        
+           <a href="https://www.zhihu.com/people/theembers" class="theme-color iconfont icon-zhihu" title="zhihu"></a>
+        
+      
+    
+      
+    
+      
+        
+           <a href="https://music.163.com/#/user/home?id=32131879" class="theme-color iconfont icon-cloudmusic" title="cloudmusic"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+    
+    
+      <a href="/atom.xml" class="theme-color iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+  </div>
+  
+</nav>
+
+<nav id="mobile-toc" class="mobile-toc slideout-menu">
+ <!-- 
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+    
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前置所谓二挡起步"><span class="toc-number">1.</span> <span class="toc-text"> 前置（所谓“二挡起步”）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#线程的生命周期"><span class="toc-number">2.</span> <span class="toc-text"> 线程的生命周期</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#上下文切换"><span class="toc-number">3.</span> <span class="toc-text"> 上下文切换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#线程的创建"><span class="toc-number">4.</span> <span class="toc-text"> 线程的创建</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#thread-类详解"><span class="toc-number">5.</span> <span class="toc-text"> Thread 类详解</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#start-方法"><span class="toc-number">5.1.</span> <span class="toc-text"> start 方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#run-方法"><span class="toc-number">5.2.</span> <span class="toc-text"> run 方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sleep-方法"><span class="toc-number">5.3.</span> <span class="toc-text"> sleep 方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#yield-方法"><span class="toc-number">5.4.</span> <span class="toc-text"> yield 方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#join-方法"><span class="toc-number">5.5.</span> <span class="toc-text"> join 方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#interrupt-方法"><span class="toc-number">5.6.</span> <span class="toc-text"> interrupt 方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#stop-方法"><span class="toc-number">5.7.</span> <span class="toc-text"> stop 方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#线程常用操作"><span class="toc-number">6.</span> <span class="toc-text"> 线程常用操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#获得代码调用者信息"><span class="toc-number">6.1.</span> <span class="toc-text"> 获得代码调用者信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#判断线程是否处于活动状态"><span class="toc-number">6.2.</span> <span class="toc-text"> 判断线程是否处于活动状态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#获取线程唯一标识"><span class="toc-number">6.3.</span> <span class="toc-text"> 获取线程唯一标识</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#线程名称-getname-和-setname"><span class="toc-number">6.4.</span> <span class="toc-text"> 线程名称 getName 和 setName</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#优先级-getpriority-和-setpriority"><span class="toc-number">6.5.</span> <span class="toc-text"> 优先级 getPriority 和 setPriority</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#守护线程-daemon"><span class="toc-number">7.</span> <span class="toc-text"> 守护线程 (Daemon)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#小结"><span class="toc-number">8.</span> <span class="toc-text"> 小结</span></a></li></ol>
+    
+    </div>
+  </div>
+
+ -->
+</nav>
+    <div class="container" id="mobile-panel">
+
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/.">
+    <span class="icon iconfont icon-cat"></span>
+    <span class="title"><font class="theme-color">7</font>heEmbers<font class="theme-color">.</font>devFun</span>
+    <span class="subtitle">childlike forever. 😃</span>
+  </a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            <i class="theme-color iconfont icon-home"></i>
+            
+            
+              首页
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            <i class="theme-color iconfont icon-tags"></i>
+            
+            
+              标签
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            <i class="theme-color iconfont icon-categories"></i>
+            
+            
+              分类
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives">
+            <i class="theme-color iconfont icon-archives"></i>
+            
+            
+              归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="https://github.com/Theembers">
+            <i class="theme-color iconfont icon-github"></i>
+            
+            
+              GitHub
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+<div id="topbar" class="topbar hidden">
+  <div class="logo">
+    <a href="/.">
+      <span class="icon iconfont icon-cat"></span>
+      <span class="title"><font class="theme-color">7</font>heEmbers<font class="theme-color">.</font>devFun</span>
+    </a>
+  </div>
+  <div class="menu">
+    
+      
+        <span class="menu-item">
+          <a class="menu-item-link" href="/">
+            <i class="theme-color iconfont icon-home"></i>
+            
+            
+              首页
+            
+          </a>
+        </span>
+      
+        <span class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            <i class="theme-color iconfont icon-tags"></i>
+            
+            
+              标签
+            
+          </a>
+        </span>
+      
+        <span class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            <i class="theme-color iconfont icon-categories"></i>
+            
+            
+              分类
+            
+          </a>
+        </span>
+      
+        <span class="menu-item">
+          <a class="menu-item-link" href="/archives">
+            <i class="theme-color iconfont icon-archives"></i>
+            
+            
+              归档
+            
+          </a>
+        </span>
+      
+        <span class="menu-item">
+          <a class="menu-item-link" href="https://github.com/Theembers">
+            <i class="theme-color iconfont icon-github"></i>
+            
+            
+              GitHub
+            
+          </a>
+        </span>
+      
+  
+  </div>
+</div>
+      </header>
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  
+    <article class="post">
+  
+    <header class="post-header">
+      
+      <!--文章标题 -->
+      <h1 class="post-title">
+        <span class="post-flag">
+          
+          
+          
+        </span>
+        
+          并发[0]-二档起步：线程
+          
+        
+      </h1>
+      <!-- 文章信息 -->
+      <div class="post-meta">
+        <span class="post-time">
+          <i class="theme-color iconfont icon-date"></i>
+          2018-09-01
+        </span>
+        <span class="post-count">
+          <i class="theme-color iconfont icon-count"></i>
+          
+          2.5k
+          
+        </span>
+        <span class="post-read">
+          <i class="theme-color iconfont icon-time"></i>
+          
+          23
+          
+        </span>
+        
+          <span class="post-visits">
+              <i class="theme-color iconfont icon-visitor"></i>
+              <span class="visits" data-url="/2018/09/01/thread-0/" data-title="并发[0]-二档起步：线程">0</span>
+          </span>
+        
+      </div>
+      
+      
+        <div class="float-right post-meta">
+      
+          <div class="post-category">
+            <i class="theme-color iconfont icon-categories"></i>
+            
+              <a href="/categories/dev/">dev</a>
+            
+              <a href="/categories/dev/java/">java</a>
+            
+              <a href="/categories/dev/java/并发/">并发</a>
+            
+          </div>
+        </div>
+      
+      
+     
+    </header>
+    
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+    
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前置所谓二挡起步"><span class="toc-number">1.</span> <span class="toc-text"> 前置（所谓“二挡起步”）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#线程的生命周期"><span class="toc-number">2.</span> <span class="toc-text"> 线程的生命周期</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#上下文切换"><span class="toc-number">3.</span> <span class="toc-text"> 上下文切换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#线程的创建"><span class="toc-number">4.</span> <span class="toc-text"> 线程的创建</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#thread-类详解"><span class="toc-number">5.</span> <span class="toc-text"> Thread 类详解</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#start-方法"><span class="toc-number">5.1.</span> <span class="toc-text"> start 方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#run-方法"><span class="toc-number">5.2.</span> <span class="toc-text"> run 方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sleep-方法"><span class="toc-number">5.3.</span> <span class="toc-text"> sleep 方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#yield-方法"><span class="toc-number">5.4.</span> <span class="toc-text"> yield 方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#join-方法"><span class="toc-number">5.5.</span> <span class="toc-text"> join 方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#interrupt-方法"><span class="toc-number">5.6.</span> <span class="toc-text"> interrupt 方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#stop-方法"><span class="toc-number">5.7.</span> <span class="toc-text"> stop 方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#线程常用操作"><span class="toc-number">6.</span> <span class="toc-text"> 线程常用操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#获得代码调用者信息"><span class="toc-number">6.1.</span> <span class="toc-text"> 获得代码调用者信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#判断线程是否处于活动状态"><span class="toc-number">6.2.</span> <span class="toc-text"> 判断线程是否处于活动状态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#获取线程唯一标识"><span class="toc-number">6.3.</span> <span class="toc-text"> 获取线程唯一标识</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#线程名称-getname-和-setname"><span class="toc-number">6.4.</span> <span class="toc-text"> 线程名称 getName 和 setName</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#优先级-getpriority-和-setpriority"><span class="toc-number">6.5.</span> <span class="toc-text"> 优先级 getPriority 和 setPriority</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#守护线程-daemon"><span class="toc-number">7.</span> <span class="toc-text"> 守护线程 (Daemon)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#小结"><span class="toc-number">8.</span> <span class="toc-text"> 小结</span></a></li></ol>
+    
+    </div>
+  </div>
+
+
+    
+    <div class="post-content ">
+      
+        <div class="detial-post-content">
+          <h2 id="前置所谓二挡起步"><a class="headerlink" href="#前置所谓二挡起步"></a> 前置（所谓“二挡起步”）</h2>
+<ul>
+<li><a href="https://theembers.gitee.io/2018/08/27/JVM-memory-model/" target="_blank" rel="noopener">JVM内存模型</a></li>
+<li>基本线程概念认知</li>
+</ul>
+<h2 id="线程的生命周期"><a class="headerlink" href="#线程的生命周期"></a> 线程的生命周期</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">状态</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">NEW</td>
+<td style="text-align:left">初始状态，线程被构建，但是还没有调用 start()方法</td>
+</tr>
+<tr>
+<td style="text-align:left">RUNNABLE</td>
+<td style="text-align:left">运行状态，Java 线程将操作系统中的就绪和运行两种状态笼统地称作“运行中”</td>
+</tr>
+<tr>
+<td style="text-align:left">BLOCKED</td>
+<td style="text-align:left">阻塞状态，表示线程阻塞于锁</td>
+</tr>
+<tr>
+<td style="text-align:left">WAITING</td>
+<td style="text-align:left">等待状态，表示线程进入等待状态，进入该状态表示当前线程需要等待其他线程做出一些特定动作（通知或中断）</td>
+</tr>
+<tr>
+<td style="text-align:left">TIME_WAITING</td>
+<td style="text-align:left">超时等待状态，该状态不同于 WAITING，它是可以在指定的时间自行返回的</td>
+</tr>
+<tr>
+<td style="text-align:left">TERMINATED</td>
+<td style="text-align:left">终止状态，表示当前线程已经执行完毕</td>
+</tr>
+</tbody>
+</table>
+<center>
+<p><img src="https://i.loli.net/2018/09/01/5b8a7d293eb42.png" alt="线程状态变迁"><span class="image-caption">线程状态变迁</span></p>
+</center>
+<h2 id="上下文切换"><a class="headerlink" href="#上下文切换"></a> 上下文切换</h2>
+<p>CPU在运行一个线程的过程中，转而去运行另外一个线程，这个叫做线程 上下文切换（对于进程也是类似）。</p>
+<p>一般来说，线程上下文切换过程中会记录程序计数器、CPU寄存器状态等数据。</p>
+<p>实质上， 线程的上下文切换就是存储和恢复CPU状态的过程，它使得线程执行能够从中断点恢复执行，这正是有程序计数器所支持的。</p>
+<h2 id="线程的创建"><a class="headerlink" href="#线程的创建"></a> 线程的创建</h2>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ThreadTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//使用继承Thread类的方式创建线程</span></span><br><span class="line">        <span class="keyword">new</span> Thread()&#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                System.out.println(<span class="string">"Thread"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;.start();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//使用实现Runnable接口的方式创建线程</span></span><br><span class="line">        Thread thread = <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                System.out.println(<span class="string">"Runnable"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        thread.start();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//JVM 创建的主线程 main</span></span><br><span class="line">        System.out.println(<span class="string">"main"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>start()方法的作用是通知 “线程规划器” 该线程已经准备就绪，以便让系统安排一个时间来调用其 run()方法，也就是使线程得到运行。</strong></p>
+<h2 id="thread-类详解"><a class="headerlink" href="#thread-类详解"></a> Thread 类详解</h2>
+<h3 id="start-方法"><a class="headerlink" href="#start-方法"></a> start 方法</h3>
+<p>start() 用来启动一个线程，当调用该方法后，相应线程就会进入就绪状态，该线程中的run()方法会在某个时机被调用。</p>
+<h3 id="run-方法"><a class="headerlink" href="#run-方法"></a> run 方法</h3>
+<p>run()方法是不需要用户来调用的。当通过start()方法启动一个线程之后，一旦线程获得了CPU执行时间，便进入run()方法体去执行具体的任务。注意，创建线程时必须重写run()方法，以定义具体要执行的任务。<br>
+一般来说，有两种方式可以达到重写run()方法的效果：</p>
+<ul>
+<li>直接重写：直接继承Thread类并重写run()方法；</li>
+<li>间接重写：通过Thread构造函数传入Runnable对象 (注意，实际上重写的是 Runnable对象 的run() 方法)。</li>
+</ul>
+<h3 id="sleep-方法"><a class="headerlink" href="#sleep-方法"></a> sleep 方法</h3>
+<p>作用是在指定的毫秒数内让当前正在执行的线程（即<code>currentThread()</code>方法所返回的线程）睡眠，并交出 CPU 让其去执行其他的任务。当线程睡眠时间满后，不一定会立即得到执行，因为此时 CPU 可能正在执行其他的任务。所以说，调用sleep方法相当于让线程进入阻塞状态。该方法有如下两条特征：</p>
+<ul>
+<li>如果调用了sleep方法，必须捕获InterruptedException异常或者将该异常向上层抛出；</li>
+<li>sleep方法不会释放锁，也就是说如果当前线程持有对某个对象的锁，则即使调用sleep方法，其他线程也无法访问这个对象。</li>
+</ul>
+<h3 id="yield-方法"><a class="headerlink" href="#yield-方法"></a> yield 方法</h3>
+<p>调用 yield()方法会让当前线程交出CPU资源，让CPU去执行其他的线程。但是yield()不能控制具体的交出CPU的时间。</p>
+<ul>
+<li>yield()方法只能让 拥有相同优先级的线程 有获取 CPU 执行时间的机会；</li>
+<li>调用yield()方法并不会让线程进入阻塞状态，而是让线程重回就绪状态，它只需要等待重新得到 CPU 的执行；</li>
+<li>它同样不会释放锁。</li>
+</ul>
+<h3 id="join-方法"><a class="headerlink" href="#join-方法"></a> join 方法</h3>
+<p>假如在main线程中调用thread.join方法，则main线程会等待thread线程执行完毕或者等待一定的时间。详细地，如果调用的是无参join方法，则等待thread执行完毕；如果调用的是指定了时间参数的join方法，则等待一定的时间。join()方法有三个重载版本：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">join</span><span class="params">(<span class="keyword">long</span> millis)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;...&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">join</span><span class="params">(<span class="keyword">long</span> millis, <span class="keyword">int</span> nanos)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;...&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">join</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;...&#125;</span><br></pre></td></tr></table></figure>
+<p>join()方法是通过wait()方法 (Object 提供的方法) 实现的。当 millis == 0 时，会进入 <code>while(isAlive())</code> 循环，并且只要子线程是活的，宿主线程就不停的等待。 <code>wait(0)</code> 的作用是让当前线程(宿主线程)等待，而这里的当前线程是指 <code>Thread.currentThread()</code> 所返回的线程。所以，虽然是子线程对象(锁)调用wait()方法，但是阻塞的是宿主线程。</p>
+<ul>
+<li>join方法同样会会让线程交出CPU执行权限；</li>
+<li>join方法同样会让线程释放对一个对象持有的锁；</li>
+<li>如果调用了join方法，必须捕获InterruptedException异常或者将该异常向上层抛出。</li>
+</ul>
+<h3 id="interrupt-方法"><a class="headerlink" href="#interrupt-方法"></a> interrupt 方法</h3>
+<p>单独调用interrupt方法可以使得 处于阻塞状态的线程 抛出一个异常，也就是说，它可以用来中断一个正处于阻塞状态的线程；<br>
+另外，通过 interrupted()方法 和 isInterrupted()方法 可以停止正在运行的线程。</p>
+<blockquote>
+<p>直接调用interrupt() 方法不能中断正在运行中的线程。但是，如果配合 isInterrupted()/interrupted() 能够中断正在运行的线程，因为调用interrupt()方法相当于将中断标志位置为true，那么可以通过调用isInterrupted()/interrupted()判断中断标志是否被置位来中断线程的执行。<br>
+但是，一般情况下，不建议通过这种方式来中断线程，一般会在MyThread类中增加一个 volatile 属性 isStop 来标志是否结束 while 循环，然后再在 while 循环中判断 isStop 的值。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// interrupt 阻断线程</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ThreadSafe</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123; </span><br><span class="line">        <span class="keyword">while</span> (!isInterrupted())&#123; <span class="comment">//非阻塞过程中通过判断中断标志来退出</span></span><br><span class="line">            <span class="keyword">try</span>&#123;</span><br><span class="line">                Thread.sleep(<span class="number">5</span>*<span class="number">1000</span>);<span class="comment">//阻塞过程捕获中断异常来退出</span></span><br><span class="line">            &#125;<span class="keyword">catch</span>(InterruptedException e)&#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">                <span class="keyword">break</span>;<span class="comment">//捕获到异常之后，执行break跳出循环。</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 退出标记 阻断线程</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ThreadSafe</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">volatile</span> <span class="keyword">boolean</span> exit = <span class="keyword">false</span>; </span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123; </span><br><span class="line">        <span class="keyword">while</span> (!exit)&#123;</span><br><span class="line">            <span class="comment">//do something</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="stop-方法"><a class="headerlink" href="#stop-方法"></a> stop 方法</h3>
+<p>stop() 方法已经是一个<strong>废弃的</strong>方法，它是一个 <font color="red"> 不安全的 </font> 方法。因为调用 stop() 方法会直接终止run方法的调用，并且会抛出一个ThreadDeath错误，如果线程持有某个对象锁的话，会完全释放锁，导致对象状态不一致。所以， stop() 方法基本是不会被用到的。</p>
+<h2 id="线程常用操作"><a class="headerlink" href="#线程常用操作"></a> 线程常用操作</h2>
+<h3 id="获得代码调用者信息"><a class="headerlink" href="#获得代码调用者信息"></a> 获得代码调用者信息</h3>
+<p><code>currentThread()</code> 方法返回代码段正在被哪个线程调用的信息。</p>
+<h3 id="判断线程是否处于活动状态"><a class="headerlink" href="#判断线程是否处于活动状态"></a> 判断线程是否处于活动状态</h3>
+<p><code>isAlive()</code> 的功能是判断调用该方法的线程是否处于活动状态。其中，活动状态指的是线程已经 start (无论是否获得CPU资源并运行) 且尚未结束。</p>
+<h3 id="获取线程唯一标识"><a class="headerlink" href="#获取线程唯一标识"></a> 获取线程唯一标识</h3>
+<p><code>getId()</code> 的作用是取得线程唯一标识，由JVM自动给出。</p>
+<h3 id="线程名称-getname-和-setname"><a class="headerlink" href="#线程名称-getname-和-setname"></a> 线程名称 getName 和 setName</h3>
+<p>用来得到或者设置线程名称。如果我们不手动设置线程名字，JVM会为该线程自动创建一个标识名，形式为： Thread-数字。</p>
+<h3 id="优先级-getpriority-和-setpriority"><a class="headerlink" href="#优先级-getpriority-和-setpriority"></a> 优先级 getPriority 和 setPriority</h3>
+<p>在操作系统中，线程可以划分优先级，优先级较高的线程得到的CPU资源较多，也就是CPU优先执行优先级较高的线程。设置线程优先级有助于帮助 “线程规划器” 确定在下一次选择哪个线程来获得CPU资源。特别地，在 Java 中，线程的优先级分为 1 ~ 10 这 10 个等级，如果小于 1 或大于 10，则 JDK 抛出异常 IllegalArgumentException ，该异常是 RuntimeException 的子类，属于不受检异常。JDK 中使用 3 个常量来预置定义优先级的值，如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MIN_PRIORITY = <span class="number">1</span>; </span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> NORM_PRIORITY = <span class="number">5</span>; </span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MAX_PRIORITY = <span class="number">10</span>;</span><br></pre></td></tr></table></figure>
+<ol>
+<li>线程优先级的继承性<br>
+在 Java 中，线程的优先级具有继承性，比如 A 线程启动 B 线程， 那么 B 线程的优先级与 A 是一样的。</li>
+<li>线程优先级的规则性和随机性<br>
+线程的优先级具有一定的规则性，也就是CPU尽量将执行资源让给优先级比较高的线程。特别地，高优先级的线程总是大部分先执行完，但并不一定所有的高优先级线程都能先执行完。</li>
+</ol>
+<h2 id="守护线程-daemon"><a class="headerlink" href="#守护线程-daemon"></a> 守护线程 (Daemon)</h2>
+<p>当进程中不存在非守护线程时，则守护线程自动销毁，典型的守护线程就是垃圾回收线程。<br>
+只要当前JVM实例中存在任何一个非守护线程没有结束，守护线程就在工作；只有当最后一个非守护线程结束时，守护线程才随着JVM一同结束工作。</p>
+<h2 id="小结"><a class="headerlink" href="#小结"></a> 小结</h2>
+<p>对于上述线程的各项基本操作，其 <strong>所操作的对象</strong> 满足：</p>
+<ul>
+<li>若该操作是静态方法，也就是说，该方法属于类而非具体的某个对象，那么该操作的作用对象就是 currentThread() 方法所返回 Thread 对象；</li>
+<li>若该操作是实例方法，也就是说，该方法属于对象，那么该操作的作用对象就是调用该方法的 Thread 对象。</li>
+</ul>
+<p>对于上述线程的各项基本操作，有：</p>
+<ul>
+<li>线程一旦被阻塞，就会释放 CPU；</li>
+<li>当线程出现异常且没有捕获处理时，JVM会自动释放当前线程占用的锁，因此不会由于异常导致出现死锁现象。</li>
+<li>对于一个线程，CPU 的释放 与 锁的释放没有必然联系。</li>
+</ul>
+
+        </div>
+      
+    </div>
+
+    
+      
+      
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <i class="theme-color iconfont icon-tag"></i>
+              <a href="/tags/java/">java</a>
+            
+              <i class="theme-color iconfont icon-tag"></i>
+              <a href="/tags/二档起步/">二档起步</a>
+            
+              <i class="theme-color iconfont icon-tag"></i>
+              <a href="/tags/并发/">并发</a>
+            
+              <i class="theme-color iconfont icon-tag"></i>
+              <a href="/tags/多线程/">多线程</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2018/09/03/thread-1/">
+        <i class="theme-color iconfont icon-left"></i>
+        <span class="prev-text nav-default">并发[1]-volatile关键字解析(在更新..)</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    
+    
+      <a class="next" href="/2018/08/31/JVM-4/">
+        <span class="next-text nav-default">JVM[4]-垃圾回收机制(GC)</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="theme-color iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+      </footer>
+    
+    
+  <div class="bdsharebuttonbox bd-share-box" id="share">
+    <a href="#" class="theme-color iconfont icon-copy" data-cmd="copy" title="分享到复制地址">
+    </a>
+    <a href="#" class="theme-color iconfont icon-yinxiang" data-cmd="evernotecn" title="分享到印象笔记"></a>
+    <!-- <a href="#" class="bds_youdao" data-cmd="youdao" title="分享到有道云笔记"></a> -->
+    <a href="#" class="theme-color iconfont icon-weibo" data-cmd="tsina" title="分享到新浪微博">
+    </a>
+    <a href="#" class="theme-color iconfont icon-wechat" data-cmd="weixin" title="分享到微信">
+    </a>
+  </div>
+  <script>
+    window._bd_share_config = {
+      "common": {
+        "bdSnsKey": {},
+        "bdText": "",
+        "bdMini": "1",
+        "bdMiniList": false,
+        "bdPic": "",
+        "bdStyle": "2",
+        "bdSize": "24"
+      },
+      "share": {}
+    };
+    // with (document) 0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = 'http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion=' + ~(-new Date() / 36e5)];
+  </script>
+  <script type="text/javascript" src="/lib/share/static/api/js/share.js"></script>
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="vcomments"></div> 
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:unusual7@163.com" class="theme-color iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+           <a href="https://github.com/Theembers" class="theme-color iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+        
+           <a href="https://www.zhihu.com/people/theembers" class="theme-color iconfont icon-zhihu" title="zhihu"></a>
+        
+      
+    
+      
+    
+      
+        
+           <a href="https://music.163.com/#/user/home?id=32131879" class="theme-color iconfont icon-cloudmusic" title="cloudmusic"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+    
+    
+      <a href="/atom.xml" class="theme-color iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+<div class="copyright">
+ <!-- <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span> -->
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2015 - 
+    
+    2020
+
+    <span class="heart">
+      <i class="iconfont icon-heart" style="color:red;"></i>
+    </span>
+    <span class="author">TheEmbers Guo</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="author-wrapper"><div class="author">
+  <div class="info">
+    
+  <div class="author-box">
+  
+    <div class="image-box">
+      <img class="image" src="https://image-1257148187.cos.ap-chengdu.myqcloud.com/picgo_img/person-head.jpeg">
+    </div>
+  
+    <div class="name">TheEmbers Guo</div>
+  
+    <div class="address"><i class="theme-color iconfont icon-address"></i>成都 · 中国</div>
+  
+  </div>
+
+  </div>
+
+  
+
+  <div class="author-categories">
+    <div class="title">
+      <i class="theme-color iconfont icon-categories"></i>
+      <span>分类</span>
+    </div>
+    <a class="category-link" href="/categories/Mac/">Mac<span class="category-count">1</span></a> <a class="category-link" href="/categories/blog/">blog<span class="category-count">12</span></a> <a class="category-link" href="/categories/blog/学习/">学习<span class="category-count">1</span></a> <a class="category-link" href="/categories/blog/年终总结/">年终总结<span class="category-count">4</span></a> <a class="category-link" href="/categories/blog/碎碎念/">碎碎念<span class="category-count">6</span></a> <a class="category-link" href="/categories/dev/">dev<span class="category-count">51</span></a> <a class="category-link" href="/categories/dev/DDD/">DDD<span class="category-count">1</span></a> <a class="category-link" href="/categories/dev/ElasticSearch/">ElasticSearch<span class="category-count">8</span></a> <a class="category-link" href="/categories/dev/database/">database<span class="category-count">6</span></a> <a class="category-link" href="/categories/dev/git/">git<span class="category-count">2</span></a> <a class="category-link" href="/categories/dev/go/">go<span class="category-count">1</span></a> <a class="category-link" href="/categories/dev/java/">java<span class="category-count">20</span></a> <a class="category-link" href="/categories/dev/java/jdk/">jdk<span class="category-count">2</span></a> <a class="category-link" href="/categories/dev/java/jvm/">jvm<span class="category-count">6</span></a> <a class="category-link" href="/categories/dev/java/netty/">netty<span class="category-count">3</span></a> <a class="category-link" href="/categories/dev/java/spring/">spring<span class="category-count">2</span></a> <a class="category-link" href="/categories/dev/java/并发/">并发<span class="category-count">5</span></a> <a class="category-link" href="/categories/dev/linux/">linux<span class="category-count">1</span></a> <a class="category-link" href="/categories/dev/node/">node<span class="category-count">1</span></a> <a class="category-link" href="/categories/dev/redis/">redis<span class="category-count">1</span></a> <a class="category-link" href="/categories/dev/spring-cloud/">spring cloud<span class="category-count">4</span></a> <a class="category-link" href="/categories/dev/tool/">tool<span class="category-count">1</span></a> <a class="category-link" href="/categories/dev/web/">web<span class="category-count">2</span></a> <a class="category-link" href="/categories/dev/消息队列/">消息队列<span class="category-count">1</span></a> <a class="category-link" href="/categories/dev/网络/">网络<span class="category-count">1</span></a> <a class="category-link" href="/categories/iot/">iot<span class="category-count">3</span></a> <a class="category-link" href="/categories/碎碎念/">碎碎念<span class="category-count">1</span></a> <a class="category-link" href="/categories/碎碎念/家装/">家装<span class="category-count">1</span></a>
+  </div>
+  <!--<div class="author-tags">
+    <div class="title">
+      <i class="iconfont icon-tags"></i>
+      <span> 标签</span>
+    </div>
+    <a class="tag-link" href="/tags/BlockingQueue/">BlockingQueue<span class="tag-count">1</span></a><a class="tag-link" href="/tags/ByteBuf/">ByteBuf<span class="tag-count">1</span></a><a class="tag-link" href="/tags/Cerebro/">Cerebro<span class="tag-count">1</span></a><a class="tag-link" href="/tags/ElasticSearch/">ElasticSearch<span class="tag-count">8</span></a><a class="tag-link" href="/tags/HTTP/">HTTP<span class="tag-count">1</span></a><a class="tag-link" href="/tags/Kibana/">Kibana<span class="tag-count">1</span></a><a class="tag-link" href="/tags/Mac/">Mac<span class="tag-count">1</span></a><a class="tag-link" href="/tags/RabbitMQ/">RabbitMQ<span class="tag-count">1</span></a><a class="tag-link" href="/tags/Spring-Cloud-Health/">Spring Cloud Health<span class="tag-count">2</span></a><a class="tag-link" href="/tags/TCP-IP/">TCP/IP<span class="tag-count">1</span></a><a class="tag-link" href="/tags/ThreadLocal/">ThreadLocal<span class="tag-count">1</span></a><a class="tag-link" href="/tags/aop/">aop<span class="tag-count">1</span></a><a class="tag-link" href="/tags/back-end/">back-end<span class="tag-count">2</span></a><a class="tag-link" href="/tags/cat/">cat<span class="tag-count">3</span></a><a class="tag-link" href="/tags/dc/">dc<span class="tag-count">1</span></a><a class="tag-link" href="/tags/dev/">dev<span class="tag-count">1</span></a><a class="tag-link" href="/tags/emoji/">emoji<span class="tag-count">1</span></a><a class="tag-link" href="/tags/fore-end/">fore-end<span class="tag-count">1</span></a><a class="tag-link" href="/tags/framework/">framework<span class="tag-count">2</span></a><a class="tag-link" href="/tags/git/">git<span class="tag-count">2</span></a><a class="tag-link" href="/tags/go/">go<span class="tag-count">1</span></a><a class="tag-link" href="/tags/iot/">iot<span class="tag-count">5</span></a><a class="tag-link" href="/tags/java/">java<span class="tag-count">14</span></a><a class="tag-link" href="/tags/jdk/">jdk<span class="tag-count">2</span></a><a class="tag-link" href="/tags/jvm/">jvm<span class="tag-count">6</span></a><a class="tag-link" href="/tags/linux/">linux<span class="tag-count">1</span></a><a class="tag-link" href="/tags/markdown/">markdown<span class="tag-count">2</span></a><a class="tag-link" href="/tags/mqtt/">mqtt<span class="tag-count">1</span></a><a class="tag-link" href="/tags/mysql/">mysql<span class="tag-count">6</span></a><a class="tag-link" href="/tags/netty/">netty<span class="tag-count">3</span></a><a class="tag-link" href="/tags/nio/">nio<span class="tag-count">2</span></a><a class="tag-link" href="/tags/nodeJs/">nodeJs<span class="tag-count">1</span></a><a class="tag-link" href="/tags/nodejs/">nodejs<span class="tag-count">1</span></a><a class="tag-link" href="/tags/proxy/">proxy<span class="tag-count">1</span></a><a class="tag-link" href="/tags/redis/">redis<span class="tag-count">1</span></a><a class="tag-link" href="/tags/soft/">soft<span class="tag-count">1</span></a><a class="tag-link" href="/tags/spring/">spring<span class="tag-count">2</span></a><a class="tag-link" href="/tags/spring-transaction/">spring transaction<span class="tag-count">1</span></a><a class="tag-link" href="/tags/spring-cloud-bus/">spring-cloud-bus<span class="tag-count">1</span></a><a class="tag-link" href="/tags/spring-cloud-config/">spring-cloud-config<span class="tag-count">1</span></a><a class="tag-link" href="/tags/spring事务管理/">spring事务管理<span class="tag-count">1</span></a><a class="tag-link" href="/tags/test/">test<span class="tag-count">1</span></a><a class="tag-link" href="/tags/volatile/">volatile<span class="tag-count">1</span></a><a class="tag-link" href="/tags/vscode/">vscode<span class="tag-count">1</span></a><a class="tag-link" href="/tags/vue/">vue<span class="tag-count">2</span></a><a class="tag-link" href="/tags/二档起步/">二档起步<span class="tag-count">1</span></a><a class="tag-link" href="/tags/代理模式/">代理模式<span class="tag-count">1</span></a><a class="tag-link" href="/tags/优化/">优化<span class="tag-count">1</span></a><a class="tag-link" href="/tags/句法/">句法<span class="tag-count">1</span></a><a class="tag-link" href="/tags/多线程/">多线程<span class="tag-count">5</span></a><a class="tag-link" href="/tags/学生时代/">学生时代<span class="tag-count">1</span></a><a class="tag-link" href="/tags/家装/">家装<span class="tag-count">1</span></a><a class="tag-link" href="/tags/年终总结/">年终总结<span class="tag-count">5</span></a><a class="tag-link" href="/tags/并发/">并发<span class="tag-count">5</span></a><a class="tag-link" href="/tags/序/">序<span class="tag-count">1</span></a><a class="tag-link" href="/tags/消息队列/">消息队列<span class="tag-count">1</span></a><a class="tag-link" href="/tags/源码解析/">源码解析<span class="tag-count">2</span></a><a class="tag-link" href="/tags/线程池/">线程池<span class="tag-count">1</span></a><a class="tag-link" href="/tags/表情/">表情<span class="tag-count">1</span></a><a class="tag-link" href="/tags/雪糕/">雪糕<span class="tag-count">3</span></a>
+  </div> -->
+  <div class="author-social">
+    
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:unusual7@163.com" class="theme-color iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+           <a href="https://github.com/Theembers" class="theme-color iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+        
+           <a href="https://www.zhihu.com/people/theembers" class="theme-color iconfont icon-zhihu" title="zhihu"></a>
+        
+      
+    
+      
+    
+      
+        
+           <a href="https://music.163.com/#/user/home?id=32131879" class="theme-color iconfont icon-cloudmusic" title="cloudmusic"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+    
+    
+      <a href="/atom.xml" class="theme-color iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+  </div>
+</div>
+
+      </div>
+      
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+
+      <div class="light-dark" id="light-dark">
+        <input type="checkbox" id="md_2">
+        <label for="md_2" class="iconfont write"></label>
+      </div>
+
+    
+  
+  
+
+  
+  
+<!-- valine Comments -->
+<script src="//cdn.jsdelivr.net/npm/valine/dist/Valine.min.js"></script>
+<script type="text/javascript">
+    setTimeout(function(){
+    new Valine({
+            el: '#vcomments',
+            notify: false,
+            verify: false,
+            app_id: "AbQBWhsXzFouhrbyvkHeWaQb-gzGzoHsz",
+            app_key: "JMW5LdbzGvOecjancFT4b9zm",
+            placeholder: "你要说什么啊😊",
+            avatar: 'retro',
+            meta: ['nick']
+        });
+    },300)
+   
+</script>
+
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.cookie.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/countup/countUp.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/growl/jquery.growl.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=1.1.4"></script>
+
+
+    <div class="back-img-box">
+      
+    </div>
+  </div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/assets/hijiki.model.json"},"display":{"position":"left","width":150,"height":300,"hOffset":20,"vOffset":-20},"mobile":{"show":false,"scale":0.5,"motion":true},"react":{"opacity":1},"log":false});</script></body>
+</html>

@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><meta name="generator" content="Hexo 3.9.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+
+  <meta name="description" content="常识之外的规范——阿里java开发手册笔记(全章节)">
+
+
+
+
+  <meta name="keywords" content="开发, dev, blog, 博客, java, hexo, even, theembers, theembers, theEmbers.devFun, 小轴, 郭小轴">
+
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="TheEmbers.devFun">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1.4">
+
+
+
+<link rel="canonical" href="https://theembers.github.io/2017/10/15/ali-java-standard/">
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css">
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1.4">
+
+
+
+  
+  <script id="baidu_analytics">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?6053c2edabf3ee9b02ecc553130da68a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+  <script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+
+
+
+  <script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.10.0/dist/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "AbQBWhsXzFouhrbyvkHeWaQb-gzGzoHsz",
+      appKey: "JMW5LdbzGvOecjancFT4b9zm"
+    });
+  </script>
+
+
+
+
+<script>
+  window.config = {"title":"TheEmbers.devFun","subtitle":"childlike forever. 😃","description":"","author":"TheEmbers Guo","language":"zh-cn","timezone":"","url":"https://theembers.github.io","root":"/","permalink":":year/:month/:day/:title/","permalink_defaults":{},"source_dir":"source","public_dir":"public","tag_dir":"tags","archive_dir":"archives","category_dir":"categories","code_dir":"downloads/code","i18n_dir":":lang","skip_render":[],"new_post_name":":title.md","default_layout":"post","titlecase":false,"external_link":true,"filename_case":0,"render_drafts":false,"post_asset_folder":true,"relative_link":false,"future":true,"highlight":{"enable":true,"auto_detect":false,"line_number":true,"tab_replace":"","first_line_number":"always1"},"default_category":"uncategorized","category_map":{},"tag_map":{},"date_format":"YYYY-MM-DD","time_format":"HH:mm:ss","per_page":10,"pagination_dir":"page","theme":"even","deploy":[{"type":"git","repository":"git@github.com:Theembers/theembers.github.com.git","branch":"master"},{"type":"git","repository":"git@gitee.com:theembers/theembers.git","branch":"master"}],"ignore":[],"logo":"/image/logo.png","title_art":"<font class=\"theme-color\">7</font>heEmbers<font class=\"theme-color\">.</font>devFun","keywords":"开发, dev, blog, 博客, java, hexo, even, theembers, theembers, theEmbers.devFun, 小轴, 郭小轴","author_image":"https://image-1257148187.cos.ap-chengdu.myqcloud.com/picgo_img/person-head.jpeg","address":"成都 · 中国","default_bgimg":["https://image-1257148187.cos.ap-chengdu.myqcloud.com/picgo_img/WechatIMG15.jpg","https://image-1257148187.cos.ap-chengdu.myqcloud.com/picgo_img/timg.jpeg","https://image-1257148187.cos.ap-chengdu.myqcloud.com/picgo_img/tes11af.jpg","https://image-1257148187.cos.ap-chengdu.myqcloud.com/picgo_img/simptab-wallpaper-20190526195946.png","https://image-1257148187.cos.ap-chengdu.myqcloud.com/picgo_img/a44d4bddb4e7d119baf614e0e6698ba4.jpg","https://image-1257148187.cos.ap-chengdu.myqcloud.com/picgo_img/simptab-wallpaper-20190107131809.png"],"markdown_it_plus":{"highlight":true,"html":true,"xhtmlOut":true,"breaks":true,"langPrefix":null,"linkify":true,"typographer":null,"quotes":"“”‘’","pre_class":"highlight","plugins":[{"plugin":{"name":"markdown-it-mark","enable":true}},{"plugin":{"name":"markdown-it-toc-and-anchor","enable":true,"options":{"toc":true,"tocClassName":"markdownIt-TOC","tocFirstLevel":2,"tocLastLevel":6,"tocCallback":null,"anchorLink":true,"anchorLinkSymbol":"","anchorFirstLevel":2,"anchorLastLevel":6,"anchorLinkSpace":true,"anchorLinkSymbolClassName":null,"anchorLinkBefore":true,"anchorClassName":"headerlink","resetIds":true}}}]},"index_generator":{"per_page":10,"order_by":"-date","path":""},"archive_generator":{"per_page":20,"yearly":true,"monthly":true,"daily":false,"order_by":"-date"},"tag_generator":{"per_page":20},"category_generator":{"per_page":20},"neat_enable":false,"neat_html":{"enable":true,"exclude":null},"neat_css":{"enable":true,"exclude":["*.min.css"]},"neat_js":{"enable":true,"mangle":true,"output":null,"compress":null,"exclude":["*.min.js"]},"image_caption":{"enable":true,"class_name":null},"live2d":{"enable":true,"scriptFrom":"local","pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"use":"live2d-widget-model-hijiki"},"display":{"position":"left","width":150,"height":300,"hOffset":20,"vOffset":-20},"mobile":{"show":false,"scale":0.5,"motion":true},"react":{"opacity":1}},"encrypt":{"enable":true,"abstract":"有东西被加密了, 需要密码才能看.","message":"需要密码才可以看哦.","wrong_pass_message":"抱歉, 这个密码看着不太对, 请再试试.","wrong_hash_message":"抱歉, 这个文章不能被校验, 不过还是能看看解密后的内容."},"feed":{"type":"atom","limit":20,"hub":"","content":true,"content_limit":140,"content_limit_delim":"","path":"atom.xml"},"server":{"port":4000,"log":false,"ip":"0.0.0.0","compress":false,"header":true},"since":2015,"favicon":"/favicon.ico","rss":"/atom.xml","menu":{"Home":"/","Tags":"/tags","Categories":"/categories","Archives":"/archives","GitHub":"https://github.com/Theembers"},"color":"Default","toc":true,"total":false,"newPost":604800000,"fancybox":true,"pjax":true,"copyright":{"enable":false,"license":"<a rel=\"license\" href=\"http://creativecommons.org/licenses/by-nc/4.0/\"><img alt=\"知识共享许可协议\" style=\"border-width:0\" src=\"https://i.creativecommons.org/l/by-nc/4.0/80x15.png\" /></a>本作品采用<a rel=\"license\" href=\"http://creativecommons.org/licenses/by-nc/4.0/\">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可。"},"reward":{"enable":false,"qrCode":{"wechat":"/image/reward/wechat.jpg","alipay":"/image/reward/alipay.jpg"}},"social":{"email":"unusual7@163.com","stack-overflow":null,"twitter":null,"facebook":null,"linkedin":null,"google":null,"github":"https://github.com/Theembers","weibo":null,"zhihu":"https://www.zhihu.com/people/theembers","wechat":null,"cloudmusic":"https://music.163.com/#/user/home?id=32131879","douban":null,"pocket":null,"tumblr":null,"instagram":null},"local_search":{"enable":true},"leancloud":{"app_id":"AbQBWhsXzFouhrbyvkHeWaQb-gzGzoHsz","app_key":"JMW5LdbzGvOecjancFT4b9zm"},"baidu_analytics":"6053c2edabf3ee9b02ecc553130da68a","baidu_verification":null,"google_analytics":null,"google_verification":null,"disqus_shortname":null,"changyan":{"appid":null,"appkey":null},"livere_datauid":null,"valine":{"appid":"AbQBWhsXzFouhrbyvkHeWaQb-gzGzoHsz","appkey":"JMW5LdbzGvOecjancFT4b9zm","notify":false,"verify":false,"avatar":"retro","placeholder":"你要说什么啊😊","meta":"['nick']"},"version":"1.1.4"};
+</script>
+
+    <title> 常识之外的规范——阿里java开发手册笔记(全章节) - TheEmbers.devFun </title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <i class="image iconfont icon-cat"></i>
+    <span class="title">TheEmbers.devFun</span>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+  
+    <div class="mobile-post-toc-blank">
+    </div>
+   <!-- <div class="mobile-post-toc-icon">
+      <i class="iconfont icon-catalog"></i>
+    </div> -->
+  
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  
+  <div class="author-box">
+  
+    <div class="image-box">
+      <img class="image" src="https://image-1257148187.cos.ap-chengdu.myqcloud.com/picgo_img/person-head.jpeg">
+    </div>
+  
+    <div class="name">TheEmbers Guo</div>
+  
+    <div class="address"><i class="theme-color iconfont icon-address"></i>成都 · 中国</div>
+  
+  </div>
+
+
+  <ul class="mobile-menu-list">
+    
+      <a href="/">
+        <li class="mobile-menu-item">
+          <i class="theme-color iconfont icon-home"></i>
+          
+          
+            首页
+          
+        </li>
+      </a>
+    
+      <a href="/tags">
+        <li class="mobile-menu-item">
+          <i class="theme-color iconfont icon-tags"></i>
+          
+          
+            标签
+          
+        </li>
+      </a>
+    
+      <a href="/categories">
+        <li class="mobile-menu-item">
+          <i class="theme-color iconfont icon-categories"></i>
+          
+          
+            分类
+          
+        </li>
+      </a>
+    
+      <a href="/archives">
+        <li class="mobile-menu-item">
+          <i class="theme-color iconfont icon-archives"></i>
+          
+          
+            归档
+          
+        </li>
+      </a>
+    
+      <a href="https://github.com/Theembers">
+        <li class="mobile-menu-item">
+          <i class="theme-color iconfont icon-github"></i>
+          
+          
+            GitHub
+          
+        </li>
+      </a>
+    
+  </ul>
+
+  <div class="mobile-menu-social">
+    
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:unusual7@163.com" class="theme-color iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+           <a href="https://github.com/Theembers" class="theme-color iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+        
+           <a href="https://www.zhihu.com/people/theembers" class="theme-color iconfont icon-zhihu" title="zhihu"></a>
+        
+      
+    
+      
+    
+      
+        
+           <a href="https://music.163.com/#/user/home?id=32131879" class="theme-color iconfont icon-cloudmusic" title="cloudmusic"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+    
+    
+      <a href="/atom.xml" class="theme-color iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+  </div>
+  
+</nav>
+
+<nav id="mobile-toc" class="mobile-toc slideout-menu">
+ <!-- 
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+    
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#说明"><span class="toc-number">1.</span> <span class="toc-text"> 说明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#插件"><span class="toc-number">2.</span> <span class="toc-text"> 插件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第一节-编程规约"><span class="toc-number">3.</span> <span class="toc-text"> 第一节 编程规约</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-命名规范"><span class="toc-number">3.1.</span> <span class="toc-text"> 1 命名规范</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-常量定义"><span class="toc-number">3.2.</span> <span class="toc-text"> 2 常量定义</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-代码格式"><span class="toc-number">3.3.</span> <span class="toc-text"> 3 代码格式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-oop-规约"><span class="toc-number">3.4.</span> <span class="toc-text"> 4 OOP 规约</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-集合处理"><span class="toc-number">3.5.</span> <span class="toc-text"> 5 集合处理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-并发处理"><span class="toc-number">3.6.</span> <span class="toc-text"> 6 并发处理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7-控制语句"><span class="toc-number">3.7.</span> <span class="toc-text"> 7 控制语句</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#8-注释规约"><span class="toc-number">3.8.</span> <span class="toc-text"> 8 注释规约</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#9-其它"><span class="toc-number">3.9.</span> <span class="toc-text"> 9 其它</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第二节-异常日志"><span class="toc-number">4.</span> <span class="toc-text"> 第二节 异常日志</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-异常处理"><span class="toc-number">4.1.</span> <span class="toc-text"> 1 异常处理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-日志规约"><span class="toc-number">4.2.</span> <span class="toc-text"> 2 日志规约</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第三节-单元测试"><span class="toc-number">5.</span> <span class="toc-text"> 第三节 单元测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第四节-安全规约"><span class="toc-number">6.</span> <span class="toc-text"> 第四节 安全规约</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第五节-mysql-数据库"><span class="toc-number">7.</span> <span class="toc-text"> 第五节 MySQL 数据库</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-建表规约"><span class="toc-number">7.1.</span> <span class="toc-text"> 1. 建表规约</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-索引规约"><span class="toc-number">7.2.</span> <span class="toc-text"> 2. 索引规约</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-sql-语句"><span class="toc-number">7.3.</span> <span class="toc-text"> 3. SQL 语句</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-orm-映射"><span class="toc-number">7.4.</span> <span class="toc-text"> 4. ORM 映射</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第六节-工程结构"><span class="toc-number">8.</span> <span class="toc-text"> 第六节 工程结构</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-应用分层"><span class="toc-number">8.1.</span> <span class="toc-text"> 1. 应用分层</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-二方库依赖"><span class="toc-number">8.2.</span> <span class="toc-text"> 2. 二方库依赖</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-服务器"><span class="toc-number">8.3.</span> <span class="toc-text"> 3. 服务器</span></a></li></ol></li></ol>
+    
+    </div>
+  </div>
+
+ -->
+</nav>
+    <div class="container" id="mobile-panel">
+
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/.">
+    <span class="icon iconfont icon-cat"></span>
+    <span class="title"><font class="theme-color">7</font>heEmbers<font class="theme-color">.</font>devFun</span>
+    <span class="subtitle">childlike forever. 😃</span>
+  </a>
+</div>
+
+<nav class="site-navbar">
+  
+    <ul id="menu" class="menu">
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/">
+            <i class="theme-color iconfont icon-home"></i>
+            
+            
+              首页
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            <i class="theme-color iconfont icon-tags"></i>
+            
+            
+              标签
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            <i class="theme-color iconfont icon-categories"></i>
+            
+            
+              分类
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="/archives">
+            <i class="theme-color iconfont icon-archives"></i>
+            
+            
+              归档
+            
+          </a>
+        </li>
+      
+        <li class="menu-item">
+          <a class="menu-item-link" href="https://github.com/Theembers">
+            <i class="theme-color iconfont icon-github"></i>
+            
+            
+              GitHub
+            
+          </a>
+        </li>
+      
+    </ul>
+  
+</nav>
+
+<div id="topbar" class="topbar hidden">
+  <div class="logo">
+    <a href="/.">
+      <span class="icon iconfont icon-cat"></span>
+      <span class="title"><font class="theme-color">7</font>heEmbers<font class="theme-color">.</font>devFun</span>
+    </a>
+  </div>
+  <div class="menu">
+    
+      
+        <span class="menu-item">
+          <a class="menu-item-link" href="/">
+            <i class="theme-color iconfont icon-home"></i>
+            
+            
+              首页
+            
+          </a>
+        </span>
+      
+        <span class="menu-item">
+          <a class="menu-item-link" href="/tags">
+            <i class="theme-color iconfont icon-tags"></i>
+            
+            
+              标签
+            
+          </a>
+        </span>
+      
+        <span class="menu-item">
+          <a class="menu-item-link" href="/categories">
+            <i class="theme-color iconfont icon-categories"></i>
+            
+            
+              分类
+            
+          </a>
+        </span>
+      
+        <span class="menu-item">
+          <a class="menu-item-link" href="/archives">
+            <i class="theme-color iconfont icon-archives"></i>
+            
+            
+              归档
+            
+          </a>
+        </span>
+      
+        <span class="menu-item">
+          <a class="menu-item-link" href="https://github.com/Theembers">
+            <i class="theme-color iconfont icon-github"></i>
+            
+            
+              GitHub
+            
+          </a>
+        </span>
+      
+  
+  </div>
+</div>
+      </header>
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content">
+            
+  
+  
+    <article class="post">
+  
+    <header class="post-header">
+      
+      <!--文章标题 -->
+      <h1 class="post-title">
+        <span class="post-flag">
+          
+          
+          
+        </span>
+        
+          常识之外的规范——阿里java开发手册笔记(全章节)
+          
+        
+      </h1>
+      <!-- 文章信息 -->
+      <div class="post-meta">
+        <span class="post-time">
+          <i class="theme-color iconfont icon-date"></i>
+          2017-10-15
+        </span>
+        <span class="post-count">
+          <i class="theme-color iconfont icon-count"></i>
+          
+          4.8k
+          
+        </span>
+        <span class="post-read">
+          <i class="theme-color iconfont icon-time"></i>
+          
+          45
+          
+        </span>
+        
+          <span class="post-visits">
+              <i class="theme-color iconfont icon-visitor"></i>
+              <span class="visits" data-url="/2017/10/15/ali-java-standard/" data-title="常识之外的规范——阿里java开发手册笔记(全章节)">0</span>
+          </span>
+        
+      </div>
+      
+      
+        <div class="float-right post-meta">
+      
+          <div class="post-category">
+            <i class="theme-color iconfont icon-categories"></i>
+            
+              <a href="/categories/dev/">dev</a>
+            
+              <a href="/categories/dev/java/">java</a>
+            
+          </div>
+        </div>
+      
+      
+     
+    </header>
+    
+    
+    
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+    
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#说明"><span class="toc-number">1.</span> <span class="toc-text"> 说明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#插件"><span class="toc-number">2.</span> <span class="toc-text"> 插件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第一节-编程规约"><span class="toc-number">3.</span> <span class="toc-text"> 第一节 编程规约</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-命名规范"><span class="toc-number">3.1.</span> <span class="toc-text"> 1 命名规范</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-常量定义"><span class="toc-number">3.2.</span> <span class="toc-text"> 2 常量定义</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-代码格式"><span class="toc-number">3.3.</span> <span class="toc-text"> 3 代码格式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-oop-规约"><span class="toc-number">3.4.</span> <span class="toc-text"> 4 OOP 规约</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-集合处理"><span class="toc-number">3.5.</span> <span class="toc-text"> 5 集合处理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-并发处理"><span class="toc-number">3.6.</span> <span class="toc-text"> 6 并发处理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7-控制语句"><span class="toc-number">3.7.</span> <span class="toc-text"> 7 控制语句</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#8-注释规约"><span class="toc-number">3.8.</span> <span class="toc-text"> 8 注释规约</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#9-其它"><span class="toc-number">3.9.</span> <span class="toc-text"> 9 其它</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第二节-异常日志"><span class="toc-number">4.</span> <span class="toc-text"> 第二节 异常日志</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-异常处理"><span class="toc-number">4.1.</span> <span class="toc-text"> 1 异常处理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-日志规约"><span class="toc-number">4.2.</span> <span class="toc-text"> 2 日志规约</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第三节-单元测试"><span class="toc-number">5.</span> <span class="toc-text"> 第三节 单元测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第四节-安全规约"><span class="toc-number">6.</span> <span class="toc-text"> 第四节 安全规约</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第五节-mysql-数据库"><span class="toc-number">7.</span> <span class="toc-text"> 第五节 MySQL 数据库</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-建表规约"><span class="toc-number">7.1.</span> <span class="toc-text"> 1. 建表规约</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-索引规约"><span class="toc-number">7.2.</span> <span class="toc-text"> 2. 索引规约</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-sql-语句"><span class="toc-number">7.3.</span> <span class="toc-text"> 3. SQL 语句</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-orm-映射"><span class="toc-number">7.4.</span> <span class="toc-text"> 4. ORM 映射</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第六节-工程结构"><span class="toc-number">8.</span> <span class="toc-text"> 第六节 工程结构</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-应用分层"><span class="toc-number">8.1.</span> <span class="toc-text"> 1. 应用分层</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-二方库依赖"><span class="toc-number">8.2.</span> <span class="toc-text"> 2. 二方库依赖</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-服务器"><span class="toc-number">8.3.</span> <span class="toc-text"> 3. 服务器</span></a></li></ol></li></ol>
+    
+    </div>
+  </div>
+
+
+    
+    <div class="post-content ">
+      
+        <div class="detial-post-content">
+          <h3 id="说明"><a class="headerlink" href="#说明"></a> 说明</h3>
+<p>这篇文章是我第一次（认真）阅读<a href="https://yq.aliyun.com/attachment/download/?id=2023" target="_blank" rel="noopener">《阿里巴巴 Java 开发手册(终极版)》</a>的笔记。<strong>手册本身对规范的讲解已经非常详细了，如果你已经有一定的开发经验并且有良好的编码习惯和意识，会发现大部分规范是符合常识的。所以本文不会再去做重复的说明，只是对其中一些可能没留意到的或者说不在（我的）常识之内的一些规范进行整理记录</strong>。当然每家公司都有自己的一套规范标准，所以大家也没必要过分追究。</p>
+<a id="more"></a>
+<p>其中或许会有遗漏或者理解错误，希望各位担待提点。</p>
+<ol>
+<li>重点我会用<strong>黑体</strong>标注。</li>
+<li>引用部分为《阿里巴巴 Java 开发手册(终极版)》原文</li>
+<li>更新时间：2017-10-17</li>
+</ol>
+<hr>
+<h3 id="插件"><a class="headerlink" href="#插件"></a> 插件</h3>
+<p>ide 插件已发布：<a href="https://yq.aliyun.com/articles/224817?spm=5176.100239.blogcont224345.17.BgD4xd" target="_blank" rel="noopener">《阿里巴巴 Java 开发手册》IDEA 插件与 Eclipse 插件使用指南</a></p>
+<hr>
+<h3 id="第一节-编程规约"><a class="headerlink" href="#第一节-编程规约"></a> 第一节 编程规约</h3>
+<h4 id="1-命名规范"><a class="headerlink" href="#1-命名规范"></a> 1 命名规范</h4>
+<blockquote>
+<p>8.【强制】POJO 类中布尔类型的变量，都不要加 is，否则部分框架解析会引起序列化错误。</p>
+</blockquote>
+<blockquote>
+<p>反例：定义为基本数据类型 Boolean isDeleted;的属性，它的方法也是 isDeleted()，<strong>RPC 框架在反向解析的时候，“以为”对应的属性名称是 deleted，导致属性获取不到，进而抛出异常。</strong></p>
+</blockquote>
+<blockquote>
+<p>16.【参考】各层命名规约：<br>
+A) Service/DAO 层方法命名规约<br>
+1） 获取单个对象的方法用 get 做前缀。<br>
+<strong>2） 获取多个对象的方法用 list 做前缀。</strong>（我习惯写成 getXxxList）<br>
+3） 获取统计值的方法用 count 做前缀。<br>
+4） 插入的方法用 save/insert 做前缀。<br>
+5） 删除的方法用 remove/delete 做前缀。<br>
+6） 修改的方法用 update 做前缀。</p>
+</blockquote>
+<h4 id="2-常量定义"><a class="headerlink" href="#2-常量定义"></a> 2 常量定义</h4>
+<blockquote>
+<p>1.【强制】不允许任何魔法值（即未经定义的常量）直接出现在代码中。<br>
+反例：<br>
+<code>String key = &quot;Id#taobao_&quot; + tradeId;</code> &gt; <code>cache.put(key, value);</code></p>
+</blockquote>
+<p><em>魔法值：是指在代码中直接出现的数值，而只有在这个数值记述的那部分代码中才能明确了解其含义。</em><br>
+也就是我们常说的[硬编码]或者[写死]，这类代码需要定义常量来明确其含义。</p>
+<h4 id="3-代码格式"><a class="headerlink" href="#3-代码格式"></a> 3 代码格式</h4>
+<blockquote>
+<p>5.【强制】采用 4 个空格缩进，禁止使用 tab 字符。<br>
+<strong>说明：如果使用 tab 缩进，必须设置 1 个 tab 为 4 个空格。IDEA 设置 tab 为 4 个空格时，请勿勾选 Use tab character；而在 eclipse 中，必须勾选 insert spaces for tabs。</strong></p>
+</blockquote>
+<p><strong>有些同学可能会对这一条不以为然。如果是协调开发，两个工程师的格式化规则不一致很可能 A 同学无意把 B 同学的代码重新格式化并提交，导致后边查看 svn 变更记录时傻逼了。</strong></p>
+<blockquote>
+<p>7.【强制】<strong>单行字符数限制不超过 120 个</strong>，超出需要换行，换行时遵循如下原则：<br>
+1） 第二行相对第一行缩进 4 个空格，从第三行开始，不再继续缩进，参考示例。<br>
+2） 运算符与下文一起换行。<br>
+3） 方法调用的点符号与下文一起换行。<br>
+4） 方法调用时，多个参数，需要换行时，在逗号后进行。<br>
+5） 在括号前不要换行，见反例。</p>
+</blockquote>
+<p>120 这个长度限制很有意思，如图：<br>
+<img src="/2017/10/15/ali-java-standard/length120.png" alt="ali-java-standard.png"><span class="image-caption">ali-java-standard.png</span><br>
+这个长度大概是 15 寸笔记本 1080 分辨率字体 14 号左右的最佳可视长度。当然应该也不一定非要这么精准吧。。</p>
+<h4 id="4-oop-规约"><a class="headerlink" href="#4-oop-规约"></a> 4 OOP 规约</h4>
+<blockquote>
+<p>7.【强制】所有的相同类型的包装类对象之间值的比较，全部使用 equals 方法比较。<br>
+说明：<strong>对于 Integer var = ? 在-128 至 127 范围内的赋值</strong>，Integer 对象是在 IntegerCache.cache 产生，会复用已有对象，这个区间内的 Integer 值可以直接使用==进行判断，但是这个区间之外的所有数据，都会在堆上产生，并不会复用已有对象，这是一个大坑，推荐使用 equals 方法进行判断。</p>
+</blockquote>
+<blockquote>
+<p>12.【强制】POJO 类必须写 toString 方法。使用 IDE 的中工具：source&gt; generate toString 时，<strong>如果继承了另一个 POJO 类，注意在前面加一下 super.toString。</strong><br>
+说明：在方法执行抛出异常时，可以直接调用 POJO 的 toString()方法打印其属性值，便于排查问题。</p>
+</blockquote>
+<p>~~ 吐槽：“使用 IDE <strong>的中</strong>工具” 码字错误哦！~~</p>
+<blockquote>
+<p>13.【推荐】使用索引访问用 String 的 split 方法得到的数组时，需做最后一个分隔符后有无内容的检查，<strong>否则会有抛 IndexOutOfBoundsException 的风险。</strong><br>
+说明：<br>
+<code>String str = &quot;a,b,c,,&quot;;</code> &gt;<code>String[] ary = str.split(&quot;,&quot;);</code> &gt;<code>// 预期大于 3，结果是 3</code> &gt;<code>System.out.println(ary.length);</code></p>
+</blockquote>
+<p>最好的做法是对集合类型的变量本身进行判空校验或者大小判断，不要想当然。</p>
+<h4 id="5-集合处理"><a class="headerlink" href="#5-集合处理"></a> 5 集合处理</h4>
+<blockquote>
+<p>2.【强制】ArrayList 的 subList 结果不可强转成 ArrayList，否则会抛出 ClassCastException 异常，即 java.util.RandomAccessSubList cannot be cast to java.util.ArrayList.<br>
+说明：subList 返回的是 ArrayList 的内部类 SubList，并不是 ArrayList ，而是 ArrayList 的一个视图，对于 SubList 子列表的所有操作最终会反映到原列表上。</p>
+</blockquote>
+<blockquote>
+<p>5.【强制】使用工具类 Arrays.asList()把数组转换成集合时，不能使用其修改集合相关的方法，它的 add/remove/clear 方法会抛出 UnsupportedOperationException 异常。<br>
+说明：<strong>asList 的返回对象是一个 Arrays 内部类，并没有实现集合的修改方法。Arrays.asList 体现的是适配器模式，只是转换接口，后台的数据仍是数组。</strong> &gt;<code>String[] str = new String[] { &quot;you&quot;, &quot;wu&quot; };</code> &gt;<code>List list = Arrays.asList(str);</code><br>
+第一种情况：list.add(“yangguanbao”); 运行时异常。<br>
+第二种情况：str[0] = “gujin”; 那么 list.get(0)也会随之修改。</p>
+</blockquote>
+<blockquote>
+<p>10.【推荐】使用 entrySet 遍历 Map 类集合 KV，而不是 keySet 方式进行遍历。<br>
+说明：keySet 其实是遍历了 2 次，一次是转为 Iterator 对象，另一次是从 hashMap 中取出 key 所对应的 value。而 entrySet 只是遍历了一次就把 key 和 value 都放到了 entry 中，效率更高。如果是 JDK8，使用 Map.foreach 方法。<br>
+正例：values()返回的是 V 值集合，是一个 list 集合对象；keySet()返回的是 K 值集合，是一个 Set 集合对象；entrySet()返回的是 K-V 值组合集合。</p>
+</blockquote>
+<p>java8 是个好东西~</p>
+<h4 id="6-并发处理"><a class="headerlink" href="#6-并发处理"></a> 6 并发处理</h4>
+<blockquote>
+<p>5.【强制】<strong>SimpleDateFormat 是线程不安全的类</strong>，一般不要定义为 static 变量，如果定义为 static，必须加锁，或者使用 DateUtils 工具类。<br>
+正例：注意线程安全，使用 DateUtils。亦推荐如下处理：<br>
+<code>private static final ThreadLocal&lt;DateFormat&gt; df = new ThreadLocal&lt;DateFormat&gt;() {</code> &gt;<code>@Override</code> &gt;<code>protected DateFormat initialValue() {</code> &gt;<code>return new SimpleDateFormat(&quot;yyyy-MM-dd&quot;);</code> &gt;<code>}</code> &gt;<code>};</code><br>
+说明：如果是 JDK8 的应用，可以使用 Instant 代替 Date，LocalDateTime 代替 Calendar，DateTimeFormatter 代替 SimpleDateFormat，官方给出的解释：simple beautiful strong immutable thread-safe。</p>
+</blockquote>
+<p>再说一遍，java8 是个好东西！<a href="http://docs.oracle.com/javase/8/docs/api/java/time/LocalDateTime.html" target="_blank" rel="noopener">LocalDateTime 相关 API</a><br>
+附赠一个 java.util.Date 和 LocalDateTime 互转的例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">private static Date localDateTimeToUDate(LocalDateTime localDateTime) &#123;</span><br><span class="line">    ZoneId zone = ZoneId.systemDefault();</span><br><span class="line">    Instant instant = localDateTime.atZone(zone).toInstant();</span><br><span class="line">    return Date.from(instant);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">private static LocalDateTime uDateToLocalDate(Date date) &#123;</span><br><span class="line">    Instant instant = date.toInstant();</span><br><span class="line">    ZoneId zone = ZoneId.systemDefault();</span><br><span class="line">    LocalDateTime localDateTime = LocalDateTime.ofInstant(instant, zone);</span><br><span class="line">    return localDateTime;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>14.【参考】 <strong>HashMap 在容量不够进行 resize 时由于高并发可能出现死链</strong>，导致 CPU 飙升，在开发过程中可以使用其它数据结构或加锁来规避此风险。</p>
+</blockquote>
+<h4 id="7-控制语句"><a class="headerlink" href="#7-控制语句"></a> 7 控制语句</h4>
+<blockquote>
+<p>3.【推荐】表达异常的分支时，少用 if-else 方式，这种方式可以改写成：<br>
+<code>if (condition) {</code> &gt; <code>...</code> &gt;<code>return obj;</code> &gt;<code>}</code> &gt;<code>// 接着写 else 的业务逻辑代码;</code><br>
+说明：如果非得使用 if()…else if()…else…方式表达逻辑，【强制】避免后续代码维护困难，请勿超过 3 层。<br>
+正例：超过 3 层的 if-else 的逻辑判断代码可以使用卫语句、策略模式、状态模式等来实现…</p>
+</blockquote>
+<p>我们公司 codeReview 时经常看到有些同学的代码是<code>if(){}else if(){} else if(){}else{}</code> 除了看上去 low 更主要的原因是过多的大括号层级不便于阅读很容易搞混，尤其是跳出代码块的时候，连续几个<code>}}}</code>基本就不知道跳到哪了彻底懵逼，还得折叠代码或者滚上去重新回忆一下。</p>
+<blockquote>
+<p>6.【推荐】接口入参保护，这种场景常见的是用于做批量操作的接口。<br>
+解释一下，<code>接口入参保护</code>就是对入参进行校验，包括允许的最大值或者其他范围或边界。防止请求大量数据导致接口“爆炸”。比如限制返回数据最大条数，超过限制直接 return 或者抛异常。</p>
+</blockquote>
+<h4 id="8-注释规约"><a class="headerlink" href="#8-注释规约"></a> 8 注释规约</h4>
+<p>感觉没啥好说的。。</p>
+<h4 id="9-其它"><a class="headerlink" href="#9-其它"></a> 9 其它</h4>
+<blockquote>
+<p>1.【强制】在使用正则表达式时，利用好其预编译功能，可以有效加快正则匹配速度。<br>
+说明：不要在方法体内定义：Pattern pattern = Pattern.compile(规则);</p>
+</blockquote>
+<p>就是说定义成全局变量。</p>
+<hr>
+<h3 id="第二节-异常日志"><a class="headerlink" href="#第二节-异常日志"></a> 第二节 异常日志</h3>
+<h4 id="1-异常处理"><a class="headerlink" href="#1-异常处理"></a> 1 异常处理</h4>
+<blockquote>
+<p>3.【强制】对大段代码进行 try-catch，这是不负责任的表现。<strong>catch 时请分清稳定代码和非稳定代码</strong>，稳定代码指的是无论如何不会出错的代码。对于非稳定代码的 catch 尽可能进行区分异常类型，再做对应的异常处理。</p>
+</blockquote>
+<blockquote>
+<p>9.【推荐】<strong>方法的返回值可以为 null，不强制返回空集合，或者空对象等</strong>，必须添加注释充分说明什么情况下会返回 null 值。调用方需要进行 null 判断防止 NPE 问题。说明：本手册明确防止 NPE 是调用者的责任。即使被调用方法返回空集合或者空对象，对调用者来说，也并非高枕无忧，必须考虑到远程调用失败、序列化失败、运行时异常等场景返回 null 的情况。</p>
+</blockquote>
+<p>需要说明的是是否可以返回 null 是需要根据接口约定来判断的，如果明确的返回对象的结构类型，一定要返回这个对象，但他的属性值可以是 null，比如 page 对象：<code>{data:null,pageNum:0,count:0}</code></p>
+<h4 id="2-日志规约"><a class="headerlink" href="#2-日志规约"></a> 2 日志规约</h4>
+<blockquote>
+<p>4.【强制】对 trace/debug/info 级别的日志输出，必须使用条件输出形式或者使用占位符的方式。<br>
+<strong>说明：logger.debug(&quot;Processingtradewithid: &quot; + id+ &quot;andsymbol: &quot; + symbol);如果日志级别是 warn，上述日志不会打印，但是会执行字符串拼接操作，如果 symbol 是对象，会执行 toString()方法，浪费了系统资源，执行了上述操作，最终日志却没有打印。</strong><br>
+正例：（条件）if (logger.isDebugEnabled()) { logger.debug(&quot;Processing trade with id: &quot; + id + &quot; and symbol: &quot; + symbol); }<br>
+正例：（占位符）logger.debug(&quot;Processing trade with id: {} and symbol : {} &quot;, id, symbol);</p>
+</blockquote>
+<hr>
+<h3 id="第三节-单元测试"><a class="headerlink" href="#第三节-单元测试"></a> 第三节 单元测试</h3>
+<blockquote>
+<p>4.【强制】单元测试是可以重复执行的，不能受到外界环境的影响。<br>
+说明：单元测试通常会被放到持续集成中，每次有代码 check in 时单元测试都会被执行。如果单测对外部环境（网络、服务、中间件等）有依赖，容易导致持续集成机制的不可用。<br>
+正例：为了不受外界环境影响，要求<strong>设计代码时就把 SUT 的依赖改成注入</strong>，在测试时用 spring 这样的 DI 框架注入一个本地（内存）实现或者 Mock 实现。</p>
+</blockquote>
+<blockquote>
+<p>15.【参考】为了更方便地进行单元测试，业务代码应避免以下情况：<br>
+构造方法中做的事情过多。 存在过多的全局变量和静态方法。<br>
+存在过多的外部依赖。<br>
+存在过多的条件语句。<strong>说明：多层条件语句建议使用卫语句、策略模式、状态模式等方式重构。</strong></p>
+</blockquote>
+<p>和第一节 if-else 提到的一样，避免多层代码块嵌套</p>
+<blockquote>
+<p>16.【参考】不要对单元测试存在如下误解：<br>
+那是测试同学干的事情。本文是开发手册，凡是本文内容都是与开发同学强相关的。<br>
+单元测试代码是多余的。汽车的整体功能与各单元部件的测试正常与否是强相关的。<br>
+单元测试代码不需要维护。一年半载后，那么单元测试几乎处于废弃状态。<br>
+单元测试与线上故障没有辩证关系。好的单元测试能够最大限度地规避线上故障。</p>
+</blockquote>
+<p>测试开发相亲相爱是一家~</p>
+<hr>
+<h3 id="第四节-安全规约"><a class="headerlink" href="#第四节-安全规约"></a> 第四节 安全规约</h3>
+<blockquote>
+<p>4.【强制】<strong>用户请求传入的任何参数必须做有效性验证</strong>。<br>
+说明：忽略参数校验可能导致：<br>
+pagesize 过大导致内存溢出<br>
+恶意 orderby 导致数据库慢查询<br>
+任意重定向 SQL 注入<br>
+反序列化注入<br>
+正则输入源串拒绝服务 ReDoS<br>
+说明：Java 代码用正则来验证客户端的输入，有些正则写法验证普通用户输入没有问题，但是如果攻击人员使用的是特殊构造的字符串来验证，有可能导致死循环的结果。</p>
+</blockquote>
+<p>老生常谈的问题，但在工作中有时会忽略。</p>
+<hr>
+<h3 id="第五节-mysql-数据库"><a class="headerlink" href="#第五节-mysql-数据库"></a> 第五节 MySQL 数据库</h3>
+<h4 id="1-建表规约"><a class="headerlink" href="#1-建表规约"></a> 1. 建表规约</h4>
+<blockquote>
+<p>8.【强制】varchar 是可变长字符串，不预先分配存储空间，<strong>长度不要超过 5000，如果存储长度大于此值，定义字段类型为 text，独立出来一张表</strong>，用主键来对应，避免影响其它字段索引效率。</p>
+</blockquote>
+<p>大字段建外连表，避免影响索引效率。难点在于如何说服主工程师（滑稽）。</p>
+<blockquote>
+<p>13.【推荐】字段允许适当冗余，以提高查询性能，但必须考虑数据一致。<br>
+冗余字段应遵循：<br>
+1）<strong>不是频繁修改的字段。</strong><br>
+2）<strong>不是 varchar 超长字段，更不能是 text 字段。</strong><br>
+正例：商品类目名称使用频率高，字段长度短，名称基本一成不变，可在相关联的表中冗余存储类目名称，避免关联查询。</p>
+</blockquote>
+<p>讲一个笑话。公司老王出差去拉项目，对方博士生问“这个数据库设计为什么不符合三范式？”<br>
+真事。</p>
+<blockquote>
+<p>14.【推荐】<strong>单表行数超过 500 万行或者单表容量超过 2GB，才推荐进行分库分表。</strong><br>
+说明：如果预计三年后的数据量根本达不到这个级别，请不要在创建表时就分库分表。</p>
+</blockquote>
+<h4 id="2-索引规约"><a class="headerlink" href="#2-索引规约"></a> 2. 索引规约</h4>
+<blockquote>
+<p>3.【强制】在 varchar 字段上建立索引时，<strong>必须指定索引长度，没必要对全字段建立索引</strong>，根据实际文本区分度决定索引长度即可。<br>
+说明：索引的长度与区分度是一对矛盾体，一般对字符串类型数据，长度为 20 的索引，区分度会高达 90%以上，可以使用 count(distinctleft(列名, 索引长度))/count(*)的区分度来确定。</p>
+</blockquote>
+<blockquote>
+<p>5.【推荐】如果有 orderby 的场景，请注意利用索引的有序性。orderby 最后的字段是组合索引的一部分，并且放在索引组合顺序的最后，避免出现 file_sort 的情况，影响查询性能。<br>
+正例：wherea=? andb=? orderbyc;索引：a_b_c<br>
+反例：索引中有范围查找，那么索引有序性无法利用，如：WHEREa&gt;10 ORDERBYb;索引 a_b 无法排序。</p>
+</blockquote>
+<blockquote>
+<p>6.【推荐】利用覆盖索引来进行查询操作，避免回表。<br>
+说明：如果一本书需要知道第 11 章是什么标题，会翻开第 11 章对应的那一页吗？目录浏览一下就好，这个目录就是起到覆盖索引的作用。<br>
+正例：能够建立索引的种类：主键索引、唯一索引、普通索引，而覆盖索引是一种查询的一种效果，用 explain 的结果，extra 列会出现：usingindex。</p>
+</blockquote>
+<h4 id="3-sql-语句"><a class="headerlink" href="#3-sql-语句"></a> 3. SQL 语句</h4>
+<blockquote>
+<p>1.【强制】<strong>不要使用 count(列名)或 count(常量)来替代 count(*)</strong>，count(<em>)是 SQL92 定义的标准统计行数的语法，跟数据库无关，跟 NULL 和非 NULL 无关。<br>
+说明：**count(</em>)会统计值为 NULL 的行，而 count(列名)不会统计此列为 NULL 值的行。**</p>
+</blockquote>
+<p>乖乖滚回 count(*)</p>
+<blockquote>
+<p>【推荐】<strong>in 操作能避免则避免，若实在避免不了，需要仔细评估 in 后边的集合元素数量，控制在 1000 个之内。</strong></p>
+</blockquote>
+<h4 id="4-orm-映射"><a class="headerlink" href="#4-orm-映射"></a> 4. ORM 映射</h4>
+<blockquote>
+<p>3.【强制】<strong>不要用 resultClass 当返回参数</strong>，即使所有类属性名与数据库字段一一对应，也需要定义；反过来，每一个表也必然有一个与之对应。<br>
+说明：配置映射关系，使字段与 DO 类解耦，方便维护。</p>
+</blockquote>
+<p>编程一时爽，维护两行泪~</p>
+<blockquote>
+<p>5.【强制】iBATIS 自带的 queryForList(StringstatementName,intstart,intsize)不推荐使用。<br>
+说明：其实现方式是<strong>在数据库取到 statementName 对应的 SQL 语句的所有记录，再通过 subList 取 start,size 的子集合</strong>。<br>
+正例：<br>
+<code>Map&lt;String, Object&gt; map = new HashMap&lt;String, Object&gt;();</code> &gt; <code>map.put(&quot;start&quot;, start);</code><br>
+<code>map.put(&quot;size&quot;, size);</code></p>
+</blockquote>
+<p>没想到你是这样的 iBATIS！</p>
+<hr>
+<h3 id="第六节-工程结构"><a class="headerlink" href="#第六节-工程结构"></a> 第六节 工程结构</h3>
+<h4 id="1-应用分层"><a class="headerlink" href="#1-应用分层"></a> 1. 应用分层</h4>
+<blockquote>
+<p>2.【参考】（分层异常处理规约）在 DAO 层，产生的异常类型有很多，无法用细粒度的异常进行 catch，使用 catch(Exceptione)方式，并 thrownewDAOException(e)，不需要打印日志，因为日志在 Manager/Service 层一定需要捕获并打到日志文件中去，如果同台服务器再打日志，浪费性能和存储。在 Service 层出现异常时，必须记录出错日志到磁盘，尽可能带上参数信息，相当于保护案发现场。如果 Manager 层与 Service 同机部署，日志方式与 DAO 层处理一致，如果是单独部署，则采用与 Service 一致的处理方式。Web 层绝不应该继续往上抛异常，因为已经处于顶层，如果意识到这个异常将导致页面无法正常渲染，那么就应该直接跳转到友好错误页面，加上用户容易理解的错误提示信息。开放接口层要将异常处理成错误码和错误信息方式返回。</p>
+</blockquote>
+<h4 id="2-二方库依赖"><a class="headerlink" href="#2-二方库依赖"></a> 2. 二方库依赖</h4>
+<blockquote>
+<p>10.【参考】为避免应用二方库的依赖冲突问题，二方库发布者应当遵循以下原则：<br>
+1）**精简可控原则。**移除一切不必要的 API 和依赖，只包含 ServiceAPI、必要的领域模型对象、Utils 类、常量、枚举等。如果依赖其它二方库，尽量是 provided 引入，让二方库使用者去依赖具体版本号；无 log 具体实现，只依赖日志框架。<br>
+2）**稳定可追溯原则。**每个版本的变化应该被记录，二方库由谁维护，源码在哪里，都需要能方便查到。除非用户主动升级版本，否则公共二方库的行为不应该发生变化。</p>
+</blockquote>
+<h4 id="3-服务器"><a class="headerlink" href="#3-服务器"></a> 3. 服务器</h4>
+<blockquote>
+<p>4.【推荐】在线上生产环境，JVM 的 Xms 和 Xmx 设置一样大小的内存容量，避免在 GC 后调整堆大小带来的压力。</p>
+</blockquote>
+
+        </div>
+      
+    </div>
+
+    
+      
+      
+
+
+
+      
+      
+    
+
+    
+      <footer class="post-footer">
+        
+          <div class="post-tags">
+            
+              <i class="theme-color iconfont icon-tag"></i>
+              <a href="/tags/dev/">dev</a>
+            
+              <i class="theme-color iconfont icon-tag"></i>
+              <a href="/tags/back-end/">back-end</a>
+            
+          </div>
+        
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2018/01/02/annual-report-2017/">
+        <i class="theme-color iconfont icon-left"></i>
+        <span class="prev-text nav-default">又是一年逝去</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    
+    
+      <a class="next" href="/2016/12/31/annual-report-2016/">
+        <span class="next-text nav-default">2016：意料之外的意料之中</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="theme-color iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+      </footer>
+    
+    
+  <div class="bdsharebuttonbox bd-share-box" id="share">
+    <a href="#" class="theme-color iconfont icon-copy" data-cmd="copy" title="分享到复制地址">
+    </a>
+    <a href="#" class="theme-color iconfont icon-yinxiang" data-cmd="evernotecn" title="分享到印象笔记"></a>
+    <!-- <a href="#" class="bds_youdao" data-cmd="youdao" title="分享到有道云笔记"></a> -->
+    <a href="#" class="theme-color iconfont icon-weibo" data-cmd="tsina" title="分享到新浪微博">
+    </a>
+    <a href="#" class="theme-color iconfont icon-wechat" data-cmd="weixin" title="分享到微信">
+    </a>
+  </div>
+  <script>
+    window._bd_share_config = {
+      "common": {
+        "bdSnsKey": {},
+        "bdText": "",
+        "bdMini": "1",
+        "bdMiniList": false,
+        "bdPic": "",
+        "bdStyle": "2",
+        "bdSize": "24"
+      },
+      "share": {}
+    };
+    // with (document) 0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = 'http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion=' + ~(-new Date() / 36e5)];
+  </script>
+  <script type="text/javascript" src="/lib/share/static/api/js/share.js"></script>
+
+  </article>
+
+
+          </div>
+          
+  <div class="comments" id="comments">
+    
+      <div id="vcomments"></div> 
+    
+  </div>
+
+
+        </div>
+      </main>
+
+      <footer id="footer" class="footer">
+
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:unusual7@163.com" class="theme-color iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+           <a href="https://github.com/Theembers" class="theme-color iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+        
+           <a href="https://www.zhihu.com/people/theembers" class="theme-color iconfont icon-zhihu" title="zhihu"></a>
+        
+      
+    
+      
+    
+      
+        
+           <a href="https://music.163.com/#/user/home?id=32131879" class="theme-color iconfont icon-cloudmusic" title="cloudmusic"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+    
+    
+      <a href="/atom.xml" class="theme-color iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+
+<div class="copyright">
+ <!-- <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span> -->
+
+  <span class="copyright-year">
+    
+    &copy; 
+     
+      2015 - 
+    
+    2020
+
+    <span class="heart">
+      <i class="iconfont icon-heart" style="color:red;"></i>
+    </span>
+    <span class="author">TheEmbers Guo</span>
+  </span>
+</div>
+
+      </footer>
+
+      <div class="author-wrapper"><div class="author">
+  <div class="info">
+    
+  <div class="author-box">
+  
+    <div class="image-box">
+      <img class="image" src="https://image-1257148187.cos.ap-chengdu.myqcloud.com/picgo_img/person-head.jpeg">
+    </div>
+  
+    <div class="name">TheEmbers Guo</div>
+  
+    <div class="address"><i class="theme-color iconfont icon-address"></i>成都 · 中国</div>
+  
+  </div>
+
+  </div>
+
+  
+
+  <div class="author-categories">
+    <div class="title">
+      <i class="theme-color iconfont icon-categories"></i>
+      <span>分类</span>
+    </div>
+    <a class="category-link" href="/categories/Mac/">Mac<span class="category-count">1</span></a> <a class="category-link" href="/categories/blog/">blog<span class="category-count">12</span></a> <a class="category-link" href="/categories/blog/学习/">学习<span class="category-count">1</span></a> <a class="category-link" href="/categories/blog/年终总结/">年终总结<span class="category-count">4</span></a> <a class="category-link" href="/categories/blog/碎碎念/">碎碎念<span class="category-count">6</span></a> <a class="category-link" href="/categories/dev/">dev<span class="category-count">51</span></a> <a class="category-link" href="/categories/dev/DDD/">DDD<span class="category-count">1</span></a> <a class="category-link" href="/categories/dev/ElasticSearch/">ElasticSearch<span class="category-count">8</span></a> <a class="category-link" href="/categories/dev/database/">database<span class="category-count">6</span></a> <a class="category-link" href="/categories/dev/git/">git<span class="category-count">2</span></a> <a class="category-link" href="/categories/dev/go/">go<span class="category-count">1</span></a> <a class="category-link" href="/categories/dev/java/">java<span class="category-count">20</span></a> <a class="category-link" href="/categories/dev/java/jdk/">jdk<span class="category-count">2</span></a> <a class="category-link" href="/categories/dev/java/jvm/">jvm<span class="category-count">6</span></a> <a class="category-link" href="/categories/dev/java/netty/">netty<span class="category-count">3</span></a> <a class="category-link" href="/categories/dev/java/spring/">spring<span class="category-count">2</span></a> <a class="category-link" href="/categories/dev/java/并发/">并发<span class="category-count">5</span></a> <a class="category-link" href="/categories/dev/linux/">linux<span class="category-count">1</span></a> <a class="category-link" href="/categories/dev/node/">node<span class="category-count">1</span></a> <a class="category-link" href="/categories/dev/redis/">redis<span class="category-count">1</span></a> <a class="category-link" href="/categories/dev/spring-cloud/">spring cloud<span class="category-count">4</span></a> <a class="category-link" href="/categories/dev/tool/">tool<span class="category-count">1</span></a> <a class="category-link" href="/categories/dev/web/">web<span class="category-count">2</span></a> <a class="category-link" href="/categories/dev/消息队列/">消息队列<span class="category-count">1</span></a> <a class="category-link" href="/categories/dev/网络/">网络<span class="category-count">1</span></a> <a class="category-link" href="/categories/iot/">iot<span class="category-count">3</span></a> <a class="category-link" href="/categories/碎碎念/">碎碎念<span class="category-count">1</span></a> <a class="category-link" href="/categories/碎碎念/家装/">家装<span class="category-count">1</span></a>
+  </div>
+  <!--<div class="author-tags">
+    <div class="title">
+      <i class="iconfont icon-tags"></i>
+      <span> 标签</span>
+    </div>
+    <a class="tag-link" href="/tags/BlockingQueue/">BlockingQueue<span class="tag-count">1</span></a><a class="tag-link" href="/tags/ByteBuf/">ByteBuf<span class="tag-count">1</span></a><a class="tag-link" href="/tags/Cerebro/">Cerebro<span class="tag-count">1</span></a><a class="tag-link" href="/tags/ElasticSearch/">ElasticSearch<span class="tag-count">8</span></a><a class="tag-link" href="/tags/HTTP/">HTTP<span class="tag-count">1</span></a><a class="tag-link" href="/tags/Kibana/">Kibana<span class="tag-count">1</span></a><a class="tag-link" href="/tags/Mac/">Mac<span class="tag-count">1</span></a><a class="tag-link" href="/tags/RabbitMQ/">RabbitMQ<span class="tag-count">1</span></a><a class="tag-link" href="/tags/Spring-Cloud-Health/">Spring Cloud Health<span class="tag-count">2</span></a><a class="tag-link" href="/tags/TCP-IP/">TCP/IP<span class="tag-count">1</span></a><a class="tag-link" href="/tags/ThreadLocal/">ThreadLocal<span class="tag-count">1</span></a><a class="tag-link" href="/tags/aop/">aop<span class="tag-count">1</span></a><a class="tag-link" href="/tags/back-end/">back-end<span class="tag-count">2</span></a><a class="tag-link" href="/tags/cat/">cat<span class="tag-count">3</span></a><a class="tag-link" href="/tags/dc/">dc<span class="tag-count">1</span></a><a class="tag-link" href="/tags/dev/">dev<span class="tag-count">1</span></a><a class="tag-link" href="/tags/emoji/">emoji<span class="tag-count">1</span></a><a class="tag-link" href="/tags/fore-end/">fore-end<span class="tag-count">1</span></a><a class="tag-link" href="/tags/framework/">framework<span class="tag-count">2</span></a><a class="tag-link" href="/tags/git/">git<span class="tag-count">2</span></a><a class="tag-link" href="/tags/go/">go<span class="tag-count">1</span></a><a class="tag-link" href="/tags/iot/">iot<span class="tag-count">5</span></a><a class="tag-link" href="/tags/java/">java<span class="tag-count">14</span></a><a class="tag-link" href="/tags/jdk/">jdk<span class="tag-count">2</span></a><a class="tag-link" href="/tags/jvm/">jvm<span class="tag-count">6</span></a><a class="tag-link" href="/tags/linux/">linux<span class="tag-count">1</span></a><a class="tag-link" href="/tags/markdown/">markdown<span class="tag-count">2</span></a><a class="tag-link" href="/tags/mqtt/">mqtt<span class="tag-count">1</span></a><a class="tag-link" href="/tags/mysql/">mysql<span class="tag-count">6</span></a><a class="tag-link" href="/tags/netty/">netty<span class="tag-count">3</span></a><a class="tag-link" href="/tags/nio/">nio<span class="tag-count">2</span></a><a class="tag-link" href="/tags/nodeJs/">nodeJs<span class="tag-count">1</span></a><a class="tag-link" href="/tags/nodejs/">nodejs<span class="tag-count">1</span></a><a class="tag-link" href="/tags/proxy/">proxy<span class="tag-count">1</span></a><a class="tag-link" href="/tags/redis/">redis<span class="tag-count">1</span></a><a class="tag-link" href="/tags/soft/">soft<span class="tag-count">1</span></a><a class="tag-link" href="/tags/spring/">spring<span class="tag-count">2</span></a><a class="tag-link" href="/tags/spring-transaction/">spring transaction<span class="tag-count">1</span></a><a class="tag-link" href="/tags/spring-cloud-bus/">spring-cloud-bus<span class="tag-count">1</span></a><a class="tag-link" href="/tags/spring-cloud-config/">spring-cloud-config<span class="tag-count">1</span></a><a class="tag-link" href="/tags/spring事务管理/">spring事务管理<span class="tag-count">1</span></a><a class="tag-link" href="/tags/test/">test<span class="tag-count">1</span></a><a class="tag-link" href="/tags/volatile/">volatile<span class="tag-count">1</span></a><a class="tag-link" href="/tags/vscode/">vscode<span class="tag-count">1</span></a><a class="tag-link" href="/tags/vue/">vue<span class="tag-count">2</span></a><a class="tag-link" href="/tags/二档起步/">二档起步<span class="tag-count">1</span></a><a class="tag-link" href="/tags/代理模式/">代理模式<span class="tag-count">1</span></a><a class="tag-link" href="/tags/优化/">优化<span class="tag-count">1</span></a><a class="tag-link" href="/tags/句法/">句法<span class="tag-count">1</span></a><a class="tag-link" href="/tags/多线程/">多线程<span class="tag-count">5</span></a><a class="tag-link" href="/tags/学生时代/">学生时代<span class="tag-count">1</span></a><a class="tag-link" href="/tags/家装/">家装<span class="tag-count">1</span></a><a class="tag-link" href="/tags/年终总结/">年终总结<span class="tag-count">5</span></a><a class="tag-link" href="/tags/并发/">并发<span class="tag-count">5</span></a><a class="tag-link" href="/tags/序/">序<span class="tag-count">1</span></a><a class="tag-link" href="/tags/消息队列/">消息队列<span class="tag-count">1</span></a><a class="tag-link" href="/tags/源码解析/">源码解析<span class="tag-count">2</span></a><a class="tag-link" href="/tags/线程池/">线程池<span class="tag-count">1</span></a><a class="tag-link" href="/tags/表情/">表情<span class="tag-count">1</span></a><a class="tag-link" href="/tags/雪糕/">雪糕<span class="tag-count">3</span></a>
+  </div> -->
+  <div class="author-social">
+    
+  <div class="social-links">
+    
+      
+        
+          <a href="mailto:unusual7@163.com" class="theme-color iconfont icon-email" title="email"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+        
+           <a href="https://github.com/Theembers" class="theme-color iconfont icon-github" title="github"></a>
+        
+      
+    
+      
+    
+      
+        
+           <a href="https://www.zhihu.com/people/theembers" class="theme-color iconfont icon-zhihu" title="zhihu"></a>
+        
+      
+    
+      
+    
+      
+        
+           <a href="https://music.163.com/#/user/home?id=32131879" class="theme-color iconfont icon-cloudmusic" title="cloudmusic"></a>
+        
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+    
+    
+      <a href="/atom.xml" class="theme-color iconfont icon-rss" title="rss"></a>
+    
+  </div>
+
+  </div>
+</div>
+
+      </div>
+      
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+
+      <div class="light-dark" id="light-dark">
+        <input type="checkbox" id="md_2">
+        <label for="md_2" class="iconfont write"></label>
+      </div>
+
+    
+  
+  
+
+  
+  
+<!-- valine Comments -->
+<script src="//cdn.jsdelivr.net/npm/valine/dist/Valine.min.js"></script>
+<script type="text/javascript">
+    setTimeout(function(){
+    new Valine({
+            el: '#vcomments',
+            notify: false,
+            verify: false,
+            app_id: "AbQBWhsXzFouhrbyvkHeWaQb-gzGzoHsz",
+            app_key: "JMW5LdbzGvOecjancFT4b9zm",
+            placeholder: "你要说什么啊😊",
+            avatar: 'retro',
+            meta: ['nick']
+        });
+    },300)
+   
+</script>
+
+
+
+
+    
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery.cookie.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/countup/countUp.min.js"></script>
+  
+
+  
+    <script type="text/javascript" src="/lib/growl/jquery.growl.js"></script>
+  
+
+
+    <script type="text/javascript" src="/js/src/even.js?v=1.1.4"></script>
+
+
+    <div class="back-img-box">
+      
+    </div>
+  </div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/assets/hijiki.model.json"},"display":{"position":"left","width":150,"height":300,"hOffset":20,"vOffset":-20},"mobile":{"show":false,"scale":0.5,"motion":true},"react":{"opacity":1},"log":false});</script></body>
+</html>
