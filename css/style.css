@@ -373,7 +373,7 @@ optgroup {
 table {
   border-collapse: collapse;
   border-spacing: 0;
-  color: #8a8a8a;
+  color: #636e72;
   width: 100%; }
   table th {
     background-color: #bdc3c7; }
@@ -600,7 +600,7 @@ h6 {
     border-bottom: 3px solid #e17055;
     padding: 5px 10px;
     z-index: 10;
-    box-shadow: 0px 2px 5px rgba(138, 138, 138, 0.5);
+    box-shadow: 0px 2px 5px rgba(99, 110, 114, 0.5);
     transition: 1s;
     -moz-transition: 1s;
     /* Firefox 4 */
@@ -734,7 +734,7 @@ h6 {
       .post-header .post-meta .post-category a + a::before {
         content: "/";
         margin-right: 3px;
-        color: #8a8a8a !important; }
+        color: #636e72 !important; }
       .post-header .post-meta .post-category a:hover {
         color: #e17055; }
     .post-header .post-meta .post-read::after {
@@ -742,11 +742,11 @@ h6 {
   .post-header .post-meta .post-time, .post-header .post-meta .post-category, .post-header .post-meta .post-visits, .post-header .post-meta .post-count, .post-header .post-meta .post-read {
     display: inline;
     font-size: 14px;
-    color: #8a8a8a; }
+    color: #636e72; }
   .post-header .post-meta .post-visits::before, .post-header .post-meta .post-count::before, .post-header .post-meta .post-read::before {
     content: "·"; }
   .post-header .tags {
-    color: #8a8a8a;
+    color: #636e72;
     font-size: 14px; }
     .post-header .tags a {
       color: inherit; }
@@ -900,7 +900,7 @@ h6 {
   margin-top: 5px;
   display: block;
   text-align: center;
-  color: #8a8a8a;
+  color: #636e72;
   font-size: 0.7em; }
 
 .post-content .table-responsive {
@@ -1106,7 +1106,7 @@ h6 {
     padding: 30px 10px 10px; }
   .post-content .highlight .gutter {
     width: 10px;
-    color: #8a8a8a; }
+    color: #636e72; }
     .post-content .highlight .gutter pre {
       margin: 0;
       padding: 30px 7px 10px; }
@@ -1269,7 +1269,7 @@ h6 {
     margin: 30px 10px;
     border: 10px solid #bdc3c7;
     padding: 20px;
-    box-shadow: inset 3px 3px 20px #8a8a8a, 8px 8px 20px #8a8a8a;
+    box-shadow: inset 3px 3px 20px #636e72, 8px 8px 20px #636e72;
     transition-duration: 0.2s;
     transition-property: transform;
     transition-timing-function: ease-out; }
@@ -1286,7 +1286,7 @@ h6 {
     margin: 30px 10px;
     border: 10px solid #bdc3c7;
     padding: 20px;
-    box-shadow: inset 3px 3px 20px #8a8a8a, 8px 8px 20px #8a8a8a;
+    box-shadow: inset 3px 3px 20px #636e72, 8px 8px 20px #636e72;
     transition-duration: 0.2s;
     transition-property: transform;
     transition-timing-function: ease-out; }
@@ -1339,7 +1339,7 @@ h6 {
         color: #c0392b; }
   .footer .copyright {
     padding: 10px 0;
-    color: #8a8a8a;
+    color: #636e72;
     text-align: center;
     font-family: -apple-system, BlinkMacSystemFont, Helvetica Neue, PingFang SC, Microsoft YaHei, Source Han Sans SC, Noto Sans CJK SC, WenQuanYi Micro Hei, sans-serif; }
     .footer .copyright .hexo-link,
@@ -1365,7 +1365,7 @@ h6 {
       line-height: 32px; }
     .archive .archive-title .archive-post-counter {
       display: none;
-      color: #8a8a8a; }
+      color: #636e72; }
   .archive .collection-title {
     font-family: -apple-system, BlinkMacSystemFont, Helvetica Neue, PingFang SC, Microsoft YaHei, Source Han Sans SC, Noto Sans CJK SC, WenQuanYi Micro Hei, sans-serif; }
     .archive .collection-title .archive-year {
@@ -1378,7 +1378,7 @@ h6 {
     border-left: 1px solid #cacaca; }
     .archive .archive-post .archive-post-time {
       margin-right: 10px;
-      color: #8a8a8a; }
+      color: #636e72; }
     .archive .archive-post .archive-post-title .archive-post-link {
       color: #e17055; }
     .archive .archive-post::first-child {
@@ -1388,7 +1388,7 @@ h6 {
       transition: 0.2s ease-out;
       transform: translateX(4px); }
       .archive .archive-post:hover .archive-post-time {
-        color: #717171; }
+        color: #4b5457; }
       .archive .archive-post:hover .archive-post-title .archive-post-link {
         color: #d94c2a; }
 
@@ -1489,7 +1489,7 @@ h6 {
   margin: 25px 0;
   padding: 0 25px;
   text-align: center;
-  color: #8a8a8a;
+  color: #636e72;
   font-size: 2em; }
   .visit-total .icon {
     font-size: 1.5em;
@@ -1757,14 +1757,13 @@ h6 {
 .author {
   text-align: center; }
   .author .title {
-    font-weight: 500;
+    font-weight: 600;
     font-family: -apple-system, BlinkMacSystemFont, Helvetica Neue, PingFang SC, Microsoft YaHei, Source Han Sans SC, Noto Sans CJK SC, WenQuanYi Micro Hei, sans-serif;
-    color: #8a8a8a;
     margin-bottom: 3px; }
   .author .visit-total {
     margin-bottom: 25px;
     padding: 0 25px;
-    color: #8a8a8a;
+    color: #636e72;
     font-size: 28px; }
     .author .visit-total .icon {
       color: #e17055;
@@ -1897,7 +1896,7 @@ h6 {
     box-shadow: 0px 0px 3px #2b3046; }
 
 .dark {
-  color: #f0f0f0;
+  color: #b2bec3;
   background: linear-gradient(rgba(0, 206, 201, 0.3), rgba(0, 206, 201, 0.3));
   background-color: #202124; }
   .dark a {
@@ -1912,7 +1911,7 @@ h6 {
     color: red;
     text-shadow: 6px 4px 20px #690000; }
   .dark .header .logo-wrapper .title {
-    color: #f0f0f0;
+    color: #b2bec3;
     text-shadow: 6px 4px 20px; }
   .dark .header .logo-wrapper .subtitle {
     color: #485075; }
@@ -1923,7 +1922,7 @@ h6 {
       color: red;
       text-shadow: 0.1em 0.1em 0.2em #690000; }
     .dark .header .topbar .logo .title {
-      color: #f0f0f0;
+      color: #b2bec3;
       text-shadow: 6px 4px 15px; }
   .dark .author-box .image {
     border-color: #2a2c2e;
@@ -1948,10 +1947,10 @@ h6 {
     .dark .post .post-header .post-meta .post-visits,
     .dark .post .post-header .post-meta .post-count,
     .dark .post .post-header .post-meta .post-read {
-      color: #f0f0f0; }
+      color: #b2bec3; }
     .dark .posts .post-header .tags,
     .dark .post .post-header .tags {
-      color: #f0f0f0; }
+      color: #b2bec3; }
   .dark .posts .post-content .detial-post-content,
   .dark .post .post-content .detial-post-content {
     border-top: 1px dashed #202124; }
@@ -1960,7 +1959,7 @@ h6 {
       border-bottom: 1px solid #202124; }
     .dark .posts .post-content .detial-post-content #hexo-blog-encrypt .hbe-input-container label,
     .dark .post .post-content .detial-post-content #hexo-blog-encrypt .hbe-input-container label {
-      color: #f0f0f0; }
+      color: #b2bec3; }
   .dark .posts .post-content blockquote,
   .dark .post .post-content blockquote {
     color: #b5afaf; }
@@ -2013,7 +2012,7 @@ h6 {
       color: red;
       text-shadow: 0.07em 0.07em 0.2em #690000; }
     .dark .mobile-navbar .mobile-header-logo .title {
-      color: #f0f0f0;
+      color: #b2bec3;
       text-shadow: 6px 4px 15px; }
   .dark .mobile-menu {
     background-color: rgba(32, 33, 36, 0.5); }
@@ -2026,7 +2025,7 @@ h6 {
       width: 100%;
       box-shadow: -1px -5px 5px #060606; } }
   .dark .v * {
-    color: #f0f0f0; }
+    color: #b2bec3; }
   .dark .v .vwrap {
     border: 1px solid #202124; }
     .dark .v .vwrap .vheader .vinput {
