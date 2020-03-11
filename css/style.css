@@ -1919,7 +1919,7 @@ h6 {
     color: #485075; }
   .dark .header .topbar {
     background-color: #202124;
-    box-shadow: 0px 2px 5px #060606; }
+    box-shadow: 0px 2px 5px #1f1f1f7a; }
     .dark .header .topbar .logo .icon {
       color: red;
       text-shadow: 0.1em 0.1em 0.2em #690000; }
@@ -1928,14 +1928,14 @@ h6 {
       text-shadow: 3px 2px 6px; }
   .dark .author-box .image {
     border-color: #2a2c2e;
-    box-shadow: 3px 3px 5px #060606; }
+    box-shadow: 3px 3px 5px #1f1f1f7a; }
   .dark .content-wrapper {
     background-color: rgba(42, 44, 46, 0.15); }
   .dark .category-link .category-count {
     color: #e17055 !important; }
   .dark .posts .post-flag i,
   .dark .post .post-flag i {
-    text-shadow: 2px 3px 2px #060606; }
+    text-shadow: 2px 3px 2px #1f1f1f7a; }
   .dark .posts .post-header,
   .dark .post .post-header {
     background: linear-gradient(to right, #2a2c2e, rgba(42, 44, 46, 0.7), #2a2c2e), linear-gradient(to bottom, #2a2c2e, rgba(42, 44, 46, 0.3), #2a2c2e); }
@@ -1969,12 +1969,12 @@ h6 {
   .dark .post .gallery .home-post-content img {
     background-color: #bdc3c7;
     border: 10px solid #cacaca;
-    box-shadow: inset 3px 3px 20px #060606, 8px 6px 20px #060606; }
+    box-shadow: inset 3px 3px 20px #1f1f1f7a, 8px 6px 20px #1f1f1f7a; }
   .dark .posts .gallery .detial-post-content img,
   .dark .post .gallery .detial-post-content img {
     background-color: #bdc3c7;
     border: 10px solid #cacaca;
-    box-shadow: inset 3px 3px 20px #060606, 8px 6px 20px #060606; }
+    box-shadow: inset 3px 3px 20px #1f1f1f7a, 8px 6px 20px #1f1f1f7a; }
   .dark .posts .post-reward,
   .dark .post .post-reward {
     border-top: 1px dashed #202124; }
@@ -1994,11 +1994,11 @@ h6 {
   .dark .post .bd-share-box .iconfont {
     color: #e17055;
     border: 2px solid #e17055;
-    box-shadow: 3px 3px 15px #060606; }
+    box-shadow: 3px 3px 15px #1f1f1f7a; }
   .dark .back-to-top {
     color: #e17055;
     border: 2px solid #e17055;
-    box-shadow: 3px 3px 15px #060606; }
+    box-shadow: 3px 3px 15px #1f1f1f7a; }
   .dark table th {
     background-color: #202124; }
   .dark table td,
@@ -2009,7 +2009,7 @@ h6 {
     background: #202124; }
   .dark .mobile-navbar {
     background: #202124;
-    box-shadow: 0px 2px 2px #060606; }
+    box-shadow: 0px 2px 2px #1f1f1f7a; }
     .dark .mobile-navbar .mobile-header-logo .image {
       color: red;
       text-shadow: 0.07em 0.07em 0.2em #690000; }
@@ -2025,7 +2025,7 @@ h6 {
   @media screen and (max-width: 1000px) {
     .dark .container {
       width: 100%;
-      box-shadow: -1px -5px 5px #060606; } }
+      box-shadow: -1px -5px 5px #1f1f1f7a; } }
   .dark .v * {
     color: #b2bec3; }
   .dark .v .vwrap {
