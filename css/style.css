@@ -1911,10 +1911,10 @@ h6 {
     color: #e17055 !important; }
   .dark .header .logo-wrapper .icon {
     color: red;
-    text-shadow: 6px 4px 20px #690000; }
+    text-shadow: 3px 2px 20px; }
   .dark .header .logo-wrapper .title {
     color: #b2bec3;
-    text-shadow: 6px 4px 20px; }
+    text-shadow: 3px 2px 20px; }
   .dark .header .logo-wrapper .subtitle {
     color: #485075; }
   .dark .header .topbar {
@@ -1925,10 +1925,10 @@ h6 {
       text-shadow: 0.1em 0.1em 0.2em #690000; }
     .dark .header .topbar .logo .title {
       color: #b2bec3;
-      text-shadow: 6px 4px 15px; }
+      text-shadow: 3px 2px 6px; }
   .dark .author-box .image {
     border-color: #2a2c2e;
-    box-shadow: 3px 3px 20px #060606; }
+    box-shadow: 3px 3px 5px #060606; }
   .dark .content-wrapper {
     background-color: rgba(42, 44, 46, 0.15); }
   .dark .category-link .category-count {
@@ -1938,7 +1938,7 @@ h6 {
     text-shadow: 2px 3px 2px #060606; }
   .dark .posts .post-header,
   .dark .post .post-header {
-    background: linear-gradient(to right, #2a2c2e, rgba(42, 44, 46, 0.7), #2a2c2e); }
+    background: linear-gradient(to right, #2a2c2e, rgba(42, 44, 46, 0.7), #2a2c2e), linear-gradient(to bottom, #2a2c2e, rgba(42, 44, 46, 0.3), #2a2c2e); }
     .dark .posts .post-header .post-meta .post-time,
     .dark .posts .post-header .post-meta .post-category,
     .dark .posts .post-header .post-meta .post-visits,
