@@ -673,9 +673,9 @@ h6 {
   border-top: 1px solid #bdc3c7; }
 
 .post-header {
-  padding-bottom: 15px;
+  padding-bottom: 30px;
   position: relative;
-  background: linear-gradient(to right, #ecf0f1, rgba(236, 240, 241, 0.5), #ecf0f1); }
+  background: linear-gradient(to right, #ecf0f1, rgba(236, 240, 241, 0.3), #ecf0f1), linear-gradient(to bottom, #ecf0f1, rgba(236, 240, 241, 0.3), #ecf0f1); }
   .post-header .post-image {
     position: absolute;
     width: 100%;
@@ -684,9 +684,11 @@ h6 {
     overflow: hidden;
     z-index: -1;
     object-fit: cover; }
+  .post-header .info {
+    padding-top: 20px; }
   .post-header .post-title {
-    margin: 0;
-    font-size: 26px;
+    margin-bottom: 10px;
+    font-size: 30px;
     font-weight: 400;
     font-family: -apple-system, BlinkMacSystemFont, Helvetica Neue, PingFang SC, Microsoft YaHei, Source Han Sans SC, Noto Sans CJK SC, WenQuanYi Micro Hei, sans-serif; }
     .post-header .post-title .post-flag i {
@@ -703,7 +705,7 @@ h6 {
     .post-header .post-title .icon-lock {
       color: #e17055; }
     .post-header .post-title .home-post-title {
-      font-size: 20px; }
+      font-size: 24px; }
   .post-header .post-link {
     display: inline-block;
     vertical-align: middle;
