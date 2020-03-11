@@ -527,15 +527,15 @@ h6 {
     .header .logo-wrapper .icon {
       font-size: 80px;
       color: #2c3e50;
-      text-shadow: 6px 4px 20px #2c3e50; }
+      text-shadow: 3px 2px 8px; }
     .header .logo-wrapper .title {
       position: absolute;
       top: 5px;
       margin-left: 10px;
       font-size: 50px;
       font-family: Dekers_Bold;
-      color: #2c3e50;
-      text-shadow: 4px 3px 8px; }
+      color: #00cec9;
+      text-shadow: 3px 2px 6px #2c3e50; }
     .header .logo-wrapper .subtitle {
       position: absolute;
       bottom: 10px;
@@ -614,12 +614,12 @@ h6 {
       .header .topbar .logo .icon {
         color: #2c3e50;
         font-size: 19px;
-        text-shadow: 0.1em 0.1em 0.2em #2c3e50; }
+        text-shadow: 0.1em 0.1em 0.2em; }
       .header .topbar .logo .title {
         font-family: Dekers_Bold;
         font-size: 19px;
-        color: #2c3e50;
-        text-shadow: 6px 4px 15px; }
+        color: #00cec9;
+        text-shadow: 3px 2px 6px #2c3e50; }
     .header .topbar .menu {
       float: right;
       margin-right: 40px; }
@@ -1516,12 +1516,12 @@ h6 {
     .mobile-navbar .mobile-header-logo .image {
       font-size: 22px;
       color: #2c3e50;
-      text-shadow: 0.07em 0.07em 0.2em #2c3e50; }
+      text-shadow: 3px 2px 6px #2c3e50; }
     .mobile-navbar .mobile-header-logo .title {
       font-size: 22px;
       line-height: 50px;
       font-family: Dekers_Bold;
-      color: #2c3e50; }
+      color: #00cec9; }
   .mobile-navbar .mobile-navbar-icon {
     color: #e17055;
     height: 50px;
@@ -1735,7 +1735,7 @@ h6 {
     width: 80px;
     height: auto;
     border: 5px solid #ececec;
-    box-shadow: 3px 3px 15px #888888; }
+    box-shadow: 3px 3px 5px #3f3f3f85; }
   .author-box .name {
     margin-top: 15px;
     font-weight: 500; }
