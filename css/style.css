@@ -619,7 +619,7 @@ h6 {
         font-family: Dekers_Bold;
         font-size: 19px;
         color: #00cec9;
-        text-shadow: 3px 2px 6px #2c3e50; }
+        text-shadow: 3px 2px 3px #2c3e50; }
     .header .topbar .menu {
       float: right;
       margin-right: 40px; }
@@ -1518,7 +1518,7 @@ h6 {
     .mobile-navbar .mobile-header-logo .image {
       font-size: 22px;
       color: #2c3e50;
-      text-shadow: 3px 2px 6px #2c3e50; }
+      text-shadow: 3px 2px 3px #2c3e50; }
     .mobile-navbar .mobile-header-logo .title {
       font-size: 22px;
       line-height: 50px;
