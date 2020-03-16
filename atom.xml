@@ -105,6 +105,35 @@
   </entry>
   
   <entry>
+    <title>2019：恍惚而过的一年</title>
+    <link href="https://theembers.github.io/2020/01/01/annual-report-2019/"/>
+    <id>https://theembers.github.io/2020/01/01/annual-report-2019/</id>
+    <published>2020-01-01T09:21:18.000Z</published>
+    <updated>2020-03-16T09:40:12.859Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="所谓恍惚而过"><a class="headerlink" href="#所谓恍惚而过"></a> 所谓恍惚而过</h2><p>不知道为什么，这一年对于我来说的确过得很快，甚至于在11月份还有这刚开年的感觉。</p><h2 id="中国加油武汉加油"><a class="headerlink" href="#中国加油武汉加油"></a> 中国加油！武汉加油！</h2><center><p><img src="https://image-1257148187.cos.ap-chengdu.myqcloud.com/picgo_img/zhwh" alt="中国加油！武汉加油！"><span class="image-caption">中国加油！武汉加油！</span></p></center>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;所谓恍惚而过&quot;&gt;&lt;a class=&quot;headerlink&quot; href=&quot;#所谓恍惚而过&quot;&gt;&lt;/a&gt; 所谓恍惚而过&lt;/h2&gt;
+&lt;p&gt;不知道为什么，这一年对于我来说的确过得很快，甚至于在11月份还有这刚开年的感觉。&lt;/p&gt;
+&lt;h2 id=&quot;中国加油武汉加油&quot;&gt;&lt;a c
+      
+    
+    </summary>
+    
+      <category term="blog" scheme="https://theembers.github.io/categories/blog/"/>
+    
+      <category term="年终总结" scheme="https://theembers.github.io/categories/blog/%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/"/>
+    
+    
+      <category term="年终总结" scheme="https://theembers.github.io/tags/%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/"/>
+    
+  </entry>
+  
+  <entry>
     <title>spring cloud - 微服务架构核心关键点</title>
     <link href="https://theembers.github.io/2019/12/11/spring-cloud-0/"/>
     <id>https://theembers.github.io/2019/12/11/spring-cloud-0/</id>
@@ -555,35 +584,6 @@
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;t
-      
-    
-    </summary>
-    
-      <category term="dev" scheme="https://theembers.github.io/categories/dev/"/>
-    
-      <category term="ElasticSearch" scheme="https://theembers.github.io/categories/dev/ElasticSearch/"/>
-    
-    
-      <category term="ElasticSearch" scheme="https://theembers.github.io/tags/ElasticSearch/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>ElasticSearch[3]-分布式中CRUD机制</title>
-    <link href="https://theembers.github.io/2019/07/02/es-3/"/>
-    <id>https://theembers.github.io/2019/07/02/es-3/</id>
-    <published>2019-07-02T01:44:06.000Z</published>
-    <updated>2020-03-05T02:50:57.361Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="分片路由"><a class="headerlink" href="#分片路由"></a> 分片路由</h2><p>ES通过hash取模的算法来分配索引或创建一个文档该如何存储在哪一个分片中。</p><p><code>shard = hash(routing) % number_of_primary_shards</code></p><p>routing 值是一个任意字符串，它默认是 _id 但也可以自定义。routing 字符串通过哈希函数生成一个数字，然后除以主切片的数量得到一个余数(remainder)，余数的范围永远是 0 到 number_of_primary_shards - 1 ，这个数字就是特定文档所在的分片。</p><blockquote><p>这也是为什么之前所说的 主分片在的数量只能在索引创建时定义且不可修改。如果修改了那么所有的路由值将失效，文档讲无法找到。除非重构索引。</p></blockquote><h2 id="主分片与复制分片的交互"><a class="headerlink" href="#主分片与复制分片的交互"></a> 主分片与复制分片的交互</h2><p>假设有以下三个node的集群模式：</p><p><img src="https://image-1257148187.cos.ap-chengdu.myqcloud.com/picgo_img/20190702101230.png" alt></p><p>请求可以发送到集群中的任意一个node上，每个node都有处理请求的能力，并且每个node都知道任意文档所在的node，所以也可以将请求转发到对应的node。</p><blockquote><p>所以，基于以上的能力，可以把请求循环或者其他负载均衡的方式平均发送到所有的节点上。以实现负载。</p></blockquote><h2 id="crud文档"><a class="headerlink" href="#crud文档"></a> CRUD文档</h2><p>写操作(新增、修改、删除)必须在主分片上完成才能同步到相关的复制分片上。</p><p><img src="https://image-1257148187.cos.ap-chengdu.myqcloud.com/picgo_img/20190702140030.png" alt></p><ol><li>客户端请求发送到node1</li><li>node1 根据 _id确定文档属于shard0，转发请求到node3</li><li>node3处理请求后转发到node1和node2上的复制分片，当所有复制分片报告成功，node3报告成功给node1(请求接受节点)，node1报告给客户端</li></ol><p>有很多可选的请求参数允许你更改这一过程：</p><ul><li>replication<br>默认replication=sync，即复制完成后才返回客户端报告，也可以修改为 async 这时客户端是无法确认是否完成复制的</li><li>consistency<br>默认主分片在尝试写入时需要规定数量(quorum)或过半的分片(可以是主节点或复制节点)可用。这是防止数据被写入到错的网络分区。<br><code>int((primary + number_of_replicas) / 2) + 1</code><br>consistency 允许的值为 one （只有一个主分片）， all （所有主分片和复制分片）或者默认的 quorum 或过半分片。</li><li>timeout</li></ul><h2 id="检索文档"><a class="headerlink" href="#检索文档"></a> 检索文档</h2><p>文档能够从主分片或任意一个复制分片被检索。</p><p><img src="https://image-1257148187.cos.ap-chengdu.myqcloud.com/picgo_img/20190702141657.png" alt></p><ol><li>客户端给 node1 发送get请求。</li><li>节点使用文档的 _id 确定文档属于分片0 。分片0 对应的复制分片在三个节点上都有。此时，它转发请求到 node2 。</li><li>node2 返回文档(document)给 node1 然后返回给客户端。</li></ol><p>为了负载均衡，接受请求的node依然会循环把请求转发到其他分片上(即便当前节点已经存在该文档的分片)。<br><strong>如果请求在复制分片中未查到文档，则会再转发到主分片所在的节点进行查询。这样就避免了出现所要查询的数据在主分片尚未来得及复制到复制分片而导致的一致性问题。</strong></p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h2 id=&quot;分片路由&quot;&gt;&lt;a class=&quot;headerlink&quot; href=&quot;#分片路由&quot;&gt;&lt;/a&gt; 分片路由&lt;/h2&gt;
-&lt;p&gt;ES通过hash取模的算法来分配索引或创建一个文档该如何存储在哪一个分片中。&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;shard = hash(routing)
       
     
     </summary>
